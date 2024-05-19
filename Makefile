@@ -1,13 +1,14 @@
-SRCS = main.c \
+SRCS =	main.c \
 		parsing.c \
+		init.c \
 
-OBJS = $(SRCS:.cpp=.o)
+OBJS = $(SRCS:.cpp=.o) ./libft/libft.a
 
 NAME = minirt
 
 LIBFT = ./libft/libft.a
 
-LDFLAGS = -L./libft -lft
+LDFLAGS = -L ./libft -lft
 
 CFLAGS = -Wall -Werror -Wextra -g3
 
