@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vk <vk@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/19 19:43:22 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/19 22:02:03 by vk               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 
 typedef enum e_dtype
 {
+    NOTYPE,
     A,
     C,
     L,
@@ -124,5 +125,7 @@ typedef struct s_data
 int scene_name_check(char *av);
 t_data init_all_data(int fd);
 void	null_data(t_data *data);
-
+int init_corresponding_data(char *file_data, t_data *data);
+void init_data_w_line(t_data *data);
+t_dtype determine_type(char *data);
 #endif

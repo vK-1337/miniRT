@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vk <vk@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/19 19:38:36 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/19 22:36:25 by vk               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,19 +27,113 @@ t_data	init_all_data(int fd)
     init_corresponding_data(file_data, &data);
     while (file_data)
     {
+        free(file_data);
         file_data = get_next_line(fd);
-        init_corresponding_data(file_data, &data);
+        if (file_data && file_data[0] == '\n')
+          continue;
+        if (init_corresponding_data(file_data, &data) == 2)
+        {
+          free(file_data);
+          exit(EXIT_FAILURE);
+        }
     }
 	return (data);
 }
 
-void init_corresponding_data(char *file_data, t_data *data)
+int init_corresponding_data(char *file_data, t_data *data)
 {
-    char *data_split;
+    char **data_split;
+    t_dtype type;
 
     if (!file_data)
-        return;
+        return EXIT_FAILURE;
     data_split = ft_split(file_data, ' ');
+    if (!data_split)
+      return (2);
+    type = determine_type(data_split[0]);
+    if (!type || !verified_content(data_split, type))
+    {
+      free(data_split);
+      write(STDERR_FILENO, ".rt file content is not valid.", 30);
+      return (2);
+    }
+    init_data_w_line(data, type, data_split); // Possible de mettre cette fonction dans le if pour free si jamais un split casse dans les init;
+    free(data_split);
+    return EXIT_SUCCESS;
+}
+
+void init_data_w_line(t_data *data, t_dtype type, char **data_split)
+{
+  if (type == A)
+    init_alight(data, data_split);
+  else if (type == C)
+    init_camera(data, data_split);
+  else if (type == L)
+    init_light(data, data_split);
+  else if (type == PL)
+    init_plan(data, data_split);
+  else if (type == SP)
+    init_sphere(data, data_split);
+  else if (type == CY)
+    init_cylindre(data, data_split);
+}
+
+void init_alight(t_data *data, char** data_split)
+{
+  char ** split_content;
+  t_alight new_alight;
+  new_alight.alight = data_split[1]; // Need to do atof
+}
+
+void init_camera(t_data *data, char** data_split)
+{
+  ;
+}
+
+void init_light(t_data *data, char** data_split)
+{
+  ;
+}
+
+void init_plan(t_data *data, char** data_split)
+{
+  ;
+}
+
+void init_sphere(t_data *data, char** data_split)
+{
+  ;
+}
+
+void init_cylindre(t_data *data, char** data_split)
+{
+  ;
+
+}
+
+t_dtype determine_type(char *data)
+{
+  if (strlen(data) > 2 || strlen(data) <= 0)
+    return NOTYPE;
+  if (strlen(data) == 1)
+  {
+    if (data[0] == 'A')
+      return A;
+    else if (data[0] == 'C')
+      return C;
+    else if (data[0] == 'L')
+      return C;
+  }
+  else
+  {
+    if (data[0] == 'p' && data[1] == 'l')
+      return PL;
+    else if (data[0] == 's' && data[1] == 'p')
+      return SP;
+    if (data[0] == 'c' && data[1] == 'y')
+      return CY;
+  }
+  return NOTYPE;
 }
 
 void	null_data(t_data *data)

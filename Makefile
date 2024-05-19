@@ -3,6 +3,7 @@ SRCS =	main.c \
 		init.c \
 		gnl/get_next_line_utils.c \
 		gnl/get_next_line.c \
+		utils.c \
 
 OBJS = $(SRCS:.c=.o) ./libft/libft.a
 

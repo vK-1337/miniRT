@@ -1,29 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strncmp.c                                       :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vk <vk@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/24 21:28:21 by vk                #+#    #+#             */
-/*   Updated: 2024/05/19 21:40:56 by vk               ###   ########.fr       */
+/*   Created: 2024/05/19 21:45:44 by vk                #+#    #+#             */
+/*   Updated: 2024/05/19 22:31:40 by vk               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minirt.h"
 
-int	ft_strncmp(const char *first, const char *second, size_t length)
+void free_char_tab(char **tab)
 {
-	size_t	i;
+  int i;
 
-	if ((!first && !second) || length == 0)
-		return (0);
-	i = 0;
-	while (i < length && (first[i] || second[i]))
-	{
-		if (first[i] != second[i])
-			return ((unsigned char)(first[i]) - (unsigned char)(second[i]));
-		i++;
-	}
-	return (0);
+  i = 0;
+  while (tab[i])
+  {
+    free(tab[i]);
+    i++;
+  }
+  return;
+}
+
+int char_tab_size(char **tab)
+{
+  int i;
+
+  i = 0;
+  while (tab[i])
+    i++;
+  return (i);
 }

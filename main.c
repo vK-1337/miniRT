@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vk <vk@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:55 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/19 19:43:53 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/19 21:39:14 by vk               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,6 @@ int main(int ac, char **av)
     if (fd == -1)
 		return (write(2, "File not found\n", 16), EXIT_FAILURE);
     data = init_all_data(fd);
+    (void) data;
     return EXIT_SUCCESS;
 }
