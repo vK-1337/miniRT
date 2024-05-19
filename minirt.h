@@ -6,27 +6,39 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/19 18:56:05 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/19 19:43:22 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINIRT_H
 #define MINIRT_H
 
+#include "./gnl/get_next_line.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include "libft/libft.h"
 
 /******************************************************************************/
 /*                                                                            */
 /*                                                                            */
-/*                                   STRUCT                                   */
+/*                              STRUCT & ENUM                                 */
 /*                                                                            */
 /*                                                                            */
 /******************************************************************************/
+
+typedef enum e_dtype
+{
+    A,
+    C,
+    L,
+    SP,
+    PL,
+    CY
+}   t_dtype;
 
 typedef struct s_alight
 {
