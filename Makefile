@@ -2,7 +2,7 @@ SRCS =	main.c \
 		parsing.c \
 		init.c \
 
-OBJS = $(SRCS:.cpp=.o) ./libft/libft.a
+OBJS = $(SRCS:.c=.o) ./libft/libft.a
 
 NAME = minirt
 
@@ -20,8 +20,8 @@ YELLOW = \e[0;93m
 $(NAME): $(OBJS)
 	$(CC) $(LDFLAGS) $(CFLAGS) $(OBJS) -o $(NAME)
 	@echo "	 			+---------------------+\n \
-		|  $(YELLOW)  miniRT $(GREEN)[OK]$(NC)   |\n \
-		+---------------------+"
+					|  $(YELLOW)    miniRT $(GREEN)[OK]$(NC)    |\n \
+					+---------------------+"
 
 $(LIBFT):
 	make -C ./libft
@@ -29,13 +29,14 @@ $(LIBFT):
 .c.o:
 	$(CC) $(CFLAGS) -c $< -o ${<:.c=.o}
 
-all: $(NAME)
+all: $(LIBFT) $(NAME)
 
 clean:
 	rm -f $(OBJS)
 
 fclean: clean
 	rm -f $(NAME)
+	make -C ./libft fclean
 
 re: fclean
 	make all

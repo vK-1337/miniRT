@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/19 18:55:12 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/19 19:05:09 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@ t_data	init_all_data(int fd)
 {
 	t_data	data;
 	char	*file_data;
+
+    (void)fd;
+    (void)file_data;
 
 	null_data(&data);
 	return (data);
