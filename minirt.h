@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vk <vk@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/19 22:02:03 by vk               ###   ########.fr       */
+/*   Updated: 2024/05/20 17:29:58 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,18 +51,20 @@ typedef struct s_alight
 
 typedef struct s_camera
 {
-    float x;
-    float y;
-    float z;
-    int orientation_v;
+    float coord_x;
+    float coord_y;
+    float coord_z;
+    float vector_x;
+    float vector_y;
+    float vector_z;
     int fov;
 } t_camera;
 
 typedef struct s_light
 {
-    float x;
-    float y;
-    float z;
+    float coord_x;
+    float coord_y;
+    float coord_z;
     float light_ratio;
     int color_r;
     int color_g;
@@ -71,9 +73,9 @@ typedef struct s_light
 
 typedef struct s_sphere
 {
-    float x;
-    float y;
-    float z;
+    float coord_x;
+    float coord_y;
+    float coord_z;
     float diameter;
     int color_r;
     int color_g;
@@ -82,10 +84,12 @@ typedef struct s_sphere
 
 typedef struct s_plan
 {
-    float x;
-    float y;
-    float z;
-    int orientation_v;
+    float coord_x;
+    float coord_y;
+    float coord_z;
+    float vector_x;
+    float vector_y;
+    float vector_z;
     int color_r;
     int color_g;
     int color_b;
@@ -93,10 +97,12 @@ typedef struct s_plan
 
 typedef struct s_cylindre
 {
-    float x;
-    float y;
-    float z;
-    int normal_v;
+    float coord_x;
+    float coord_y;
+    float coord_z;
+    float n_vector_x;
+    float n_vector_y;
+    float n_vector_z;
     float diameter;
     float height;
     int color_r;
@@ -128,4 +134,6 @@ void	null_data(t_data *data);
 int init_corresponding_data(char *file_data, t_data *data);
 void init_data_w_line(t_data *data);
 t_dtype determine_type(char *data);
+int char_tab_len(char **tab);
+void free_char_tab(char **tab);
 #endif
