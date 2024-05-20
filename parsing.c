@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:52 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/20 16:47:38 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/20 19:39:27 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,20 +32,21 @@ int	scene_name_check(char *av)
 int	verified_content(char **data, t_dtype type)
 {
 	if (type == A)
-		return (verify_alight(data)); // ! OK
+		return (verify_alight(data));
 	else if (type == C)
-		return (verify_camera(data)); // ! OK
+		return (verify_camera(data));
 	else if (type == L)
-		return (verify_light(data)); // TODO
+		return (verify_light(data));
 	else if (type == PL)
-		return (verify_plan(data)); // TODO
+		return (verify_plan(data));
 	else if (type == SP)
-		return (verify_sphere(data)); // TODO
+		return (verify_sphere(data));
 	else if (type == CY)
-		return (verify_cylindre(data)); // TODO
+		return (verify_cylindre(data));
+	return (0);
 }
 
-int	verify_alight(char **data) // ! OK
+int	verify_alight(char **data)
 {
 	int i;
 	float float_data;
@@ -75,16 +76,15 @@ int	verify_alight(char **data) // ! OK
 
 int	verify_camera(char **data)
 {
-	int	fov;
 
 	if (char_tab_len(data) != 4)
 		return (0);
-    if (!verify_coord(data[1])) // ! OK
-        return (0);
-    if (!verify_vect(data[2])) // ! OK
-        return (0);
-    if (!verify_fov(data[3])) // ! OK
-        return (0);
+	if (!verify_coord(data[1]))
+		return (0);
+	if (!verify_vect(data[2]))
+		return (0);
+	if (!verify_fov(data[3]))
+		return (0);
 	return (1);
 }
 
@@ -213,15 +213,15 @@ int	verify_light(char **data)
 
 	if (char_tab_len(data) != 4)
 		return (0);
-    if (!verify_coord(data[1]))
-        return (0);
-    if (!is_string_float(data[2]))
-        return (0);
-    float_data = atof(data[3]);
-    if (float_data < 0.0 || float_data > 1.0)
-        return (0);
-    if (!verify_colors(data[4])) // ! NON USE IN MANDATORY PART;
-        return (0);
+	if (!verify_coord(data[1]))
+		return (0);
+	if (!is_string_float(data[2]))
+		return (0);
+	float_data = atof(data[3]);
+	if (float_data < 0.0 || float_data > 1.0)
+		return (0);
+	if (!verify_colors(data[4])) // ! NON USE IN MANDATORY PART;
+		return (0);
 	return (1);
 }
 
@@ -229,12 +229,12 @@ int	verify_sphere(char **data)
 {
 	if (char_tab_len(data) != 4)
 		return (0);
-    if (!verify_coord(data[1]))
-        return (0);
-    if (!is_string_float(data[2]))
-        return (0);
-    if (!verify_colors(data[3]))
-        return (0);
+	if (!verify_coord(data[1]))
+		return (0);
+	if (!is_string_float(data[2]))
+		return (0);
+	if (!verify_colors(data[3]))
+		return (0);
 	return (1);
 }
 
@@ -242,12 +242,12 @@ int	verify_plan(char **data)
 {
 	if (char_tab_len(data) != 4)
 		return (0);
-    if (!verify_coord(data[1]))
-        return (0);
-    if (!verify_vect(data[2]))
-        return (0);
-    if (!verify_colors(data[3]))
-        return (0);
+	if (!verify_coord(data[1]))
+		return (0);
+	if (!verify_vect(data[2]))
+		return (0);
+	if (!verify_colors(data[3]))
+		return (0);
 	return (1);
 }
 
@@ -255,14 +255,14 @@ int	verify_cylindre(char **data)
 {
 	if (char_tab_len(data) != 5)
 		return (0);
-    if (!verify_coord(data[1]))
-        return (0);
-    if (!verify_vect(data[2]))
-        return (0);
-    if (!is_string_float(data[3]) || !is_string_float(data[4]))
-        return (0);
-    if (!verify_colors(data[5]))
-        return (0);
+	if (!verify_coord(data[1]))
+		return (0);
+	if (!verify_vect(data[2]))
+		return (0);
+	if (!is_string_float(data[3]) || !is_string_float(data[4]))
+		return (0);
+	if (!verify_colors(data[5]))
+		return (0);
 	return (1);
 }
 
@@ -317,6 +317,7 @@ int	is_string_float(char *str)
 	{
 		if (!ft_isdigit(str[i]) && str[i] != '.')
 			return (0);
+        i++;
 	}
 	return (1);
 }
