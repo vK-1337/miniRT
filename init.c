@@ -6,7 +6,7 @@
 /*   By: vk <vk@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/19 22:36:25 by vk               ###   ########.fr       */
+/*   Updated: 2024/05/20 08:29:11 by vk               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int init_corresponding_data(char *file_data, t_data *data)
     if (!data_split)
       return (2);
     type = determine_type(data_split[0]);
-    if (!type || !verified_content(data_split, type))
+    if (!type || !verified_content(data_split, type)) // TODO Verified Content
     {
       free(data_split);
       write(STDERR_FILENO, ".rt file content is not valid.", 30);
@@ -78,7 +78,7 @@ void init_data_w_line(t_data *data, t_dtype type, char **data_split)
     init_cylindre(data, data_split);
 }
 
-void init_alight(t_data *data, char** data_split)
+void init_alight(t_data *data, char** data_split) // ! HERE
 {
   char ** split_content;
   t_alight new_alight;
