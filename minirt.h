@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vk <vk@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/20 19:42:30 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/20 22:54:09 by vk               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,5 +160,5 @@ void init_plan(t_data *data, char** data_split);
 void init_cylindre(t_data *data, char** data_split);
 t_dtype determine_type(char *data);
 void	null_data(t_data *data);
-void print_all_data(t_data data);
+void print_all_data(t_data *data);
 #endif
