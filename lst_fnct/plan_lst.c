@@ -3,14 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   plan_lst.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vk <vk@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 12:11:41 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/21 12:11:58 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/21 22:53:02 by vk               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minirt.h"
+
+void plan_lstfree(t_plan **lst)
+{
+  t_plan	*tmp;
+
+  if (!lst)
+    return ;
+  while (*lst)
+  {
+    tmp = (*lst)->next;
+    free(*lst);
+    *lst = tmp;
+  }
+}
 
 t_plan	*plan_lstlast(t_plan *lst)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vk <vk@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/21 18:16:13 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/21 22:50:26 by vk               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,12 +179,15 @@ void print_all_data(t_data *data);
 t_cylindre	*cylindre_lstlast(t_cylindre *lst);
 int	cylindre_lstsize(t_cylindre *lst);
 void	cylindre_lstadd_back(t_cylindre **lst, t_cylindre *new);
+void cylindre_lstfree(t_cylindre **lst);
 
 t_sphere	*sphere_lstlast(t_sphere *lst);
 int	sphere_lstsize(t_sphere *lst);
 void	sphere_lstadd_back(t_sphere **lst, t_sphere *new);
+void sphere_lstfree(t_sphere **lst);
 
 t_plan	*plan_lstlast(t_plan *lst);
 int	plan_lstsize(t_plan *lst);
 void	plan_lstadd_back(t_plan **lst, t_plan *new);
+void plan_lstfree(t_plan **lst);
 #endif

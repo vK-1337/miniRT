@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vk <vk@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/21 19:06:50 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/21 22:46:41 by vk               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,7 +180,7 @@ void	init_sphere(t_data *data, char **data_split)
 	sphere->color_g = ft_atoi(split[1]);
 	sphere->color_b = ft_atoi(split[2]);
 	free_char_tab(split);
-	data->sphere = &sphere;
+	sphere_lstadd_back(data->sphere, sphere);
 	return ;
 }
 
@@ -212,7 +212,7 @@ void	init_plan(t_data *data, char **data_split)
 	plan->color_r = ft_atoi(split[0]);
 	plan->color_g = ft_atoi(split[1]);
 	plan->color_b = ft_atoi(split[2]);
-	data->plan = &plan;
+	plan_lstadd_back(data->plan, plan);
 	free_char_tab(split);
 }
 
@@ -246,7 +246,7 @@ void	init_cylindre(t_data *data, char **data_split)
 	cylindre->color_r = ft_atoi(split[0]);
 	cylindre->color_g = ft_atoi(split[1]);
 	cylindre->color_b = ft_atoi(split[2]);
-	data->cylindre = &cylindre;
+	cylindre_lstadd_back(data->cylindre, cylindre);
 	free_char_tab(split);
 }
 

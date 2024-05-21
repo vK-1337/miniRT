@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vk <vk@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 21:45:44 by vk                #+#    #+#             */
-/*   Updated: 2024/05/21 12:08:10 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/21 22:53:06 by vk               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,21 @@ int char_tab_len(char **tab)
   while (tab[i])
     i++;
   return (i);
+}
+
+void free_data(t_data *data)
+{
+  if (data->alight)
+    free(data->alight);
+  if (data->camera)
+    free(data->camera);
+  if (data->light)
+    free(data->light);
+  if (data->plan)
+    plan_lstfree(data->plan);
+  if (data->sphere)
+    sphere_lstfree(data->sphere);
+  if (data->cylindre)
+    cylindre_lstfree(data->cylindre);
+  return;
 }
