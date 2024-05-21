@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:52 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/20 19:39:27 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/21 18:28:41 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,9 +74,20 @@ int	verify_alight(char **data)
 	return (1);
 }
 
+void print_char_tab(char **tab)
+{
+    int i;
+
+    i = 0;
+    while (tab[i])
+    {
+        printf("tab[%d] = %s\n", i, tab[i]);
+        i++;
+    }
+}
+
 int	verify_camera(char **data)
 {
-
 	if (char_tab_len(data) != 4)
 		return (0);
 	if (!verify_coord(data[1]))
@@ -92,7 +103,7 @@ int	verify_fov(char *data)
 {
 	int	fov;
 
-	if (!data || !check_fov_syntax(data)) // ! OK
+	if (!data || !check_fov_syntax(data))
 		return (0);
 	fov = ft_atoi(data);
 	if (fov < 0 || fov > 180)
@@ -100,22 +111,22 @@ int	verify_fov(char *data)
 	return (1);
 }
 
-int	check_fov_syntax(char *data) // ! OK
+int	check_fov_syntax(char *data)
 {
 	int i;
-	if (!data || ft_strlen(data) > 3)
+	if (!data || (ft_strlen(data) > 3 && data[ft_strlen(data) - 1] != '\n'))
 		return (0);
 	i = 0;
 	while (data[i])
 	{
-		if (!ft_isdigit(data[i]))
+		if (!ft_isdigit(data[i]) && (data[i] != '\n' && !data[i + 1]))
 			return (0);
 		i++;
 	}
 	return (1);
 }
 
-int	verify_vect(char *data) // ! OK
+int	verify_vect(char *data)
 {
 	int i;
 	char **vect_split;
@@ -217,10 +228,10 @@ int	verify_light(char **data)
 		return (0);
 	if (!is_string_float(data[2]))
 		return (0);
-	float_data = atof(data[3]);
+	float_data = atof(data[2]);
 	if (float_data < 0.0 || float_data > 1.0)
 		return (0);
-	if (!verify_colors(data[4])) // ! NON USE IN MANDATORY PART;
+	if (!verify_colors(data[3])) // ! NON USE IN MANDATORY PART;
 		return (0);
 	return (1);
 }
@@ -299,7 +310,7 @@ int	verify_colors_syntax(char *colors)
 	i = 0;
 	while (colors[i])
 	{
-		if (!ft_isdigit(colors[i]) && colors[i] != ',')
+		if (!ft_isdigit(colors[i]) && colors[i] != ',' && (colors[i] != '\n' && !colors[i + 1]))
 			return (0);
 		i++;
 	}

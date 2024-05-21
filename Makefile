@@ -4,6 +4,9 @@ SRCS =	main.c \
 		gnl/get_next_line_utils.c \
 		gnl/get_next_line.c \
 		utils.c \
+		lst_fnct/cylindre_lst.c \
+		lst_fnct/sphere_lst.c \
+		lst_fnct/plan_lst.c \
 
 OBJS = $(SRCS:.c=.o) ./libft/libft.a
 

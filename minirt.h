@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vk <vk@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/20 22:54:09 by vk               ###   ########.fr       */
+/*   Updated: 2024/05/21 18:16:13 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ typedef struct s_sphere
     int color_r;
     int color_g;
     int color_b;
+    struct s_sphere *next;
 } t_sphere;
 
 typedef struct s_plan
@@ -93,6 +94,7 @@ typedef struct s_plan
     int color_r;
     int color_g;
     int color_b;
+    struct s_plan *next;
 } t_plan;
 
 typedef struct s_cylindre
@@ -108,6 +110,7 @@ typedef struct s_cylindre
     int color_r;
     int color_g;
     int color_b;
+    struct s_cylindre *next;
 } t_cylindre;
 
 typedef struct s_data
@@ -115,11 +118,13 @@ typedef struct s_data
     t_alight *alight;
     t_camera *camera;
     t_light *light;
-    t_sphere *sphere;
-    t_plan *plan;
-    t_cylindre *cylindre;
+    t_sphere **sphere;
+    t_plan **plan;
+    t_cylindre **cylindre;
+    int counter[6];
 }   t_data;
 
+void print_char_tab(char **tab);
 /******************************************************************************/
 /*                                                                            */
 /*                                                                            */
@@ -148,10 +153,11 @@ int verified_content(char **data, t_dtype type);
 int verify_coord(char *data);
 int verify_vect(char *data);
 int verify_fov(char *data);
+int verify_colors_syntax(char *data);
 int	check_fov_syntax(char *data);
 int check_vect_syntax(char *data);
 int check_coord_syntax(char *data);
-int verify_colors_syntax(char *data);
+
 void init_alight(t_data *data, char** data_split);
 void init_camera(t_data *data, char** data_split);
 void init_light(t_data *data, char** data_split);
@@ -161,4 +167,24 @@ void init_cylindre(t_data *data, char** data_split);
 t_dtype determine_type(char *data);
 void	null_data(t_data *data);
 void print_all_data(t_data *data);
+
+/******************************************************************************/
+/*                                                                            */
+/*                                                                            */
+/*                                   LST                                      */
+/*                                                                            */
+/*                                                                            */
+/******************************************************************************/
+
+t_cylindre	*cylindre_lstlast(t_cylindre *lst);
+int	cylindre_lstsize(t_cylindre *lst);
+void	cylindre_lstadd_back(t_cylindre **lst, t_cylindre *new);
+
+t_sphere	*sphere_lstlast(t_sphere *lst);
+int	sphere_lstsize(t_sphere *lst);
+void	sphere_lstadd_back(t_sphere **lst, t_sphere *new);
+
+t_plan	*plan_lstlast(t_plan *lst);
+int	plan_lstsize(t_plan *lst);
+void	plan_lstadd_back(t_plan **lst, t_plan *new);
 #endif

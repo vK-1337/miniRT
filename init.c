@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vk <vk@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/20 22:53:55 by vk               ###   ########.fr       */
+/*   Updated: 2024/05/21 18:14:26 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,15 @@ t_data	init_all_data(int fd)
 		write(STDERR_FILENO, "The file is empty\n", 19);
 		exit(EXIT_FAILURE);
 	}
-  printf("file_data : %s", file_data);
-  if (init_corresponding_data(file_data, &data) == 2)
-  {
-    free(file_data);
-    exit(EXIT_FAILURE);
+	if (init_corresponding_data(file_data, &data) == 2)
+	{
+		free(file_data);
+		exit(EXIT_FAILURE);
 	}
-  printf("data.alight juste apres le premier init: %p\n", data.alight);
 	while (file_data)
 	{
 		free(file_data);
 		file_data = get_next_line(fd);
-    printf("file_data avant corresponding data: %s ", file_data);
 		if (file_data && file_data[0] == '\n')
 			continue ;
 		if (init_corresponding_data(file_data, &data) == 2)
@@ -44,7 +41,6 @@ t_data	init_all_data(int fd)
 			exit(EXIT_FAILURE);
 		}
 	}
-  // print_all_data(&data);
 	return (data);
 }
 
@@ -59,14 +55,13 @@ int	init_corresponding_data(char *file_data, t_data *data)
 	if (!data_split)
 		return (2);
 	type = determine_type(data_split[0]);
-  printf("type : %d\n", type);
-	if (!type)
+	printf("type : %d\n", type);
+	if (!type || verified_content(data_split, type) == 0)
 	{
 		free_char_tab(data_split);
 		write(STDERR_FILENO, ".rt file content is not valid.\n", 30);
 		return (2);
 	}
-  printf("Corresponding data juste avant init\n");
 	init_data_w_line(data, type, data_split);
 	free_char_tab(data_split);
 	return (EXIT_SUCCESS);
@@ -90,11 +85,12 @@ void	init_data_w_line(t_data *data, t_dtype type, char **data_split)
 
 void	init_alight(t_data *data, char **data_split)
 {
-	char	**color_split;
-  t_alight *alight;
-  alight = malloc(sizeof(t_alight));
-  if (!alight)
-    return ;
+	char		**color_split;
+	t_alight	*alight;
+
+	alight = malloc(sizeof(t_alight));
+	if (!alight)
+		return ;
 	alight->alight = atof(data_split[1]);
 	color_split = ft_split(data_split[2], ',');
 	if (!color_split)
@@ -103,21 +99,18 @@ void	init_alight(t_data *data, char **data_split)
 	alight->color_g = ft_atoi(color_split[1]);
 	alight->color_b = ft_atoi(color_split[2]);
 	free_char_tab(color_split);
-  printf("alight.color_r : %d\n", alight->color_r);
-  printf("alight.color_g : %d\n", alight->color_g);
-  printf("alight.color_b : %d\n", alight->color_b);
-  data->alight = alight;
+	data->alight = alight;
 	return ;
 }
 
 void	init_camera(t_data *data, char **data_split)
 {
-	char	**split;
-  t_camera *camera;
+	char		**split;
+	t_camera	*camera;
 
-  camera = malloc(sizeof(t_camera));
-  if (!camera)
-    return ;
+	camera = malloc(sizeof(t_camera));
+	if (!camera)
+		return ;
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return ;
@@ -133,20 +126,19 @@ void	init_camera(t_data *data, char **data_split)
 	camera->vector_z = atof(split[2]);
 	camera->fov = atoi(data_split[3]);
 	free_char_tab(split);
-  data->camera = camera;
+	data->camera = camera;
 	return ;
 }
 
 void	init_light(t_data *data, char **data_split)
 {
 	char	**split;
-  t_light *light;
+	t_light	*light;
 
-  light = malloc(sizeof(t_light));
-  if (!light)
-    return ;
+	light = malloc(sizeof(t_light));
+	if (!light)
+		return ;
 	split = ft_split(data_split[1], ',');
-  printf("data_split[1] : %s\n", data_split[1]);
 	if (!split)
 		return ;
 	light->coord_x = atof(split[0]);
@@ -161,18 +153,18 @@ void	init_light(t_data *data, char **data_split)
 	light->color_g = ft_atoi(split[1]);
 	light->color_b = ft_atoi(split[2]);
 	free_char_tab(split);
-  data->light = light;
+	data->light = light;
 	return ;
 }
 
 void	init_sphere(t_data *data, char **data_split)
 {
-	char	**split;
-  t_sphere *sphere;
+	char		**split;
+	t_sphere	*sphere;
 
-  sphere = malloc(sizeof(t_sphere));
-  if (!sphere)
-    return ;
+	sphere = malloc(sizeof(t_sphere));
+	if (!sphere)
+		return ;
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return ;
@@ -188,18 +180,18 @@ void	init_sphere(t_data *data, char **data_split)
 	sphere->color_g = ft_atoi(split[1]);
 	sphere->color_b = ft_atoi(split[2]);
 	free_char_tab(split);
-  data->sphere = sphere;
+	data->sphere = &sphere;
 	return ;
 }
 
 void	init_plan(t_data *data, char **data_split)
 {
 	char	**split;
-    t_plan *plan;
+	t_plan	*plan;
 
-  plan = malloc(sizeof(t_plan));
-  if (!plan)
-    return ;
+	plan = malloc(sizeof(t_plan));
+	if (!plan)
+		return ;
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return ;
@@ -220,18 +212,18 @@ void	init_plan(t_data *data, char **data_split)
 	plan->color_r = ft_atoi(split[0]);
 	plan->color_g = ft_atoi(split[1]);
 	plan->color_b = ft_atoi(split[2]);
-  data->plan = plan;
+	data->plan = &plan;
 	free_char_tab(split);
 }
 
 void	init_cylindre(t_data *data, char **data_split)
 {
-	char	**split;
-  t_cylindre *cylindre;
+	char		**split;
+	t_cylindre	*cylindre;
 
-  cylindre = malloc(sizeof(t_cylindre));
-  if (!cylindre)
-    return ;
+	cylindre = malloc(sizeof(t_cylindre));
+	if (!cylindre)
+		return ;
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return ;
@@ -254,7 +246,7 @@ void	init_cylindre(t_data *data, char **data_split)
 	cylindre->color_r = ft_atoi(split[0]);
 	cylindre->color_g = ft_atoi(split[1]);
 	cylindre->color_b = ft_atoi(split[2]);
-  data->cylindre = cylindre;
+	data->cylindre = &cylindre;
 	free_char_tab(split);
 }
 
@@ -262,7 +254,6 @@ t_dtype	determine_type(char *data)
 {
 	if (strlen(data) > 2 || strlen(data) <= 0)
 		return (NOTYPE);
-	printf("data[0] : %c\n", data[0]);
 	if (strlen(data) == 1)
 	{
 		if (data[0] == 'A')
@@ -286,11 +277,19 @@ t_dtype	determine_type(char *data)
 
 void	null_data(t_data *data)
 {
+    int i;
+
 	data->alight = NULL;
 	data->camera = NULL;
 	data->cylindre = NULL;
 	data->light = NULL;
 	data->plan = NULL;
 	data->sphere = NULL;
+    i = 0;
+    while (i < 6)
+    {
+        data->counter[i] = 0;
+        i++;
+    }
 	return ;
 }

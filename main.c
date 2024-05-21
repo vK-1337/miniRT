@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vk <vk@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:55 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/20 22:54:36 by vk               ###   ########.fr       */
+/*   Updated: 2024/05/21 18:12:48 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,33 +28,6 @@ void print_all_data(t_data *data)
     printf("Data.camera->vector_x : %f\n", data->camera->vector_x);
     printf("Data.camera->vector_y : %f\n", data->camera->vector_y);
     printf("Data.camera->vector_z : %f\n", data->camera->vector_z);
-    printf("\n\nData.cylindre :\n");
-    printf("Data.cylindre->coord_x : %f\n", data->cylindre->coord_x);
-    printf("Data.cylindre->coord_y : %f\n", data->cylindre->coord_y);
-    printf("Data.cylindre->coord_z : %f\n", data->cylindre->coord_z);
-    printf("Data.cylindre->diameter : %f\n", data->cylindre->diameter);
-    printf("Data.cylindre->height : %f\n", data->cylindre->height);
-    printf("Data.cylindre->color_r : %d\n", data->cylindre->color_r);
-    printf("Data.cylindre->color_g : %d\n", data->cylindre->color_g);
-    printf("Data.cylindre->color_b : %d\n", data->cylindre->color_b);
-    printf("\n\nData.plan :\n");
-    printf("Data.plan->coord_x : %f\n", data->plan->coord_x);
-    printf("Data.plan->coord_y : %f\n", data->plan->coord_y);
-    printf("Data.plan->coord_z : %f\n", data->plan->coord_z);
-    printf("Data.plan->vector_x : %f\n", data->plan->vector_x);
-    printf("Data.plan->vector_y : %f\n", data->plan->vector_y);
-    printf("Data.plan->vector_z : %f\n", data->plan->vector_z);
-    printf("Data.plan->color_r : %d\n", data->plan->color_r);
-    printf("Data.plan->color_g : %d\n", data->plan->color_g);
-    printf("Data.plan->color_b : %d\n", data->plan->color_b);
-    printf("\n\nData.sphere :\n");
-    printf("Data.sphere->coord_x : %f\n", data->sphere->coord_x);
-    printf("Data.sphere->coord_y : %f\n", data->sphere->coord_y);
-    printf("Data.sphere->coord_z : %f\n", data->sphere->coord_z);
-    printf("Data.sphere->diameter : %f\n", data->sphere->diameter);
-    printf("Data.sphere->color_r : %d\n", data->sphere->color_r);
-    printf("Data.sphere->color_g : %d\n", data->sphere->color_g);
-    printf("Data.sphere->color_b : %d\n", data->sphere->color_b);
     printf("\n\nData.light :\n");
     printf("Data.light->coord_x : %f\n", data->light->coord_x);
     printf("Data.light->coord_y : %f\n", data->light->coord_y);
@@ -80,6 +53,5 @@ int main(int ac, char **av)
 		return (write(2, "File not found\n", 16), EXIT_FAILURE);
     data = init_all_data(fd);
     print_all_data(&data);
-    (void) data;
     return EXIT_SUCCESS;
 }

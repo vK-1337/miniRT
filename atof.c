@@ -6,10 +6,13 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 14:42:27 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/20 14:42:52 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/21 11:23:23 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-double atof(char *str);
+double ft_atof(char *str)
+{
+    
+}
