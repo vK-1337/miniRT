@@ -1,47 +1,102 @@
-SRCS =	main.c \
-		parsing.c \
-		init.c \
-		gnl/get_next_line_utils.c \
-		gnl/get_next_line.c \
-		utils.c \
+#Colors / base 16 / Bright
 
-OBJS = $(SRCS:.c=.o) ./libft/libft.a
+DEF_COLOR		= \033[0;39m
+GRAY			= \033[0;90m
+RED				= \033[0;91m
+GREEN			= \033[0;92m
+YELLOW			= \033[0;93m
+BLUE			= \033[0;94m
+MAGENTA			= \033[0;95m
+CYAN			= \033[0;96m
+WHITE			= \033[0;97m
 
-NAME = minirt
+#Colors / Perso / Bright
 
-LIBFT = ./libft/libft.a
+ORANGE			= \033[38;5;214m
 
-LDFLAGS = -L ./libft -lft
+#Mlx42
 
-CFLAGS = -Wall -Werror -Wextra -g3
+MLX_DIR			= mlx42/
+MLX_NAME		= libmlx.a
+MLX				= $(MLX_DIR)$(MLX_NAME)
 
-# colors
-GREEN = \033[0;32m
-NC = \033[0m
-YELLOW = \e[0;93m
+#Libft
 
-$(NAME): $(OBJS)
-	$(CC) $(LDFLAGS) $(CFLAGS) $(OBJS) -o $(NAME)
-	@echo "	 			+---------------------+\n \
-					|  $(YELLOW)    miniRT $(GREEN)[OK]$(NC)    |\n \
-					+---------------------+"
+LIBFT_DIR		= libft/
+LIBFT_NAME		= libft.a
+LIBFT			= $(LIBFT_DIR)$(LIBFT_NAME)
+
+#Variables
+
+NAME			= MiniRT
+CC				= cc
+FLAGS			= -Wall -Werror -Wextra 
+RM				= rm -f
+AR				= ar rcs
+NORM			= ./includes\
+					./libft/include/\
+					./libft/src_lib
+INCLUDE			= 	-I ./includes/\
+					-I ./libft/include/\
+					-I ./mlx42/
+
+#Sources
+
+OBJ_DIR_F 		= obj/
+SRC_DIR_F		= src/
+SRC_FUNCTIONS_F	= main color_calculation tuple_calculations tuple_calculations2 utils
+
+FRACT_SRC		= $(addprefix $(SRC_DIR_F), $(addsuffix .c, $(SRC_FUNCTIONS_F)))
+FRACT_OBJ		= $(addprefix $(OBJ_DIR_F), $(addsuffix .o, $(SRC_FUNCTIONS_F)))
+
+IFMAKE_DIR_F	= .cache_exists
+
+#instructions
+
+all:			$(MLX) $(LIBFT) $(NAME)
+
+$(IFMAKE_DIR_F):
+					@mkdir -p $(OBJ_DIR_F)
+					@mkdir -p $(OBJ_DIR_F)fractals/
+
+$(MLX):
+					@echo "Getting MinilibX ready"
+					@make -sC $(MLX_DIR)
 
 $(LIBFT):
-	make -C ./libft
+					@echo "Getting libft ready"
+					@make -sC $(LIBFT_DIR)
 
-.c.o:
-	$(CC) $(CFLAGS) -c $< -o ${<:.c=.o}
+$(OBJ_DIR_F)%.o: $(SRC_DIR_F)%.c | $(IFMAKE_DIR_F)
+					@echo "$(ORANGE)Loading... $< $(DEF_COLOR)"
+					@$(CC) $(FLAGS) $(INCLUDE) -c $< -o $@
 
-all: $(LIBFT) $(NAME)
+$(OBJ_DIR_F)fractals/%.o: $(SRC_DIR_F)fractals/%.c | $(IFMAKE_DIR_F)
+					@echo "$(ORANGE)Loading... $< $(DEF_COLOR)"
+					@$(CC) $(FLAGS) $(INCLUDE) -c $< -o $@
+
+$(NAME): $(FRACT_OBJ)
+					@echo "Compiling MiniRT..."
+					@$(CC) $(FLAGS) -o $(NAME) $(FRACT_OBJ) $(MLX) $(LIBFT) $(INCLUDE) -lXext -lX11 -lm -g3
+					@echo "MiniRT ready."
+
+bonus:			all
 
 clean:
-	rm -f $(OBJS)
+					@echo "Removing object files"
+					@rm -rf $(OBJ_DIR_F)
+					@make clean -C $(LIBFT_DIR)
+					
+fclean:			clean
+					@echo "Removing push_swap..."
+					@rm -f $(NAME)
+					@rm -f $(LIBFT_DIR)$(LIBFT_NAME)
 
-fclean: clean
-	rm -f $(NAME)
-	make -C ./libft fclean
+re:				fclean all
+					@echo "$(BLUE)Cleaned and rebuilt everything for MiniRT$(DEF_COLOR)"
 
-re: fclean
-	make all
+norm:
+					@norminette $(SRC_DIR_F) $(NORM) $(LIBFT_DIR) | grep -v Norme -B1 || true
+					@echo "Norminet the cat says : $(RED)M$(ORANGE)e$(YELLOW)o$(GREEN)w$(CYAN) !$(BLUE)!$(MAGENTA)!$(DEF_COLOR)"
 
-.PHONY: all clean fclean re
+.PHONY: all re clean fclean norm bonus

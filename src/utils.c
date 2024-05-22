@@ -1,15 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   atof.c                                             :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/20 14:42:27 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/20 14:42:52 by vda-conc         ###   ########.fr       */
+/*   Created: 2024/05/19 21:45:44 by vk                #+#    #+#             */
+/*   Updated: 2024/05/22 20:19:07 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "../includes/minirt.h"
 
-double atof(char *str);
+void free_char_tab(char **tab)
+{
+  int i;
+
+  i = 0;
+  while (tab[i])
+  {
+    free(tab[i]);
+    i++;
+  }
+  return;
+}
+
+int char_tab_len(char **tab)
+{
+  int i;
+
+  i = 0;
+  while (tab[i])
+    i++;
+  return (i);
+}
