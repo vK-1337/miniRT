@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cylindre_lst.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vk <vk@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 12:11:43 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/21 22:49:46 by vk               ###   ########.fr       */
+/*   Updated: 2024/05/22 21:03:50 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void cylindre_lstfree(t_cylindre **lst)
     free(*lst);
     *lst = tmp;
   }
+  free(lst);
 }
 
 t_cylindre	*cylindre_lstlast(t_cylindre *lst)

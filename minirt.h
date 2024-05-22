@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/22 11:38:48 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/22 20:41:09 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,5 +194,9 @@ t_plan	*plan_lstlast(t_plan *lst);
 int	plan_lstsize(t_plan *lst);
 void	plan_lstadd_back(t_plan **lst, t_plan *new);
 void plan_lstfree(t_plan **lst);
+
+void print_sphere_list(t_sphere **sphere_list);
+void print_plan_list(t_plan **plan_list);
+void print_cylindre_list(t_cylindre **cylindre_list);
 
 #endif

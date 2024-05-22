@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sphere_lst.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vk <vk@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 12:12:03 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/21 22:50:08 by vk               ###   ########.fr       */
+/*   Updated: 2024/05/22 21:03:39 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void sphere_lstfree(t_sphere **lst)
     free(*lst);
     *lst = tmp;
   }
+  free(lst);
 }
 
 t_sphere	*sphere_lstlast(t_sphere *lst)

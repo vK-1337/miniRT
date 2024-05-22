@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/22 12:30:15 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/22 21:42:55 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_data	init_all_data(int fd)
 	char	*file_data;
 
 	null_data(&data);
-	file_data = get_next_line(fd);
+	file_data = get_next_line(fd, 0);
 	if (file_data == NULL)
 	{
 		write(STDERR_FILENO, "The file is empty\n", 19);
@@ -26,17 +26,20 @@ t_data	init_all_data(int fd)
 	}
 	if (init_corresponding_data(file_data, &data) == 2)
 	{
+        free_data(&data);
 		free(file_data);
 		exit(EXIT_FAILURE);
 	}
 	while (file_data)
 	{
 		free(file_data);
-		file_data = get_next_line(fd);
+		file_data = get_next_line(fd, 0);
 		if (file_data && file_data[0] == '\n')
 			continue ;
 		if (init_corresponding_data(file_data, &data) == 2)
 		{
+            get_next_line(fd, 1);
+            free_data(&data);
 			free(file_data);
 			exit(EXIT_FAILURE);
 		}
@@ -55,11 +58,10 @@ int	init_corresponding_data(char *file_data, t_data *data)
 	if (!data_split)
 		return (2);
 	type = determine_type(data_split[0]);
-	printf("type : %d\n", type);
 	if (!type || verified_content(data_split, type) == 0)
 	{
 		free_char_tab(data_split);
-		write(STDERR_FILENO, ".rt file content is not valid.\n", 30);
+		write(STDERR_FILENO, ".rt file content is not valid.\n", 32);
 		return (2);
 	}
 	if (!init_data_w_line(data, type, data_split))
@@ -67,6 +69,7 @@ int	init_corresponding_data(char *file_data, t_data *data)
 		write(STDERR_FILENO, "A malloc failed.\n", 18);
 		return (free_char_tab(data_split), 2);
 	}
+    free_char_tab(data_split);
 	return (EXIT_SUCCESS);
 }
 
@@ -78,7 +81,6 @@ int	init_data_w_line(t_data *data, t_dtype type, char **data_split)
 			return (free_data(data), 0);
 	}
 	else if (type == C)
-    
 	{
 		if (!init_camera(data, data_split))
 			return (free_data(data), 0);
@@ -182,29 +184,38 @@ int	init_light(t_data *data, char **data_split)
 
 int	init_sphere(t_data *data, char **data_split)
 {
-	char		**split;
-	t_sphere	*sphere;
+    char		**split;
+    t_sphere	*sphere;
 
-	sphere = malloc(sizeof(t_sphere));
-	if (!sphere)
-		return (0);
-	split = ft_split(data_split[1], ',');
-	if (!split)
-		return (free(sphere) , 0);
-	sphere->coord_x = atof(split[0]);
-	sphere->coord_y = atof(split[1]);
-	sphere->coord_z = atof(split[2]);
-	free_char_tab(split);
-	sphere->diameter = atof(data_split[2]);
-	split = ft_split(data_split[3], ',');
-	if (!split)
-		return (free(sphere) , 0);
-	sphere->color_r = ft_atoi(split[0]);
-	sphere->color_g = ft_atoi(split[1]);
-	sphere->color_b = ft_atoi(split[2]);
-	free_char_tab(split);
-	sphere_lstadd_back(data->sphere, sphere);
-	return (1);
+    sphere = malloc(sizeof(t_sphere));
+    if (!sphere)
+        return (0);
+    split = ft_split(data_split[1], ',');
+    if (!split)
+        return (free(sphere) , 0);
+    sphere->coord_x = atof(split[0]);
+    sphere->coord_y = atof(split[1]);
+    sphere->coord_z = atof(split[2]);
+    free_char_tab(split);
+    sphere->diameter = atof(data_split[2]);
+    split = ft_split(data_split[3], ',');
+    if (!split)
+        return (free(sphere) , 0);
+    sphere->color_r = ft_atoi(split[0]);
+    sphere->color_g = ft_atoi(split[1]);
+    sphere->color_b = ft_atoi(split[2]);
+    free_char_tab(split);
+    sphere->next = NULL;
+    if (!data->sphere)
+    {
+        data->sphere = malloc(sizeof(t_sphere*));
+        if (!data->sphere)
+            return (free(sphere), 0);
+        *data->sphere = sphere;
+    }
+    else
+        sphere_lstadd_back(data->sphere, sphere);
+    return (1);
 }
 
 int	init_plan(t_data *data, char **data_split)
@@ -235,8 +246,18 @@ int	init_plan(t_data *data, char **data_split)
 	plan->color_r = ft_atoi(split[0]);
 	plan->color_g = ft_atoi(split[1]);
 	plan->color_b = ft_atoi(split[2]);
-	plan_lstadd_back(data->plan, plan);
-	return (free_char_tab(split), 1);
+    plan->next = NULL;
+    free_char_tab(split);
+    if (!data->plan)
+    {
+        data->plan = malloc(sizeof(t_plan*));
+        if (!data->plan)
+            return (free(plan), 0);
+        *data->plan = plan;
+    }
+    else
+	    plan_lstadd_back(data->plan, plan);
+	return (1);
 }
 
 int	init_cylindre(t_data *data, char **data_split)
@@ -269,8 +290,18 @@ int	init_cylindre(t_data *data, char **data_split)
 	cylindre->color_r = ft_atoi(split[0]);
 	cylindre->color_g = ft_atoi(split[1]);
 	cylindre->color_b = ft_atoi(split[2]);
-	cylindre_lstadd_back(data->cylindre, cylindre);
-	return (free_char_tab(split), 1);
+    cylindre->next = NULL;
+    free_char_tab(split);
+    if (!data->cylindre)
+    {
+        data->cylindre = malloc(sizeof(t_cylindre*));
+        if (!data->cylindre)
+            return (free(cylindre), 0);
+        *data->cylindre = cylindre;
+    }
+    else
+	    cylindre_lstadd_back(data->cylindre, cylindre);
+	return (1);
 }
 
 t_dtype	determine_type(char *data)

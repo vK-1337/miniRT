@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   plan_lst.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vk <vk@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 12:11:41 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/21 22:53:02 by vk               ###   ########.fr       */
+/*   Updated: 2024/05/22 21:03:23 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void plan_lstfree(t_plan **lst)
     free(*lst);
     *lst = tmp;
   }
+  free(lst);
 }
 
 t_plan	*plan_lstlast(t_plan *lst)
