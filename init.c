@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vk <vk@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/21 22:46:41 by vk               ###   ########.fr       */
+/*   Updated: 2024/05/22 12:30:15 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,85 +62,108 @@ int	init_corresponding_data(char *file_data, t_data *data)
 		write(STDERR_FILENO, ".rt file content is not valid.\n", 30);
 		return (2);
 	}
-	init_data_w_line(data, type, data_split);
-	free_char_tab(data_split);
+	if (!init_data_w_line(data, type, data_split))
+	{
+		write(STDERR_FILENO, "A malloc failed.\n", 18);
+		return (free_char_tab(data_split), 2);
+	}
 	return (EXIT_SUCCESS);
 }
 
-void	init_data_w_line(t_data *data, t_dtype type, char **data_split)
+int	init_data_w_line(t_data *data, t_dtype type, char **data_split)
 {
 	if (type == A)
-		init_alight(data, data_split);
+	{
+		if (!init_alight(data, data_split))
+			return (free_data(data), 0);
+	}
 	else if (type == C)
-		init_camera(data, data_split);
+    
+	{
+		if (!init_camera(data, data_split))
+			return (free_data(data), 0);
+	}
 	else if (type == L)
-		init_light(data, data_split);
+	{
+		if (!init_light(data, data_split))
+			return (free_data(data), 0);
+	}
 	else if (type == PL)
-		init_plan(data, data_split);
+	{
+		if (!init_plan(data, data_split))
+			return (free_data(data), 0);
+	}
 	else if (type == SP)
-		init_sphere(data, data_split);
+	{
+		if (!init_sphere(data, data_split))
+			return (free_data(data), 0);
+	}
 	else if (type == CY)
-		init_cylindre(data, data_split);
+	{
+		if (!init_cylindre(data, data_split))
+			return (free_data(data), 0);
+	}
+	return (1);
 }
 
-void	init_alight(t_data *data, char **data_split)
+int	init_alight(t_data *data, char **data_split)
 {
 	char		**color_split;
 	t_alight	*alight;
 
 	alight = malloc(sizeof(t_alight));
 	if (!alight)
-		return ;
+		return (0);
 	alight->alight = atof(data_split[1]);
 	color_split = ft_split(data_split[2], ',');
 	if (!color_split)
-		return ;
+		return (free(alight), 0);
 	alight->color_r = ft_atoi(color_split[0]);
 	alight->color_g = ft_atoi(color_split[1]);
 	alight->color_b = ft_atoi(color_split[2]);
 	free_char_tab(color_split);
 	data->alight = alight;
-	return ;
+	return (1);
 }
 
-void	init_camera(t_data *data, char **data_split)
+int	init_camera(t_data *data, char **data_split)
 {
 	char		**split;
 	t_camera	*camera;
 
 	camera = malloc(sizeof(t_camera));
 	if (!camera)
-		return ;
+		return (0);
 	split = ft_split(data_split[1], ',');
 	if (!split)
-		return ;
+		return (free(camera) , 0);
 	camera->coord_x = atof(split[0]);
 	camera->coord_y = atof(split[1]);
 	camera->coord_z = atof(split[2]);
 	free_char_tab(split);
 	split = ft_split(data_split[2], ',');
 	if (!split)
-		return ;
+		return (free(camera) , 0);
 	camera->vector_x = atof(split[0]);
 	camera->vector_y = atof(split[1]);
 	camera->vector_z = atof(split[2]);
 	camera->fov = atoi(data_split[3]);
 	free_char_tab(split);
 	data->camera = camera;
-	return ;
+	return (1);
 }
 
-void	init_light(t_data *data, char **data_split)
+int	init_light(t_data *data, char **data_split)
 {
 	char	**split;
 	t_light	*light;
 
 	light = malloc(sizeof(t_light));
 	if (!light)
-		return ;
+		return (0);
 	split = ft_split(data_split[1], ',');
 	if (!split)
-		return ;
+		return (free(light) ,0);
 	light->coord_x = atof(split[0]);
 	light->coord_y = atof(split[1]);
 	light->coord_z = atof(split[2]);
@@ -148,26 +171,26 @@ void	init_light(t_data *data, char **data_split)
 	light->light_ratio = atof(data_split[2]);
 	split = ft_split(data_split[3], ',');
 	if (!split)
-		return ;
+		return (free(light) ,0);
 	light->color_r = ft_atoi(split[0]);
 	light->color_g = ft_atoi(split[1]);
 	light->color_b = ft_atoi(split[2]);
 	free_char_tab(split);
 	data->light = light;
-	return ;
+	return (1);
 }
 
-void	init_sphere(t_data *data, char **data_split)
+int	init_sphere(t_data *data, char **data_split)
 {
 	char		**split;
 	t_sphere	*sphere;
 
 	sphere = malloc(sizeof(t_sphere));
 	if (!sphere)
-		return ;
+		return (0);
 	split = ft_split(data_split[1], ',');
 	if (!split)
-		return ;
+		return (free(sphere) , 0);
 	sphere->coord_x = atof(split[0]);
 	sphere->coord_y = atof(split[1]);
 	sphere->coord_z = atof(split[2]);
@@ -175,65 +198,65 @@ void	init_sphere(t_data *data, char **data_split)
 	sphere->diameter = atof(data_split[2]);
 	split = ft_split(data_split[3], ',');
 	if (!split)
-		return ;
+		return (free(sphere) , 0);
 	sphere->color_r = ft_atoi(split[0]);
 	sphere->color_g = ft_atoi(split[1]);
 	sphere->color_b = ft_atoi(split[2]);
 	free_char_tab(split);
 	sphere_lstadd_back(data->sphere, sphere);
-	return ;
+	return (1);
 }
 
-void	init_plan(t_data *data, char **data_split)
+int	init_plan(t_data *data, char **data_split)
 {
 	char	**split;
 	t_plan	*plan;
 
 	plan = malloc(sizeof(t_plan));
 	if (!plan)
-		return ;
+		return (0);
 	split = ft_split(data_split[1], ',');
 	if (!split)
-		return ;
+		return (free(plan), 0);
 	plan->coord_x = atof(split[0]);
 	plan->coord_y = atof(split[1]);
 	plan->coord_z = atof(split[2]);
 	free_char_tab(split);
 	split = ft_split(data_split[2], ',');
 	if (!split)
-		return ;
+		return (free(plan), 0);
 	plan->vector_x = atof(split[0]);
 	plan->vector_y = atof(split[1]);
 	plan->vector_z = atof(split[2]);
 	free_char_tab(split);
 	split = ft_split(data_split[3], ',');
 	if (!split)
-		return ;
+		return (free(plan), 0);
 	plan->color_r = ft_atoi(split[0]);
 	plan->color_g = ft_atoi(split[1]);
 	plan->color_b = ft_atoi(split[2]);
 	plan_lstadd_back(data->plan, plan);
-	free_char_tab(split);
+	return (free_char_tab(split), 1);
 }
 
-void	init_cylindre(t_data *data, char **data_split)
+int	init_cylindre(t_data *data, char **data_split)
 {
 	char		**split;
 	t_cylindre	*cylindre;
 
 	cylindre = malloc(sizeof(t_cylindre));
 	if (!cylindre)
-		return ;
+		return (0);
 	split = ft_split(data_split[1], ',');
 	if (!split)
-		return ;
+		return (free(cylindre), 0);
 	cylindre->coord_x = atof(split[0]);
 	cylindre->coord_y = atof(split[1]);
 	cylindre->coord_z = atof(split[2]);
 	free_char_tab(split);
 	split = ft_split(data_split[2], ',');
 	if (!split)
-		return ;
+		return (free(cylindre), 0);
 	cylindre->n_vector_x = atof(split[0]);
 	cylindre->n_vector_y = atof(split[1]);
 	cylindre->n_vector_z = atof(split[2]);
@@ -242,12 +265,12 @@ void	init_cylindre(t_data *data, char **data_split)
 	free_char_tab(split);
 	split = ft_split(data_split[5], ',');
 	if (!split)
-		return ;
+		return (free(cylindre), 0);
 	cylindre->color_r = ft_atoi(split[0]);
 	cylindre->color_g = ft_atoi(split[1]);
 	cylindre->color_b = ft_atoi(split[2]);
 	cylindre_lstadd_back(data->cylindre, cylindre);
-	free_char_tab(split);
+	return (free_char_tab(split), 1);
 }
 
 t_dtype	determine_type(char *data)
@@ -277,7 +300,7 @@ t_dtype	determine_type(char *data)
 
 void	null_data(t_data *data)
 {
-    int i;
+	int	i;
 
 	data->alight = NULL;
 	data->camera = NULL;
@@ -285,11 +308,11 @@ void	null_data(t_data *data)
 	data->light = NULL;
 	data->plan = NULL;
 	data->sphere = NULL;
-    i = 0;
-    while (i < 6)
-    {
-        data->counter[i] = 0;
-        i++;
-    }
+	i = 0;
+	while (i < 6)
+	{
+		data->counter[i] = 0;
+		i++;
+	}
 	return ;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vk <vk@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/21 22:50:26 by vk               ###   ########.fr       */
+/*   Updated: 2024/05/22 11:38:48 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ typedef struct s_data
 }   t_data;
 
 void print_char_tab(char **tab);
+
 /******************************************************************************/
 /*                                                                            */
 /*                                                                            */
@@ -134,14 +135,13 @@ void print_char_tab(char **tab);
 /******************************************************************************/
 
 int scene_name_check(char *av);
-t_data init_all_data(int fd);
 void	null_data(t_data *data);
-int init_corresponding_data(char *file_data, t_data *data);
-void init_data_w_line(t_data *data, t_dtype type, char **data_split);
-t_dtype determine_type(char *data);
+void free_data(t_data *data);
+
 int char_tab_len(char **tab);
 void free_char_tab(char **tab);
 int is_string_float(char *str);
+
 int verify_colors(char *str);
 int verify_alight(char **data);
 int verify_camera(char **data);
@@ -154,18 +154,22 @@ int verify_coord(char *data);
 int verify_vect(char *data);
 int verify_fov(char *data);
 int verify_colors_syntax(char *data);
+
 int	check_fov_syntax(char *data);
 int check_vect_syntax(char *data);
 int check_coord_syntax(char *data);
 
-void init_alight(t_data *data, char** data_split);
-void init_camera(t_data *data, char** data_split);
-void init_light(t_data *data, char** data_split);
-void init_sphere(t_data *data, char** data_split);
-void init_plan(t_data *data, char** data_split);
-void init_cylindre(t_data *data, char** data_split);
+t_data init_all_data(int fd);
+int init_corresponding_data(char *file_data, t_data *data);
+int init_data_w_line(t_data *data, t_dtype type, char **data_split);
+int init_alight(t_data *data, char** data_split);
+int init_camera(t_data *data, char** data_split);
+int init_light(t_data *data, char** data_split);
+int init_sphere(t_data *data, char** data_split);
+int init_plan(t_data *data, char** data_split);
+int init_cylindre(t_data *data, char** data_split);
+
 t_dtype determine_type(char *data);
-void	null_data(t_data *data);
 void print_all_data(t_data *data);
 
 /******************************************************************************/
@@ -190,4 +194,5 @@ t_plan	*plan_lstlast(t_plan *lst);
 int	plan_lstsize(t_plan *lst);
 void	plan_lstadd_back(t_plan **lst, t_plan *new);
 void plan_lstfree(t_plan **lst);
+
 #endif
