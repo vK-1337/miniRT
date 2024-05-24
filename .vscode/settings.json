@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+      "cmath": "c",
+      "keysym.h": "c",
+      "minirt.h": "c"
+    }
+}
