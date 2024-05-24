@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 21:45:44 by vk                #+#    #+#             */
-/*   Updated: 2024/05/24 17:37:53 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/24 17:46:12 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	free_char_tab(char **tab)
 		free(tab[i]);
 		i++;
 	}
-    free(tab);
+	free(tab);
 	return ;
 }
 
@@ -45,7 +45,7 @@ void	free_data(t_data *data)
 	if (data->light)
 		free(data->light);
 	if (data->plan)
-        plan_lstfree(data->plan);
+		plan_lstfree(data->plan);
 	if (data->sphere)
 		sphere_lstfree(data->sphere);
 	if (data->cylindre)

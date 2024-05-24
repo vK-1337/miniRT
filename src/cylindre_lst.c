@@ -1,20 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   plan_lst.c                                         :+:      :+:    :+:   */
+/*   cylindre_lst.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/21 12:11:41 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/22 21:03:23 by vda-conc         ###   ########.fr       */
+/*   Created: 2024/05/21 12:11:43 by vda-conc          #+#    #+#             */
+/*   Updated: 2024/05/24 17:42:34 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minirt.h"
+#include "../includes/minirt.h"
 
-void plan_lstfree(t_plan **lst)
+void cylindre_lstfree(t_cylindre **lst)
 {
-  t_plan	*tmp;
+  t_cylindre	*tmp;
 
   if (!lst)
     return ;
@@ -27,7 +27,7 @@ void plan_lstfree(t_plan **lst)
   free(lst);
 }
 
-t_plan	*plan_lstlast(t_plan *lst)
+t_cylindre	*cylindre_lstlast(t_cylindre *lst)
 {
 	if (!lst)
 		return (NULL);
@@ -39,7 +39,7 @@ t_plan	*plan_lstlast(t_plan *lst)
 	return (lst);
 }
 
-int	plan_lstsize(t_plan *lst)
+int	cylindre_lstsize(t_cylindre *lst)
 {
 	size_t	i;
 
@@ -54,16 +54,16 @@ int	plan_lstsize(t_plan *lst)
 	return (i + 1);
 }
 
-void	plan_lstadd_back(t_plan **lst, t_plan *new)
+void	cylindre_lstadd_back(t_cylindre **lst, t_cylindre *new)
 {
-	t_plan	*tmp;
+	t_cylindre	*tmp;
 
 	tmp = NULL;
 	if (!lst || !new)
 		return ;
 	if (*lst)
 	{
-		tmp = plan_lstlast((*lst));
+		tmp = cylindre_lstlast((*lst));
 		tmp->next = new;
 	}
 	else

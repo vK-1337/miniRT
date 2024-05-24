@@ -1,20 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sphere_lst.c                                       :+:      :+:    :+:   */
+/*   plan_lst.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/21 12:12:03 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/22 21:03:39 by vda-conc         ###   ########.fr       */
+/*   Created: 2024/05/21 12:11:41 by vda-conc          #+#    #+#             */
+/*   Updated: 2024/05/24 17:52:26 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minirt.h"
+#include "../includes/minirt.h"
 
-void sphere_lstfree(t_sphere **lst)
+void plan_lstfree(t_plan **lst)
 {
-  t_sphere	*tmp;
+  t_plan	*tmp;
 
   if (!lst)
     return ;
@@ -27,7 +27,7 @@ void sphere_lstfree(t_sphere **lst)
   free(lst);
 }
 
-t_sphere	*sphere_lstlast(t_sphere *lst)
+t_plan	*plan_lstlast(t_plan *lst)
 {
 	if (!lst)
 		return (NULL);
@@ -39,7 +39,7 @@ t_sphere	*sphere_lstlast(t_sphere *lst)
 	return (lst);
 }
 
-int	sphere_lstsize(t_sphere *lst)
+int	plan_lstsize(t_plan *lst)
 {
 	size_t	i;
 
@@ -54,16 +54,16 @@ int	sphere_lstsize(t_sphere *lst)
 	return (i + 1);
 }
 
-void	sphere_lstadd_back(t_sphere **lst, t_sphere *new)
+void	plan_lstadd_back(t_plan **lst, t_plan *new)
 {
-	t_sphere	*tmp;
+	t_plan	*tmp;
 
 	tmp = NULL;
 	if (!lst || !new)
 		return ;
 	if (*lst)
 	{
-		tmp = sphere_lstlast((*lst));
+		tmp = plan_lstlast((*lst));
 		tmp->next = new;
 	}
 	else
