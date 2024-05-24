@@ -6,70 +6,38 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 12:08:49 by udumas            #+#    #+#             */
-/*   Updated: 2024/05/22 21:19:00 by udumas           ###   ########.fr       */
+/*   Updated: 2024/05/24 15:30:36 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
 
-void	ft_matcre2_2(float **mat, float arr[4])
+float	**ft_matcre(float *tab, int row_col)
 {
-	int	x;
-	int	y;
-	int	k;
- 
+	int i;
+	int j;
+	int k;
+	float **matrice;
+	
+	i = -1;
 	k = 0;
-	y = 0;
-	while (y < 2)
+	matrice = malloc(sizeof(float *) * row_col);
+	if (!matrice)
+		return (printf("malloc error\n"), NULL);
+	while (++i < row_col)
 	{
-		x = 0;
-		while (x < 2)
-		{
-			mat[y][x] = arr[k++];
-			x++;
-		}
-		y++;
+		matrice[i] = malloc(sizeof(float) * row_col);
+		if (!matrice[i])
+			return (printf("malloc error\n"), NULL);
 	}
-}
-
-void	ft_matcre3_3(float mat[3][3], float arr[9])
-{
-	int	x;
-	int	y;
-	int	k;
-
-	k = 0;
-	y = 0;
-	while (y < 3)
+	i = -1;
+	while (++i < row_col)
 	{
-		x = 0;
-		while (x < 3)
-		{
-			mat[y][x] = arr[k++];
-			x++;
-		}
-		y++;
+		j = -1;
+		while (++j < row_col)
+			matrice[i][j] = tab[k++];	
 	}
-}
-
-void	ft_matcre4_4(float mat[4][4], float arr[16])
-{
-	int	x;
-	int	y;
-	int	k;
-
-	k = 0;
-	y = 0;
-	while (y < 4)
-	{
-		x = 0;
-		while (x < 4)
-		{
-			mat[y][x] = arr[k++];
-			x++;
-		}
-		y++;
-	}
+	return (matrice);
 }
 
 void	ft_mult_mat(float res[4][4], float mat1[4][4], float mat2[4][4])

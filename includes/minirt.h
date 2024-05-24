@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/22 18:56:48 by udumas           ###   ########.fr       */
+/*   Updated: 2024/05/24 15:11:26 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,9 +206,7 @@ t_color				ft_mult_color_tog(t_color c1, t_color c2);
 /*                                                                            */
 /******************************************************************************/
 
-void	ft_matcre2_2(float mat[2][2], float arr[4]);
-void	ft_matcre3_3(float mat[3][3], float arr[9]);
-void	ft_matcre4_4(float mat[4][4], float arr[16]);
+float	**ft_matcre(float *tab, int row_col);
 void	ft_mult_mat(float res[4][4], float mat1[4][4], float mat2[4][4]);
 void	ft_mult_mat_tuple(float tuple[4], float mat[4][4]);
 
