@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_substr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 12:44:41 by vda-conc          #+#    #+#             */
-/*   Updated: 2023/11/14 15:56:35 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/21 18:32:27 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../includes/libft.h"
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
