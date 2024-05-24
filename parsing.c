@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:52 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/21 18:28:41 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/22 22:00:54 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ int	verified_content(char **data, t_dtype type)
 
 int	verify_alight(char **data)
 {
-	int i;
-	float float_data;
+	int		i;
+	float	float_data;
 
 	i = 1;
 	if (char_tab_len(data) != 3)
@@ -74,16 +74,16 @@ int	verify_alight(char **data)
 	return (1);
 }
 
-void print_char_tab(char **tab)
+void	print_char_tab(char **tab)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    while (tab[i])
-    {
-        printf("tab[%d] = %s\n", i, tab[i]);
-        i++;
-    }
+	i = 0;
+	while (tab[i])
+	{
+		printf("tab[%d] = %s\n", i, tab[i]);
+		i++;
+	}
 }
 
 int	verify_camera(char **data)
@@ -113,7 +113,8 @@ int	verify_fov(char *data)
 
 int	check_fov_syntax(char *data)
 {
-	int i;
+	int	i;
+
 	if (!data || (ft_strlen(data) > 3 && data[ft_strlen(data) - 1] != '\n'))
 		return (0);
 	i = 0;
@@ -128,9 +129,9 @@ int	check_fov_syntax(char *data)
 
 int	verify_vect(char *data)
 {
-	int i;
-	char **vect_split;
-	float vect;
+	int		i;
+	char	**vect_split;
+	float	vect;
 
 	if (!check_vect_syntax(data))
 		return (0);
@@ -201,7 +202,7 @@ int	check_coord_syntax(char *data) // ! OK
 	while (data[i])
 	{
 		if (data[i] == '-' && (!data[i + 1] || !ft_isdigit(data[i + 1])
-				|| (data[i - 1] && data[i - 1] != ',')))
+				|| (i > 0 && data[i - 1] && data[i - 1] != ',')))
 			return (0);
 		else if (data[i] == '.' && (!data[i - 1] || !data[i + 1]
 				|| !ft_isdigit(data[i + 1]) || !ft_isdigit(data[i - 1])))
@@ -231,13 +232,14 @@ int	verify_light(char **data)
 	float_data = atof(data[2]);
 	if (float_data < 0.0 || float_data > 1.0)
 		return (0);
-	if (!verify_colors(data[3])) // ! NON USE IN MANDATORY PART;
+	if (!verify_colors(data[3]))
 		return (0);
 	return (1);
 }
 
 int	verify_sphere(char **data)
 {
+	print_char_tab(data);
 	if (char_tab_len(data) != 4)
 		return (0);
 	if (!verify_coord(data[1]))
@@ -264,7 +266,7 @@ int	verify_plan(char **data)
 
 int	verify_cylindre(char **data)
 {
-	if (char_tab_len(data) != 5)
+	if (char_tab_len(data) != 6)
 		return (0);
 	if (!verify_coord(data[1]))
 		return (0);
@@ -294,7 +296,7 @@ int	verify_colors(char *data)
 	while (colors_split[i])
 	{
 		color_int = ft_atoi(colors_split[i]);
-		if ((ft_strlen(colors_split[i]) != 1 && color_int == 0) || color_int < 0
+		if ((ft_strlen(colors_split[i]) > 4) || color_int < 0
 			|| color_int > 255)
 			return (free_char_tab(colors_split), 0);
 		i++;
@@ -310,7 +312,8 @@ int	verify_colors_syntax(char *colors)
 	i = 0;
 	while (colors[i])
 	{
-		if (!ft_isdigit(colors[i]) && colors[i] != ',' && (colors[i] != '\n' && !colors[i + 1]))
+		if (!ft_isdigit(colors[i]) && colors[i] != ',' && (colors[i] != '\n'
+				&& !colors[i + 1]))
 			return (0);
 		i++;
 	}
@@ -328,7 +331,7 @@ int	is_string_float(char *str)
 	{
 		if (!ft_isdigit(str[i]) && str[i] != '.')
 			return (0);
-        i++;
+		i++;
 	}
 	return (1);
 }
