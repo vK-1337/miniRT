@@ -6,11 +6,26 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 12:11:43 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/21 12:11:44 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/22 21:03:50 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minirt.h"
+
+void cylindre_lstfree(t_cylindre **lst)
+{
+  t_cylindre	*tmp;
+
+  if (!lst)
+    return ;
+  while (*lst)
+  {
+    tmp = (*lst)->next;
+    free(*lst);
+    *lst = tmp;
+  }
+  free(lst);
+}
 
 t_cylindre	*cylindre_lstlast(t_cylindre *lst)
 {

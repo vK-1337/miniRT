@@ -6,11 +6,26 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 12:12:03 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/21 12:12:14 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/22 21:03:39 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minirt.h"
+
+void sphere_lstfree(t_sphere **lst)
+{
+  t_sphere	*tmp;
+
+  if (!lst)
+    return ;
+  while (*lst)
+  {
+    tmp = (*lst)->next;
+    free(*lst);
+    *lst = tmp;
+  }
+  free(lst);
+}
 
 t_sphere	*sphere_lstlast(t_sphere *lst)
 {

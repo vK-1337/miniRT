@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 18:19:03 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/01/15 15:02:26 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/22 22:00:02 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,31 +96,31 @@ char	*ft_fill_line(char **stash, ssize_t index)
 	return (line);
 }
 
-char	*get_next_line(int fd)
+char	*get_next_line(int fd, int err)
 {
-	char		*line;
-	char		*buffer;
+    t_norme norme;
 	static char	*stash;
-	int			line_index;
 
-	line = NULL;
-	buffer = NULL;
-	if (fd < 0 || read(fd, buffer, 0) == -1)
+	norme.line = NULL;
+	norme.buffer = NULL;
+	if (err)
+		return (free(stash), NULL);
+	if (fd < 0 || read(fd, norme.buffer, 0) == -1)
 		return (0);
-	buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
-	if (!buffer)
+	norme.buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (!norme.buffer)
 		return (NULL);
-	line_index = ft_read(&stash, buffer, fd);
-	if (line_index == -1 && ft_gnl_strlen(stash) == 0)
+	norme.line_index = ft_read(&stash, norme.buffer, fd);
+	if (norme.line_index == -1 && ft_gnl_strlen(stash) == 0)
 	{
 		free(stash);
 		stash = NULL;
 		return (NULL);
 	}
-	else if (line_index == -1 && (ft_gnl_strlen(stash) > 0))
-		line_index = ft_gnl_strlen(stash) - 1;
-	line = ft_fill_line(&stash, line_index);
-	if (line == NULL)
+	else if (norme.line_index == -1 && (ft_gnl_strlen(stash) > 0))
+		norme.line_index = ft_gnl_strlen(stash) - 1;
+	norme.line = ft_fill_line(&stash, norme.line_index);
+	if (norme.line == NULL)
 		return (NULL);
-	return (ft_clean_stash(&stash, line_index), line);
+	return (ft_clean_stash(&stash, norme.line_index), norme.line);
 }
