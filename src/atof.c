@@ -3,13 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   atof.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 14:42:27 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/22 20:19:07 by udumas           ###   ########.fr       */
+/*   Updated: 2024/05/24 17:34:40 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
 #include "../includes/minirt.h"
 
-double atof(char *str);
+double ft_atof(char *str)
+{
+  ;
+}

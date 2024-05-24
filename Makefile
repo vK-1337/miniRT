@@ -1,5 +1,15 @@
-#Colors / base 16 / Bright
+SRCS =	main.c \
+		parsing.c \
+		init.c \
+		gnl/get_next_line_utils.c \
+		gnl/get_next_line.c \
+		utils.c \
+		lst_fnct/cylindre_lst.c \
+		lst_fnct/sphere_lst.c \
+		lst_fnct/plan_lst.c \
 
+
+#Colors / base 16 / Bright
 DEF_COLOR		= \033[0;39m
 GRAY			= \033[0;90m
 RED				= \033[0;91m
@@ -30,7 +40,7 @@ LIBFT			= $(LIBFT_DIR)$(LIBFT_NAME)
 
 NAME			= MiniRT
 CC				= cc
-FLAGS			= -Wall -Werror -Wextra 
+FLAGS			= -Wall -Werror -Wextra
 RM				= rm -f
 AR				= ar rcs
 NORM			= ./includes\
@@ -86,7 +96,7 @@ clean:
 					@echo "Removing object files"
 					@rm -rf $(OBJ_DIR_F)
 					@make clean -C $(LIBFT_DIR)
-					
+
 fclean:			clean
 					@echo "Removing push_swap..."
 					@rm -f $(NAME)
