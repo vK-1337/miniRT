@@ -1,14 +1,3 @@
-SRCS =	main.c \
-		parsing.c \
-		init.c \
-		gnl/get_next_line_utils.c \
-		gnl/get_next_line.c \
-		utils.c \
-		lst_fnct/cylindre_lst.c \
-		lst_fnct/sphere_lst.c \
-		lst_fnct/plan_lst.c \
-
-
 #Colors / base 16 / Bright
 DEF_COLOR		= \033[0;39m
 GRAY			= \033[0;90m
@@ -54,7 +43,8 @@ INCLUDE			= 	-I ./includes/\
 
 OBJ_DIR_F 		= obj/
 SRC_DIR_F		= src/
-SRC_FUNCTIONS_F	= main color_calculation tuple_calculations tuple_calculations2 utils
+
+SRC_FUNCTIONS_F	= main color_calculation tuple_calculations tuple_calculations2 utils sphere_lst plan_lst cylindre_lst
 
 FRACT_SRC		= $(addprefix $(SRC_DIR_F), $(addsuffix .c, $(SRC_FUNCTIONS_F)))
 FRACT_OBJ		= $(addprefix $(OBJ_DIR_F), $(addsuffix .o, $(SRC_FUNCTIONS_F)))

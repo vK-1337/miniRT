@@ -1,20 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cylindre_lst.c                                     :+:      :+:    :+:   */
+/*   sphere_lst.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/21 12:11:43 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/22 21:03:50 by vda-conc         ###   ########.fr       */
+/*   Created: 2024/05/21 12:12:03 by vda-conc          #+#    #+#             */
+/*   Updated: 2024/05/24 17:42:51 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minirt.h"
+#include "../includes/minirt.h"
 
-void cylindre_lstfree(t_cylindre **lst)
+void sphere_lstfree(t_sphere **lst)
 {
-  t_cylindre	*tmp;
+  t_sphere	*tmp;
 
   if (!lst)
     return ;
@@ -27,7 +27,7 @@ void cylindre_lstfree(t_cylindre **lst)
   free(lst);
 }
 
-t_cylindre	*cylindre_lstlast(t_cylindre *lst)
+t_sphere	*sphere_lstlast(t_sphere *lst)
 {
 	if (!lst)
 		return (NULL);
@@ -39,7 +39,7 @@ t_cylindre	*cylindre_lstlast(t_cylindre *lst)
 	return (lst);
 }
 
-int	cylindre_lstsize(t_cylindre *lst)
+int	sphere_lstsize(t_sphere *lst)
 {
 	size_t	i;
 
@@ -54,16 +54,16 @@ int	cylindre_lstsize(t_cylindre *lst)
 	return (i + 1);
 }
 
-void	cylindre_lstadd_back(t_cylindre **lst, t_cylindre *new)
+void	sphere_lstadd_back(t_sphere **lst, t_sphere *new)
 {
-	t_cylindre	*tmp;
+	t_sphere	*tmp;
 
 	tmp = NULL;
 	if (!lst || !new)
 		return ;
 	if (*lst)
 	{
-		tmp = cylindre_lstlast((*lst));
+		tmp = sphere_lstlast((*lst));
 		tmp->next = new;
 	}
 	else

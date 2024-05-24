@@ -6,11 +6,11 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:55 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/22 21:26:56 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/24 17:49:23 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "includes/minirt.h"
 
 void	print_all_data(t_data *data)
 {
