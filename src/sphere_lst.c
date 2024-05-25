@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   sphere_lst.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 12:12:03 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/21 12:12:14 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/25 11:53:28 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minirt.h"
+#include "../includes/minirt.h"
 
 t_sphere	*sphere_lstlast(t_sphere *lst)
 {

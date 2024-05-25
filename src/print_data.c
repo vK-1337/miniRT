@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   print_data.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:55 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/21 18:12:48 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/25 11:47:36 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "../includes/minirt.h"
 
 void print_all_data(t_data *data)
 {
@@ -38,20 +38,4 @@ void print_all_data(t_data *data)
     printf("Data.light->color_b : %d\n", data->light->color_b);
 }
 
-int main(int ac, char **av)
-{
-    int fd;
-    t_data data;
 
-    if (ac != 2 || !scene_name_check(av[1]))
-    {
-        printf("Bad arguments : Usage : ./minirt scene.rt");
-        return EXIT_FAILURE;
-    }
-    fd = open(av[1], O_RDONLY);
-    if (fd == -1)
-		return (write(2, "File not found\n", 16), EXIT_FAILURE);
-    data = init_all_data(fd);
-    print_all_data(&data);
-    return EXIT_SUCCESS;
-}

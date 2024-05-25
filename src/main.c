@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:55 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/22 20:19:07 by udumas           ###   ########.fr       */
+/*   Updated: 2024/05/25 11:38:51 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,13 +116,20 @@ t_win *init_mlx(void)
   return (win);
 }
 
-int main()
+int main(int ac, char **av)
 {
-  t_win *win;
+    int fd;
+    t_data data;
 
-  win = init_mlx();
-  tick(win);
-  mlx_hook(win->win, 17, 0L, exit_window, win);
-  mlx_loop(win->mlx);
-  return (0);
+    if (ac != 2 || !scene_name_check(av[1]))
+    {
+        printf("Bad arguments : Usage : ./minirt scene.rt");
+        return EXIT_FAILURE;
+    }
+    fd = open(av[1], O_RDONLY);
+    if (fd == -1)
+		return (write(2, "File not found\n", 16), EXIT_FAILURE);
+    data = init_all_data(fd);
+    // print_all_data(&data);
+    return EXIT_SUCCESS;
 }

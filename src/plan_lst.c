@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cylindre_lst.c                                     :+:      :+:    :+:   */
+/*   plan_lst.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/21 12:11:43 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/21 12:11:44 by vda-conc         ###   ########.fr       */
+/*   Created: 2024/05/21 12:11:41 by vda-conc          #+#    #+#             */
+/*   Updated: 2024/05/25 11:53:35 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minirt.h"
+#include "../includes/minirt.h"
 
-t_cylindre	*cylindre_lstlast(t_cylindre *lst)
+t_plan	*plan_lstlast(t_plan *lst)
 {
 	if (!lst)
 		return (NULL);
@@ -24,7 +24,7 @@ t_cylindre	*cylindre_lstlast(t_cylindre *lst)
 	return (lst);
 }
 
-int	cylindre_lstsize(t_cylindre *lst)
+int	plan_lstsize(t_plan *lst)
 {
 	size_t	i;
 
@@ -39,16 +39,16 @@ int	cylindre_lstsize(t_cylindre *lst)
 	return (i + 1);
 }
 
-void	cylindre_lstadd_back(t_cylindre **lst, t_cylindre *new)
+void	plan_lstadd_back(t_plan **lst, t_plan *new)
 {
-	t_cylindre	*tmp;
+	t_plan	*tmp;
 
 	tmp = NULL;
 	if (!lst || !new)
 		return ;
 	if (*lst)
 	{
-		tmp = cylindre_lstlast((*lst));
+		tmp = plan_lstlast((*lst));
 		tmp->next = new;
 	}
 	else
