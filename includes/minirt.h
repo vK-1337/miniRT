@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/25 11:59:32 by udumas           ###   ########.fr       */
+/*   Updated: 2024/05/25 12:09:07 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,7 @@ int						scene_name_check(char *av);
 t_data					init_all_data(int fd);
 void					null_data(t_data *data);
 int						init_corresponding_data(char *file_data, t_data *data);
-void					init_data_w_line(t_data *data, t_dtype type,
+int					init_data_w_line(t_data *data, t_dtype type,
 							char **data_split);
 t_dtype					determine_type(char *data);
 int						char_tab_len(char **tab);
@@ -193,12 +193,12 @@ int						check_fov_syntax(char *data);
 int						check_vect_syntax(char *data);
 int						check_coord_syntax(char *data);
 
-void					init_alight(t_data *data, char **data_split);
-void					init_camera(t_data *data, char **data_split);
-void					init_light(t_data *data, char **data_split);
-void					init_sphere(t_data *data, char **data_split);
-void					init_plan(t_data *data, char **data_split);
-void					init_cylindre(t_data *data, char **data_split);
+int						init_alight(t_data *data, char **data_split);
+int						init_camera(t_data *data, char **data_split);
+int						init_light(t_data *data, char **data_split);
+int						init_sphere(t_data *data, char **data_split);
+int						init_plan(t_data *data, char **data_split);
+int						init_cylindre(t_data *data, char **data_split);
 t_dtype					determine_type(char *data);
 void					null_data(t_data *data);
 void					print_all_data(t_data *data);
@@ -214,14 +214,23 @@ void					print_all_data(t_data *data);
 t_cylindre				*cylindre_lstlast(t_cylindre *lst);
 int						cylindre_lstsize(t_cylindre *lst);
 void					cylindre_lstadd_back(t_cylindre **lst, t_cylindre *new);
+void					cylindre_lstfree(t_cylindre **lst);
 
 t_sphere				*sphere_lstlast(t_sphere *lst);
 int						sphere_lstsize(t_sphere *lst);
 void					sphere_lstadd_back(t_sphere **lst, t_sphere *new);
+void					sphere_lstfree(t_sphere **lst);
 
 t_plan					*plan_lstlast(t_plan *lst);
 int						plan_lstsize(t_plan *lst);
 void					plan_lstadd_back(t_plan **lst, t_plan *new);
+void					plan_lstfree(t_plan **lst);
+
+void					print_sphere_list(t_sphere **sphere_list);
+void					print_plan_list(t_plan **plan_list);
+void					print_cylindre_list(t_cylindre **cylindre_list);
+
+void					free_data(t_data *data);
 
 /******************************************************************************/
 /*                                                                            */

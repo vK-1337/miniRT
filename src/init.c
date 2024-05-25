@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/25 12:00:37 by udumas           ###   ########.fr       */
+/*   Updated: 2024/05/25 12:06:00 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,42 +16,7 @@ t_data	init_all_data(int fd)
 {
 	t_data	data;
 	char	*file_data;
-t_data	init_all_data(int fd)
-{
-	t_data	data;
-	char	*file_data;
 
-	null_data(&data);
-	file_data = get_next_line(fd);
-	if (file_data == NULL)
-	{
-		write(STDERR_FILENO, "The file is empty\n", 19);
-		exit(EXIT_FAILURE);
-	}
-	if (init_corresponding_data(file_data, &data) == 2)
-	{
-		free(file_data);
-		exit(EXIT_FAILURE);
-	}
-	while (file_data)
-	{
-		free(file_data);
-		file_data = get_next_line(fd);
-		if (file_data && file_data[0] == '\n')
-			continue ;
-		if (init_corresponding_data(file_data, &data) == 2)
-		{
-			free(file_data);
-			exit(EXIT_FAILURE);
-		}
-	}
-	return (data);
-}
-
-int	init_corresponding_data(char *file_data, t_data *data)
-{
-	char	**data_split;
-	t_dtype	type;
 	null_data(&data);
 	file_data = get_next_line(fd, 0);
 	if (file_data == NULL)

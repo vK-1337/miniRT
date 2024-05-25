@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 12:11:43 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/25 11:59:42 by udumas           ###   ########.fr       */
+/*   Updated: 2024/05/25 12:12:26 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,3 +54,19 @@ void	cylindre_lstadd_back(t_cylindre **lst, t_cylindre *new)
 	else
 		*lst = new;
 }
+
+void cylindre_lstfree(t_cylindre **lst)
+{
+  t_cylindre	*tmp;
+
+  if (!lst)
+    return ;
+  while (*lst)
+  {
+    tmp = (*lst)->next;
+    free(*lst);
+    *lst = tmp;
+  }
+  free(lst);
+}
+
