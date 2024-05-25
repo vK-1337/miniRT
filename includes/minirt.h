@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/25 12:09:07 by udumas           ###   ########.fr       */
+/*   Updated: 2024/05/25 15:35:27 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,7 @@ int						scene_name_check(char *av);
 t_data					init_all_data(int fd);
 void					null_data(t_data *data);
 int						init_corresponding_data(char *file_data, t_data *data);
-int					init_data_w_line(t_data *data, t_dtype type,
+int						init_data_w_line(t_data *data, t_dtype type,
 							char **data_split);
 t_dtype					determine_type(char *data);
 int						char_tab_len(char **tab);
@@ -267,9 +267,32 @@ t_color					ft_mult_color_tog(t_color c1, t_color c2);
 /*                                                                            */
 /******************************************************************************/
 
-float					**ft_matcre(float *tab, int row_col);
-void					ft_mult_mat(float res[4][4], float mat1[4][4],
-							float mat2[4][4]);
+//										CALCUL								//
+
+float					**ft_mult_mat(float **mat1, float **mat2);
 void					ft_mult_mat_tuple(float tuple[4], float mat[4][4]);
+void					ft_transpose(float mat[4][4]);
+int						ft_comp_mat(float mat1[4][4], float mat2[4][4]);
+float					**ft_inversion(float **matrice, int row_col);
+
+//										UTILS								//
+
+float					**ft_matcre(float *tab, int row_col);
+void					ft_free_mat(float **mat, int row_col);
+float					**ft_create_mat_null(int row_col);
+void					print_matrix(float **mat, int row_col);
+float					**ft_submat(float **matrice, int row_col, int row,
+							int col);
+
+//										UTILS2								//
+float					**identity_matrix(int size);
+
+//										DETER_COFAC							//
+
+float					ft_deter2_2(float **mat);
+float					ft_determinant3_3(float **mat);
+float					ft_cofactorinversion(float **mat, int row, int col);
+float					ft_determinant4_4(float **matrice);
+float					ft_cofactor2_2(float **mat, int row, int col);
 
 #endif

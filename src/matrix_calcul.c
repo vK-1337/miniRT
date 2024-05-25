@@ -1,50 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   matrix.c                                           :+:      :+:    :+:   */
+/*   matrix_calcul.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 12:08:49 by udumas            #+#    #+#             */
-/*   Updated: 2024/05/24 15:30:36 by udumas           ###   ########.fr       */
+/*   Updated: 2024/05/25 15:38:10 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
 
-float	**ft_matcre(float *tab, int row_col)
+float	**ft_mult_mat(float **mat1, float **mat2)
 {
-	int i;
-	int j;
-	int k;
-	float **matrice;
-	
-	i = -1;
-	k = 0;
-	matrice = malloc(sizeof(float *) * row_col);
-	if (!matrice)
-		return (printf("malloc error\n"), NULL);
-	while (++i < row_col)
-	{
-		matrice[i] = malloc(sizeof(float) * row_col);
-		if (!matrice[i])
-			return (printf("malloc error\n"), NULL);
-	}
-	i = -1;
-	while (++i < row_col)
-	{
-		j = -1;
-		while (++j < row_col)
-			matrice[i][j] = tab[k++];	
-	}
-	return (matrice);
-}
+	int		row;
+	int		col;
+	float	**res;
 
-void	ft_mult_mat(float res[4][4], float mat1[4][4], float mat2[4][4])
-{
-	int	row;
-	int	col;
-
+	res = ft_create_mat_null(4);
 	row = 0;
 	while (row < 4)
 	{
@@ -58,11 +32,12 @@ void	ft_mult_mat(float res[4][4], float mat1[4][4], float mat2[4][4])
 		}
 		row++;
 	}
+	return (res);
 }
 
 void	ft_mult_mat_tuple(float tuple[4], float mat[4][4])
 {
-	int row;
+	int	row;
 
 	row = 0;
 	while (row < 4)
@@ -71,4 +46,73 @@ void	ft_mult_mat_tuple(float tuple[4], float mat[4][4])
 			+ mat[row][2] * tuple[2] + mat[row][3] * tuple[3];
 		row++;
 	}
+}
+
+void	ft_transpose(float mat[4][4])
+{
+	int		i;
+	int		j;
+	float	temp;
+
+	i = 0;
+	while (i < 4)
+	{
+		j = i + 1;
+		while (j < 4)
+		{
+			temp = mat[i][j];
+			mat[i][j] = mat[j][i];
+			mat[j][i] = temp;
+			j++;
+		}
+		i++;
+	}
+}
+
+int	ft_comp_mat(float mat1[4][4], float mat2[4][4])
+{
+	int	x;
+	int	y;
+
+	x = 0;
+	while (x < 4)
+	{
+		y = 0;
+		while (y < 4)
+		{
+			if (ft_comp_float(mat1[y][x], mat2[y][x]) == 0)
+				return (0);
+			y++;
+		}
+		x++;
+	}
+	return (1);
+}
+
+float	**ft_inversion(float **matrice, int row_col)
+{
+	float	det;
+	float	**mat;
+	int		i;
+	int		j;
+	float	temp;
+
+	i = 0;
+	j = 0;
+	det = ft_determinant4_4(matrice);
+	if (det == 0)
+		return (NULL);
+	mat = ft_create_mat_null(4);
+	while (i < row_col)
+	{
+		j = 0;
+		while (j < row_col)
+		{
+			temp = ft_cofactorinversion(matrice, i, j);
+			mat[j][i] = temp / det;
+			j++;
+		}
+		i++;
+	}
+	return (mat);
 }
