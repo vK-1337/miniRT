@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   sphere_lst.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 12:12:03 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/24 17:42:51 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/25 12:02:36 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../includes/minirt.h"
 #include "../includes/minirt.h"
 
 void sphere_lstfree(t_sphere **lst)

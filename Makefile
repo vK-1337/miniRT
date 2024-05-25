@@ -43,8 +43,7 @@ INCLUDE			= 	-I ./includes/\
 
 OBJ_DIR_F 		= obj/
 SRC_DIR_F		= src/
-
-SRC_FUNCTIONS_F	= main color_calculation tuple_calculations tuple_calculations2 utils sphere_lst plan_lst cylindre_lst
+SRC_FUNCTIONS_F	= main color_calculation tuple_calculations tuple_calculations2 utils init parsing get_next_line get_next_line_utils cylindre_lst sphere_lst plan_lst \
 
 FRACT_SRC		= $(addprefix $(SRC_DIR_F), $(addsuffix .c, $(SRC_FUNCTIONS_F)))
 FRACT_OBJ		= $(addprefix $(OBJ_DIR_F), $(addsuffix .o, $(SRC_FUNCTIONS_F)))
@@ -57,7 +56,6 @@ all:			$(MLX) $(LIBFT) $(NAME)
 
 $(IFMAKE_DIR_F):
 					@mkdir -p $(OBJ_DIR_F)
-					@mkdir -p $(OBJ_DIR_F)fractals/
 
 $(MLX):
 					@echo "Getting MinilibX ready"
@@ -71,7 +69,7 @@ $(OBJ_DIR_F)%.o: $(SRC_DIR_F)%.c | $(IFMAKE_DIR_F)
 					@echo "$(ORANGE)Loading... $< $(DEF_COLOR)"
 					@$(CC) $(FLAGS) $(INCLUDE) -c $< -o $@
 
-$(OBJ_DIR_F)fractals/%.o: $(SRC_DIR_F)fractals/%.c | $(IFMAKE_DIR_F)
+$(OBJ_DIR_F)MiniRT/%.o: $(SRC_DIR_F)MiniRT/%.c | $(IFMAKE_DIR_F)
 					@echo "$(ORANGE)Loading... $< $(DEF_COLOR)"
 					@$(CC) $(FLAGS) $(INCLUDE) -c $< -o $@
 
