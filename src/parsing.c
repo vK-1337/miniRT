@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:52 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/25 12:01:54 by udumas           ###   ########.fr       */
+/*   Updated: 2024/05/25 12:05:47 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,28 +151,7 @@ int	verify_vect(char *data)
 	free_char_tab(vect_split);
 	return (1);
 }
-	if (!check_vect_syntax(data))
-		return (0);
-	vect_split = ft_split(data, ',');
-	if (!vect_split)
-		return (0);
-	if (char_tab_len(vect_split) != 3)
-		return (free_char_tab(vect_split), 0);
-	i = 0;
-	while (vect_split[i])
-	{
-		vect = atof(vect_split[i]);
-		if (vect > 1.0 || vect < -1.0)
-			return (free_char_tab(vect_split), 0);
-		i++;
-	}
-	free_char_tab(vect_split);
-	return (1);
-}
 
-int	check_vect_syntax(char *data) // ! OK
-{
-	int i;
 int	check_vect_syntax(char *data) // ! OK
 {
 	int i;
@@ -199,32 +178,7 @@ int	check_vect_syntax(char *data) // ! OK
 	}
 	return (1);
 }
-	i = 0;
-	while (data[i])
-	{
-		if (data[i] == '-' && (!data[i + 1] || !ft_isdigit(data[i + 1])
-				|| (data[i - 1] && data[i - 1] != ',')))
-			return (0);
-		else if (data[i] == '.' && (!data[i - 1] || !data[i + 1]
-				|| !ft_isdigit(data[i + 1]) || !ft_isdigit(data[i - 1])))
-			return (0);
-		else if (data[i] == ',' && (!data[i - 1] || !data[i + 1]
-				|| (!ft_isdigit(data[i + 1]) && data[i + 1] != '-')
-				|| !ft_isdigit(data[i - 1])))
-			return (0);
-		else if (!ft_isdigit(data[i]) && data[i] != '.' && data[i] != '-'
-			&& data[i] != ',')
-			return (0);
-		else if (ft_isdigit(data[i]) && data[i] != '1' && data[i] != '0')
-			return (0);
-		i++;
-	}
-	return (1);
-}
 
-int	verify_coord(char *data) // ! OK
-{
-	char **coord_split;
 int	verify_coord(char *data) // ! OK
 {
 	char **coord_split;
@@ -239,20 +193,7 @@ int	verify_coord(char *data) // ! OK
 	free_char_tab(coord_split);
 	return (1);
 }
-	if (!check_coord_syntax(data))
-		return (0);
-	coord_split = ft_split(data, ',');
-	if (!coord_split)
-		return (0);
-	if (char_tab_len(coord_split) != 3)
-		return (free_char_tab(coord_split), 0);
-	free_char_tab(coord_split);
-	return (1);
-}
 
-int	check_coord_syntax(char *data) // ! OK
-{
-	int i;
 int	check_coord_syntax(char *data) // ! OK
 {
 	int i;
@@ -322,18 +263,6 @@ int	verify_plan(char **data)
 		return (0);
 	return (1);
 }
-int	verify_plan(char **data)
-{
-	if (char_tab_len(data) != 4)
-		return (0);
-	if (!verify_coord(data[1]))
-		return (0);
-	if (!verify_vect(data[2]))
-		return (0);
-	if (!verify_colors(data[3]))
-		return (0);
-	return (1);
-}
 
 int	verify_cylindre(char **data)
 {
@@ -350,11 +279,6 @@ int	verify_cylindre(char **data)
 	return (1);
 }
 
-int	verify_colors(char *data)
-{
-	char	**colors_split;
-	int		color_int;
-	int		i;
 int	verify_colors(char *data)
 {
 	char	**colors_split;
@@ -384,9 +308,6 @@ int	verify_colors(char *data)
 int	verify_colors_syntax(char *colors)
 {
 	int	i;
-int	verify_colors_syntax(char *colors)
-{
-	int	i;
 
 	i = 0;
 	while (colors[i])
@@ -399,9 +320,6 @@ int	verify_colors_syntax(char *colors)
 	return (1);
 }
 
-int	is_string_float(char *str)
-{
-	int i;
 int	is_string_float(char *str)
 {
 	int i;
