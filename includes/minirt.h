@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/25 15:35:27 by udumas           ###   ########.fr       */
+/*   Updated: 2024/05/27 14:22:08 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,89 +49,6 @@ typedef enum e_dtype
 	CY
 }						t_dtype;
 
-typedef struct s_alight
-{
-	float				alight;
-	int					color_r;
-	int					color_g;
-	int					color_b;
-}						t_alight;
-
-typedef struct s_camera
-{
-	float				coord_x;
-	float				coord_y;
-	float				coord_z;
-	float				vector_x;
-	float				vector_y;
-	float				vector_z;
-	int					fov;
-}						t_camera;
-
-typedef struct s_light
-{
-	float				coord_x;
-	float				coord_y;
-	float				coord_z;
-	float				light_ratio;
-	int					color_r;
-	int					color_g;
-	int					color_b;
-}						t_light;
-
-typedef struct s_sphere
-{
-	float				coord_x;
-	float				coord_y;
-	float				coord_z;
-	float				diameter;
-	int					color_r;
-	int					color_g;
-	int					color_b;
-	struct s_sphere		*next;
-}						t_sphere;
-
-typedef struct s_plan
-{
-	float				coord_x;
-	float				coord_y;
-	float				coord_z;
-	float				vector_x;
-	float				vector_y;
-	float				vector_z;
-	int					color_r;
-	int					color_g;
-	int					color_b;
-	struct s_plan		*next;
-}						t_plan;
-
-typedef struct s_cylindre
-{
-	float				coord_x;
-	float				coord_y;
-	float				coord_z;
-	float				n_vector_x;
-	float				n_vector_y;
-	float				n_vector_z;
-	float				diameter;
-	float				height;
-	int					color_r;
-	int					color_g;
-	int					color_b;
-	struct s_cylindre	*next;
-}						t_cylindre;
-
-typedef struct s_data
-{
-	t_alight			*alight;
-	t_camera			*camera;
-	t_light				*light;
-	t_sphere			**sphere;
-	t_plan				**plan;
-	t_cylindre			**cylindre;
-	int					counter[6];
-}						t_data;
-
 typedef struct s_tuple
 {
 	float				x;
@@ -146,6 +63,85 @@ typedef struct s_color
 	unsigned char		g;
 	unsigned char		b;
 }						t_color;
+
+typedef struct t_discriminant
+{
+    float				a;
+    float				b;
+    float				c;
+    float				result;
+}						t_discriminant;
+
+typedef struct s_ray
+{
+	t_tuple				origin;
+	t_tuple				direction;
+}						t_ray;
+
+typedef struct s_alight
+{
+	float				alight;
+	t_color                colors;
+}						t_alight;
+
+typedef struct s_camera
+{
+	t_tuple                coord;
+	t_tuple               vector;
+	int					fov;
+}						t_camera;
+
+typedef struct s_light
+{
+	t_tuple               coord;
+	float				light_ratio;
+	t_color                colors;
+}						t_light;
+
+typedef struct s_sphere
+{
+	t_tuple                center;
+	float				diameter;
+	t_color                colors;
+	struct s_sphere		*next;
+    float              radius;
+	int					id;
+}						t_sphere;
+
+typedef struct s_intersection {
+    float				t;
+    t_sphere			object;
+}						t_intersection;
+
+typedef struct s_plan
+{
+	t_tuple                coord;
+	t_tuple              vector;
+	t_color                colors;
+	struct s_plan		*next;
+}						t_plan;
+
+typedef struct s_cylindre
+{
+	t_tuple				coord;
+	t_tuple                vector;
+	float				diameter;
+	float				height;
+	t_color                colors;
+	struct s_cylindre	*next;
+}						t_cylindre;
+
+typedef struct s_data
+{
+	t_alight			*alight;
+	t_camera			*camera;
+	t_light				*light;
+	t_sphere			**sphere;
+	t_plan				**plan;
+	t_cylindre			**cylindre;
+	int					counter[6];
+}						t_data;
+
 
 typedef struct s_win
 {
@@ -262,7 +258,7 @@ t_color					ft_mult_color_tog(t_color c1, t_color c2);
 /******************************************************************************/
 /*                                                                            */
 /*                                                                            */
-/*                                   MATRICE                        			*/
+/*                                   MATRICE                                  */
 /*                                                                            */
 /*                                                                            */
 /******************************************************************************/
@@ -295,4 +291,14 @@ float					ft_cofactorinversion(float **mat, int row, int col);
 float					ft_determinant4_4(float **matrice);
 float					ft_cofactor2_2(float **mat, int row, int col);
 
+/******************************************************************************/
+/*                                                                            */
+/*                                                                            */
+/*                                   RAYS                                     */
+/*                                                                            */
+/*                                                                            */
+/******************************************************************************/
+
+t_ray					ft_ray(t_tuple origin, t_tuple direction);
+t_tuple					ft_position(t_ray r, float t);
 #endif

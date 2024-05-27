@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:55 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/25 11:38:51 by udumas           ###   ########.fr       */
+/*   Updated: 2024/05/27 12:12:29 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	put_pixel(t_win *win, int x, int y, int color)
 {
 	char	*dst;
 
-  if ((x > SIZE_X || x < 0)|| (y > SIZE_Y || y < 0)) 
+  if ((x > SIZE_X || x < 0)|| (y > SIZE_Y || y < 0))
     return ;
 	dst = win->addr + (y * win->line_length + x
 			* (win->bits_per_pixel / 8));
@@ -55,7 +55,7 @@ void tick(t_win *win)
 {
     t_projectile pro;
     t_env env;
-    
+
     pro.position.x = 0;
     pro.position.y = 1;
     pro.position.z = 0;
@@ -66,12 +66,12 @@ void tick(t_win *win)
 
     pro.velocity.z = 0;
     pro.velocity.w = 0;
-    
+
     env.gravity.x = 0;
     env.gravity.y = -0.1;
     env.gravity.z = 0;
     env.gravity.w = 0;
-    
+
     env.wind.x = -0.01;
     env.wind.y = 0;
     env.wind.z = 0;
@@ -106,7 +106,7 @@ int exit_window(t_win *win)
 t_win *init_mlx(void)
 {
   t_win *win;
-  
+
   win = malloc(sizeof(t_win));
   win->mlx = mlx_init();
   win->img = mlx_new_image(win->mlx, SIZE_X, SIZE_Y);
@@ -116,20 +116,67 @@ t_win *init_mlx(void)
   return (win);
 }
 
-int main(int ac, char **av)
-{
-    int fd;
-    t_data data;
+// int main(int ac, char **av)
+// {
+//     int fd;
+//     t_data data;
 
-    if (ac != 2 || !scene_name_check(av[1]))
-    {
-        printf("Bad arguments : Usage : ./minirt scene.rt");
-        return EXIT_FAILURE;
-    }
-    fd = open(av[1], O_RDONLY);
-    if (fd == -1)
-		return (write(2, "File not found\n", 16), EXIT_FAILURE);
-    data = init_all_data(fd);
-    // print_all_data(&data);
-    return EXIT_SUCCESS;
+//     if (ac != 2 || !scene_name_check(av[1]))
+//     {
+//         printf("Bad arguments : Usage : ./minirt scene.rt");
+//         return EXIT_FAILURE;
+//     }
+//     fd = open(av[1], O_RDONLY);
+//     if (fd == -1)
+// 		return (write(2, "File not found\n", 16), EXIT_FAILURE);
+//     data = init_all_data(fd);
+//     // print_all_data(&data);
+//     return EXIT_SUCCESS;
+// }
+
+int main(void)
+{
+    t_tuple direction;
+    t_tuple origin;
+    t_ray r;
+
+    direction.x = 1;
+    direction.y = 0;
+    direction.z = 0;
+    direction.w = 0;
+
+    origin.x = 2;
+    origin.y = 3;
+    origin.z = 4;
+    origin.w = 1;
+
+    r = ft_ray(origin, direction);
+
+    t_tuple position;
+
+    position = ft_position(r, 0);
+
+    printf("position.x = %f\n", position.x);
+    printf("position.y = %f\n", position.y);
+    printf("position.z = %f\n\n", position.z);
+
+    position = ft_position(r, 1);
+
+    printf("position.x = %f\n", position.x);
+    printf("position.y = %f\n", position.y);
+    printf("position.z = %f\n\n", position.z);
+
+    position = ft_position(r, -1);
+
+    printf("position.x = %f\n", position.x);
+    printf("position.y = %f\n", position.y);
+    printf("position.z = %f\n\n", position.z);
+
+    position = ft_position(r, 2.5);
+
+    printf("position.x = %f\n", position.x);
+    printf("position.y = %f\n", position.y);
+    printf("position.z = %f\n\n", position.z);
+
+    return (0);
 }
