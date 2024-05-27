@@ -43,7 +43,7 @@ INCLUDE			= 	-I ./includes/\
 
 OBJ_DIR_F 		= obj/
 SRC_DIR_F		= src/
-SRC_FUNCTIONS_F	= main color_calculation tuple_calculations tuple_calculations2 \
+SRC_FUNCTIONS_F	= main color_calculation tuple_calculations tuple_calculations2 rays \
 					matrix_calcul matrix_deter_cofac matrix_utils matrix_utils2 utils init \
 					parsing get_next_line get_next_line_utils cylindre_lst sphere_lst plan_lst \
 
