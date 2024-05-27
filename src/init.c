@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/25 12:06:00 by udumas           ###   ########.fr       */
+/*   Updated: 2024/05/27 18:19:09 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,9 +120,9 @@ int	init_alight(t_data *data, char **data_split)
 	color_split = ft_split(data_split[2], ',');
 	if (!color_split)
 		return (free(alight), 0);
-	alight->color_r = ft_atoi(color_split[0]);
-	alight->color_g = ft_atoi(color_split[1]);
-	alight->color_b = ft_atoi(color_split[2]);
+    alight->colors.r = ft_atoi(color_split[0]);
+	alight->colors.g = ft_atoi(color_split[1]);
+	alight->colors.b = ft_atoi(color_split[2]);
 	free_char_tab(color_split);
 	data->alight = alight;
 	return (1);
@@ -139,16 +139,16 @@ int	init_camera(t_data *data, char **data_split)
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return (free(camera) , 0);
-	camera->coord_x = atof(split[0]);
-	camera->coord_y = atof(split[1]);
-	camera->coord_z = atof(split[2]);
+	camera->coord.x = atof(split[0]);
+	camera->coord.y = atof(split[1]);
+	camera->coord.z = atof(split[2]);
 	free_char_tab(split);
 	split = ft_split(data_split[2], ',');
 	if (!split)
 		return (free(camera) , 0);
-	camera->vector_x = atof(split[0]);
-	camera->vector_y = atof(split[1]);
-	camera->vector_z = atof(split[2]);
+	camera->vector.x = atof(split[0]);
+	camera->vector.y = atof(split[1]);
+	camera->vector.z = atof(split[2]);
 	camera->fov = atoi(data_split[3]);
 	free_char_tab(split);
 	data->camera = camera;
@@ -166,17 +166,17 @@ int	init_light(t_data *data, char **data_split)
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return (free(light) ,0);
-	light->coord_x = atof(split[0]);
-	light->coord_y = atof(split[1]);
-	light->coord_z = atof(split[2]);
+	light->coord.x = atof(split[0]);
+	light->coord.y = atof(split[1]);
+	light->coord.z = atof(split[2]);
 	free_char_tab(split);
 	light->light_ratio = atof(data_split[2]);
 	split = ft_split(data_split[3], ',');
 	if (!split)
 		return (free(light) ,0);
-	light->color_r = ft_atoi(split[0]);
-	light->color_g = ft_atoi(split[1]);
-	light->color_b = ft_atoi(split[2]);
+	light->colors.r = ft_atoi(split[0]);
+	light->colors.g = ft_atoi(split[1]);
+	light->colors.b = ft_atoi(split[2]);
 	free_char_tab(split);
 	data->light = light;
 	return (1);
@@ -193,17 +193,17 @@ int	init_sphere(t_data *data, char **data_split)
     split = ft_split(data_split[1], ',');
     if (!split)
         return (free(sphere) , 0);
-    sphere->coord_x = atof(split[0]);
-    sphere->coord_y = atof(split[1]);
-    sphere->coord_z = atof(split[2]);
+    sphere->center.x = atof(split[0]);
+    sphere->center.y = atof(split[1]);
+    sphere->center.z = atof(split[2]);
     free_char_tab(split);
     sphere->diameter = atof(data_split[2]);
     split = ft_split(data_split[3], ',');
     if (!split)
         return (free(sphere) , 0);
-    sphere->color_r = ft_atoi(split[0]);
-    sphere->color_g = ft_atoi(split[1]);
-    sphere->color_b = ft_atoi(split[2]);
+    sphere->colors.r = ft_atoi(split[0]);
+    sphere->colors.g = ft_atoi(split[1]);
+    sphere->colors.b = ft_atoi(split[2]);
     free_char_tab(split);
     sphere->next = NULL;
     if (!data->sphere)
@@ -229,23 +229,23 @@ int	init_plan(t_data *data, char **data_split)
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return (free(plan), 0);
-	plan->coord_x = atof(split[0]);
-	plan->coord_y = atof(split[1]);
-	plan->coord_z = atof(split[2]);
+	plan->coord.x = atof(split[0]);
+	plan->coord.y = atof(split[1]);
+	plan->coord.z = atof(split[2]);
 	free_char_tab(split);
 	split = ft_split(data_split[2], ',');
 	if (!split)
 		return (free(plan), 0);
-	plan->vector_x = atof(split[0]);
-	plan->vector_y = atof(split[1]);
-	plan->vector_z = atof(split[2]);
+	plan->vector.x = atof(split[0]);
+	plan->vector.y = atof(split[1]);
+	plan->vector.z = atof(split[2]);
 	free_char_tab(split);
 	split = ft_split(data_split[3], ',');
 	if (!split)
 		return (free(plan), 0);
-	plan->color_r = ft_atoi(split[0]);
-	plan->color_g = ft_atoi(split[1]);
-	plan->color_b = ft_atoi(split[2]);
+	plan->colors.r = ft_atoi(split[0]);
+	plan->colors.g = ft_atoi(split[1]);
+	plan->colors.b = ft_atoi(split[2]);
     plan->next = NULL;
     free_char_tab(split);
     if (!data->plan)
@@ -271,25 +271,25 @@ int	init_cylindre(t_data *data, char **data_split)
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return (free(cylindre), 0);
-	cylindre->coord_x = atof(split[0]);
-	cylindre->coord_y = atof(split[1]);
-	cylindre->coord_z = atof(split[2]);
+	cylindre->coord.x = atof(split[0]);
+	cylindre->coord.y = atof(split[1]);
+	cylindre->coord.z = atof(split[2]);
 	free_char_tab(split);
 	split = ft_split(data_split[2], ',');
 	if (!split)
 		return (free(cylindre), 0);
-	cylindre->n_vector_x = atof(split[0]);
-	cylindre->n_vector_y = atof(split[1]);
-	cylindre->n_vector_z = atof(split[2]);
+	cylindre->n_vector.x = atof(split[0]);
+	cylindre->n_vector.y = atof(split[1]);
+	cylindre->n_vector.z = atof(split[2]);
 	cylindre->diameter = atof(data_split[3]);
 	cylindre->height = atof(data_split[4]);
 	free_char_tab(split);
 	split = ft_split(data_split[5], ',');
 	if (!split)
 		return (free(cylindre), 0);
-	cylindre->color_r = ft_atoi(split[0]);
-	cylindre->color_g = ft_atoi(split[1]);
-	cylindre->color_b = ft_atoi(split[2]);
+	cylindre->colors.r = ft_atoi(split[0]);
+	cylindre->colors.g = ft_atoi(split[1]);
+	cylindre->colors.b = ft_atoi(split[2]);
     cylindre->next = NULL;
     free_char_tab(split);
     if (!data->cylindre)

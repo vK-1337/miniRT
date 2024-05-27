@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/27 14:22:08 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/27 18:31:04 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # include <sys/types.h>
 # include <unistd.h>
 # include <wait.h>
+#include <stdarg.h>
 
 /******************************************************************************/
 /*                                                                            */
@@ -124,7 +125,7 @@ typedef struct s_plan
 typedef struct s_cylindre
 {
 	t_tuple				coord;
-	t_tuple                vector;
+	t_tuple                n_vector;
 	float				diameter;
 	float				height;
 	t_color                colors;
@@ -301,4 +302,13 @@ float					ft_cofactor2_2(float **mat, int row, int col);
 
 t_ray					ft_ray(t_tuple origin, t_tuple direction);
 t_tuple					ft_position(t_ray r, float t);
+
+                                // INTERSECTIONS //
+t_intersection	*ft_intersections_tab(int count, ...);
+void	ft_sort_intersections(t_intersection *intersections, int count);
+t_intersection *ft_hit(t_intersection *intersections, int count);
+t_intersection	*ft_intersect(t_ray ray, t_sphere sphere);
+t_discriminant	ft_discriminant(t_ray ray, t_sphere sphere);
+t_sphere	ft_sphere(t_tuple center, float radius);
+t_intersection	ft_intersection(float t, t_sphere sphere);
 #endif

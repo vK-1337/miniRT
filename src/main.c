@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:55 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/27 12:12:29 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/27 19:13:49 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,49 +134,80 @@ t_win *init_mlx(void)
 //     return EXIT_SUCCESS;
 // }
 
+// int main(void)
+// {
+//     t_tuple direction;
+//     t_tuple origin;
+//     t_ray r;
+
+//     direction.x = 1;
+//     direction.y = 0;
+//     direction.z = 0;
+//     direction.w = 0;
+
+//     origin.x = 2;
+//     origin.y = 3;
+//     origin.z = 4;
+//     origin.w = 1;
+
+//     r = ft_ray(origin, direction);
+
+//     t_tuple position;
+
+//     position = ft_position(r, 0);
+
+//     printf("position.x = %f\n", position.x);
+//     printf("position.y = %f\n", position.y);
+//     printf("position.z = %f\n\n", position.z);
+
+//     position = ft_position(r, 1);
+
+//     printf("position.x = %f\n", position.x);
+//     printf("position.y = %f\n", position.y);
+//     printf("position.z = %f\n\n", position.z);
+
+//     position = ft_position(r, -1);
+
+//     printf("position.x = %f\n", position.x);
+//     printf("position.y = %f\n", position.y);
+//     printf("position.z = %f\n\n", position.z);
+
+//     position = ft_position(r, 2.5);
+
+//     printf("position.x = %f\n", position.x);
+//     printf("position.y = %f\n", position.y);
+//     printf("position.z = %f\n\n", position.z);
+
+//     return (0);
+// }
+
 int main(void)
 {
-    t_tuple direction;
-    t_tuple origin;
-    t_ray r;
+    t_intersection i1;
+    t_intersection i2;
+    t_intersection i3;
+    t_intersection i4;
+    t_intersection *xs;
+    t_sphere sphere;
 
-    direction.x = 1;
-    direction.y = 0;
-    direction.z = 0;
-    direction.w = 0;
+    sphere.center.x = 0;
+    sphere.center.y = 0;
+    sphere.center.z = 0;
+    sphere.radius = 1;
 
-    origin.x = 2;
-    origin.y = 3;
-    origin.z = 4;
-    origin.w = 1;
+    i1 = ft_intersection(5, sphere);
+    i2 = ft_intersection(7, sphere);
+    i3 = ft_intersection(-3, sphere);
+    i4 = ft_intersection(2, sphere);
 
-    r = ft_ray(origin, direction);
+    xs = ft_intersections_tab(4, i4, i3, i1, i2);
 
-    t_tuple position;
+    int i = 0;
+    while (i < 4)
+    {
+        printf("xs[%d].t = %f\n", i, xs[i].t);
+        i++;
+    }
 
-    position = ft_position(r, 0);
-
-    printf("position.x = %f\n", position.x);
-    printf("position.y = %f\n", position.y);
-    printf("position.z = %f\n\n", position.z);
-
-    position = ft_position(r, 1);
-
-    printf("position.x = %f\n", position.x);
-    printf("position.y = %f\n", position.y);
-    printf("position.z = %f\n\n", position.z);
-
-    position = ft_position(r, -1);
-
-    printf("position.x = %f\n", position.x);
-    printf("position.y = %f\n", position.y);
-    printf("position.z = %f\n\n", position.z);
-
-    position = ft_position(r, 2.5);
-
-    printf("position.x = %f\n", position.x);
-    printf("position.y = %f\n", position.y);
-    printf("position.z = %f\n\n", position.z);
-
-    return (0);
+    printf("\nft_hit(inter) = %f\n", ft_hit(xs, 4)->t);
 }
