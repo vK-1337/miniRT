@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rays.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vk <vk@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 09:54:05 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/27 18:29:10 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/27 22:01:21 by vk               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,4 +133,13 @@ t_intersection *ft_hit(t_intersection *intersections, int count)
         i++;
     }
     return (NULL);
+}
+
+t_ray ray_transform(t_ray ray, float **matrix)
+{
+  t_ray new_ray;
+
+  new_ray = ft_mult_matrix_tuple(matrix, ray);
+
+  return (new_ray);
 }
