@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/27 18:31:04 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/28 10:56:16 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ typedef struct s_sphere
 	struct s_sphere		*next;
     float              radius;
 	int					id;
+    float**			matrix;
 }						t_sphere;
 
 typedef struct s_intersection {

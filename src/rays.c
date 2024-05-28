@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rays.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vk <vk@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 09:54:05 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/27 22:01:21 by vk               ###   ########.fr       */
+/*   Updated: 2024/05/28 10:57:32 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ t_intersection	*ft_intersect(t_ray ray, t_sphere sphere)
 	t1 = (-dis.b - sqrt(dis.result)) / (2 * dis.a);
 	t2 = (-dis.b + sqrt(dis.result)) / (2 * dis.a);
 	return (ft_intersections_tab(2, ft_intersection(t1, sphere),
-        ft_intersection(t2, sphere)));
+			ft_intersection(t2, sphere)));
 }
 
 t_intersection	ft_intersection(float t, t_sphere sphere)
@@ -80,9 +80,11 @@ t_intersection	ft_intersection(float t, t_sphere sphere)
 
 t_intersection	*ft_intersections_tab(int count, ...)
 {
-	int i;
-	va_list args;
-	t_intersection *intersections = malloc(sizeof(t_intersection) * count);
+	int				i;
+	va_list			args;
+	t_intersection	*intersections;
+
+	intersections = malloc(sizeof(t_intersection) * count);
 	if (!intersections)
 		return (NULL);
 	va_start(args, count);
@@ -92,54 +94,74 @@ t_intersection	*ft_intersections_tab(int count, ...)
 		intersections[i] = va_arg(args, t_intersection);
 		i++;
 	}
-    ft_sort_intersections(intersections, count);
+	ft_sort_intersections(intersections, count);
 	va_end(args);
 	return (intersections);
 }
 
 void	ft_sort_intersections(t_intersection *intersections, int count)
 {
-    int i;
-    int j;
-    t_intersection tmp;
+	int				i;
+	int				j;
+	t_intersection	tmp;
 
-    i = 0;
-    while (i < count)
-    {
-        j = i + 1;
-        while (j < count)
-        {
-            if (intersections[i].t > intersections[j].t)
-            {
-                tmp = intersections[i];
-                intersections[i] = intersections[j];
-                intersections[j] = tmp;
-            }
-            j++;
-        }
-        i++;
-    }
+	i = 0;
+	while (i < count)
+	{
+		j = i + 1;
+		while (j < count)
+		{
+			if (intersections[i].t > intersections[j].t)
+			{
+				tmp = intersections[i];
+				intersections[i] = intersections[j];
+				intersections[j] = tmp;
+			}
+			j++;
+		}
+		i++;
+	}
 }
 
-t_intersection *ft_hit(t_intersection *intersections, int count)
+t_intersection	*ft_hit(t_intersection *intersections, int count)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    while (i < count)
-    {
-        if (intersections[i].t >= 0)
-            return (&intersections[i]);
-        i++;
-    }
-    return (NULL);
+	i = 0;
+	while (i < count)
+	{
+		if (intersections[i].t >= 0)
+			return (&intersections[i]);
+		i++;
+	}
+	return (NULL);
 }
 
-t_ray ray_transform(t_ray ray, float **matrix)
+t_ray	ray_transform(t_ray ray, float **matrix)
 {
-  t_ray new_ray;
+	t_ray	new_ray;
 
-  new_ray = ft_mult_matrix_tuple(matrix, ray);
+	new_ray.direction = ft_mult_matrix_tuple(matrix, ray.direction);
+	new_ray.origin = ft_mult_matrix_tuple(matrix, ray.origin);
+	return (new_ray);
+}
 
-  return (new_ray);
+t_tuple	ft_mult_matrix_tuple(float **matrix, t_tuple tuple)
+{
+	t_tuple	new_tuple;
+
+	new_tuple.x = matrix[0][0] * tuple.x + matrix[0][1] * tuple.y + matrix[0][2]
+		* tuple.z + matrix[0][3] * tuple.w;
+	new_tuple.y = matrix[1][0] * tuple.x + matrix[1][1] * tuple.y + matrix[1][2]
+		* tuple.z + matrix[1][3] * tuple.w;
+	new_tuple.z = matrix[2][0] * tuple.x + matrix[2][1] * tuple.y + matrix[2][2]
+		* tuple.z + matrix[2][3] * tuple.w;
+	new_tuple.w = matrix[3][0] * tuple.x + matrix[3][1] * tuple.y + matrix[3][2]
+		* tuple.z + matrix[3][3] * tuple.w;
+	return (new_tuple);
+}
+void set_transform(t_sphere *sphere, float **matrix)
+{
+    sphere->matrix = matrix;
+    return;
 }

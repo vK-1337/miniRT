@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/27 18:19:09 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/28 10:56:55 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,6 +205,7 @@ int	init_sphere(t_data *data, char **data_split)
     sphere->colors.g = ft_atoi(split[1]);
     sphere->colors.b = ft_atoi(split[2]);
     free_char_tab(split);
+    sphere->matrix = identity_matrix(4);
     sphere->next = NULL;
     if (!data->sphere)
     {
