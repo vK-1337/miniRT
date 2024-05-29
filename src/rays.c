@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 09:54:05 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/29 14:26:51 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/29 16:06:26 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,36 +36,35 @@ t_sphere	ft_sphere(t_tuple center, float radius)
 
 	s.center = center;
 	s.radius = radius;
-    s.matrix = identity_matrix(4);
+	s.matrix = identity_matrix(4);
 	s.id = id++;
 	return (s);
 }
 
-t_discriminant	ft_discriminant(t_ray ray, t_sphere sphere)
+t_discriminant	ft_discriminant(t_ray ray, t_sphere *sphere)
 {
 	t_discriminant	dis;
 	t_tuple			sphere_to_ray;
 
-	sphere_to_ray = ft_dif_tuple(ray.origin, sphere.center);
+	sphere_to_ray = ft_dif_tuple(ray.origin, sphere->center);
 	dis.a = ft_dotproduct(ray.direction, ray.direction);
 	dis.b = 2 * ft_dotproduct(ray.direction, sphere_to_ray);
-	dis.c = ft_dotproduct(sphere_to_ray, sphere_to_ray) - sphere.radius
-		* sphere.radius;
-	dis.result = dis.b * dis.b - 4 * dis.a * dis.c;
-    printf("dis.result = %f\n", dis.result);
+	dis.c = ft_dotproduct(sphere_to_ray, sphere_to_ray) - sphere->radius
+		* sphere->radius;
+	dis.result = (dis.b * dis.b) - 4 * dis.a * dis.c;
+	printf("dis.result = %f\n", dis.result);
 	return (dis);
 }
 
-t_intersection	*ft_intersect(t_ray ray, t_sphere sphere)
+t_intersection	*ft_intersect(t_ray ray, t_sphere *sphere)
 {
 	t_discriminant	dis;
 	float			t1;
 	float			t2;
-    // t_ray          new_ray;
 
-    // new_ray = ray_transform(ray, ft_inversion(sphere.matrix, 4));
-	dis = ft_discriminant(ray, sphere);
-    printf(" %p\n", sphere.matrix);
+	t_ray          new_ray;
+	new_ray = ray_transform(ray, ft_inversion(sphere->matrix, 4));
+	dis = ft_discriminant(new_ray, sphere);
 	if (dis.result < 0)
 		return (0);
 	t1 = (-dis.b - sqrt(dis.result)) / (2 * dis.a);
@@ -74,7 +73,7 @@ t_intersection	*ft_intersect(t_ray ray, t_sphere sphere)
 			ft_intersection(t2, sphere)));
 }
 
-t_intersection	ft_intersection(float t, t_sphere sphere)
+t_intersection	ft_intersection(float t, t_sphere *sphere)
 {
 	t_intersection	i;
 
@@ -133,7 +132,7 @@ t_intersection	*ft_hit(t_intersection *intersections, int count)
 	int	i;
 
 	i = 0;
-	while (i < count)
+	while (i < count && intersections)
 	{
 		if (intersections[i].t >= 0)
 			return (&intersections[i]);
@@ -165,8 +164,8 @@ t_tuple	ft_mult_matrix_tuple(float **matrix, t_tuple tuple)
 		* tuple.z + matrix[3][3] * tuple.w;
 	return (new_tuple);
 }
-void set_transform(t_sphere *sphere, float **matrix)
+void	set_transform(t_sphere *sphere, float **matrix)
 {
-    sphere->matrix = matrix;
-    return;
+	sphere->matrix = matrix;
+	return ;
 }
