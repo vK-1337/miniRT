@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/28 10:56:16 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/29 14:14:47 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,23 @@
 
 # define EPSILON 0.00001
 # define INFINITY 1e10
-# define SIZE_X 1280
-# define SIZE_Y 800
+# define SIZE_X 100
+# define SIZE_Y 100
+# define CENTER_X SIZE_X / 2
+# define CENTER_Y SIZE_Y / 2
 # include "get_next_line.h"
 # include "libft.h"
 # include "mlx.h"
 # include <X11/keysym.h>
 # include <fcntl.h>
 # include <math.h>
+# include <stdarg.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <unistd.h>
 # include <wait.h>
-#include <stdarg.h>
 
 /******************************************************************************/
 /*                                                                            */
@@ -50,6 +52,14 @@ typedef enum e_dtype
 	CY
 }						t_dtype;
 
+typedef struct t_wall
+{
+	float				x;
+	float				y;
+	float				z;
+	float				size;
+}						t_wall;
+
 typedef struct s_tuple
 {
 	float				x;
@@ -67,10 +77,10 @@ typedef struct s_color
 
 typedef struct t_discriminant
 {
-    float				a;
-    float				b;
-    float				c;
-    float				result;
+	float				a;
+	float				b;
+	float				c;
+	float				result;
 }						t_discriminant;
 
 typedef struct s_ray
@@ -82,54 +92,55 @@ typedef struct s_ray
 typedef struct s_alight
 {
 	float				alight;
-	t_color                colors;
+	t_color				colors;
 }						t_alight;
 
 typedef struct s_camera
 {
-	t_tuple                coord;
-	t_tuple               vector;
+	t_tuple				coord;
+	t_tuple				vector;
 	int					fov;
 }						t_camera;
 
 typedef struct s_light
 {
-	t_tuple               coord;
+	t_tuple				coord;
 	float				light_ratio;
-	t_color                colors;
+	t_color				colors;
 }						t_light;
 
 typedef struct s_sphere
 {
-	t_tuple                center;
+	t_tuple				center;
 	float				diameter;
-	t_color                colors;
+	t_color				colors;
 	struct s_sphere		*next;
-    float              radius;
+	float				radius;
 	int					id;
-    float**			matrix;
+	float				**matrix;
 }						t_sphere;
 
-typedef struct s_intersection {
-    float				t;
-    t_sphere			object;
+typedef struct s_intersection
+{
+	float				t;
+	t_sphere			object;
 }						t_intersection;
 
 typedef struct s_plan
 {
-	t_tuple                coord;
-	t_tuple              vector;
-	t_color                colors;
+	t_tuple				coord;
+	t_tuple				vector;
+	t_color				colors;
 	struct s_plan		*next;
 }						t_plan;
 
 typedef struct s_cylindre
 {
 	t_tuple				coord;
-	t_tuple                n_vector;
+	t_tuple				n_vector;
 	float				diameter;
 	float				height;
-	t_color                colors;
+	t_color				colors;
 	struct s_cylindre	*next;
 }						t_cylindre;
 
@@ -143,7 +154,6 @@ typedef struct s_data
 	t_cylindre			**cylindre;
 	int					counter[6];
 }						t_data;
-
 
 typedef struct s_win
 {
@@ -304,12 +314,15 @@ float					ft_cofactor2_2(float **mat, int row, int col);
 t_ray					ft_ray(t_tuple origin, t_tuple direction);
 t_tuple					ft_position(t_ray r, float t);
 
-                                // INTERSECTIONS //
-t_intersection	*ft_intersections_tab(int count, ...);
-void	ft_sort_intersections(t_intersection *intersections, int count);
-t_intersection *ft_hit(t_intersection *intersections, int count);
-t_intersection	*ft_intersect(t_ray ray, t_sphere sphere);
-t_discriminant	ft_discriminant(t_ray ray, t_sphere sphere);
-t_sphere	ft_sphere(t_tuple center, float radius);
-t_intersection	ft_intersection(float t, t_sphere sphere);
+// INTERSECTIONS //
+t_intersection			*ft_intersections_tab(int count, ...);
+void					ft_sort_intersections(t_intersection *intersections,
+							int count);
+t_intersection			*ft_hit(t_intersection *intersections, int count);
+t_intersection			*ft_intersect(t_ray ray, t_sphere sphere);
+t_discriminant			ft_discriminant(t_ray ray, t_sphere sphere);
+t_sphere				ft_sphere(t_tuple center, float radius);
+t_intersection			ft_intersection(float t, t_sphere sphere);
+t_ray					ray_transform(t_ray ray, float **matrix);
+t_tuple					ft_mult_matrix_tuple(float **matrix, t_tuple tuple);
 #endif
