@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:55 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/27 12:12:29 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/29 14:31:31 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,49 +134,136 @@ t_win *init_mlx(void)
 //     return EXIT_SUCCESS;
 // }
 
-int main(void)
-{
-    t_tuple direction;
-    t_tuple origin;
-    t_ray r;
+// int main(void)
+// {
+//     t_tuple direction;
+//     t_tuple origin;
+//     t_ray r;
 
-    direction.x = 1;
-    direction.y = 0;
-    direction.z = 0;
-    direction.w = 0;
+//     direction.x = 1;
+//     direction.y = 0;
+//     direction.z = 0;
+//     direction.w = 0;
 
-    origin.x = 2;
-    origin.y = 3;
-    origin.z = 4;
-    origin.w = 1;
+//     origin.x = 2;
+//     origin.y = 3;
+//     origin.z = 4;
+//     origin.w = 1;
 
-    r = ft_ray(origin, direction);
+//     r = ft_ray(origin, direction);
 
-    t_tuple position;
+//     t_tuple position;
 
-    position = ft_position(r, 0);
+//     position = ft_position(r, 0);
 
-    printf("position.x = %f\n", position.x);
-    printf("position.y = %f\n", position.y);
-    printf("position.z = %f\n\n", position.z);
+//     printf("position.x = %f\n", position.x);
+//     printf("position.y = %f\n", position.y);
+//     printf("position.z = %f\n\n", position.z);
 
-    position = ft_position(r, 1);
+//     position = ft_position(r, 1);
 
-    printf("position.x = %f\n", position.x);
-    printf("position.y = %f\n", position.y);
-    printf("position.z = %f\n\n", position.z);
+//     printf("position.x = %f\n", position.x);
+//     printf("position.y = %f\n", position.y);
+//     printf("position.z = %f\n\n", position.z);
 
-    position = ft_position(r, -1);
+//     position = ft_position(r, -1);
 
-    printf("position.x = %f\n", position.x);
-    printf("position.y = %f\n", position.y);
-    printf("position.z = %f\n\n", position.z);
+//     printf("position.x = %f\n", position.x);
+//     printf("position.y = %f\n", position.y);
+//     printf("position.z = %f\n\n", position.z);
 
-    position = ft_position(r, 2.5);
+//     position = ft_position(r, 2.5);
 
-    printf("position.x = %f\n", position.x);
-    printf("position.y = %f\n", position.y);
-    printf("position.z = %f\n\n", position.z);
+//     printf("position.x = %f\n", position.x);
+//     printf("position.y = %f\n", position.y);
+//     printf("position.z = %f\n\n", position.z);
 
-    return (0);
-}
+//     return (0);
+// }
+
+// int main(void)
+// {
+//     void *mlx_ptr;
+//     void *win_ptr;
+//     t_win win;
+//     int canvas_pixels = SIZE_X; // Assuming SIZE_X is the size of your canvas
+//     double half = canvas_pixels / 2.0;
+//     double pixel_size = 1.0; // Adjust as needed
+//     double wall_z = 10.0; // Adjust as needed
+//     t_tuple ray_origin = {SIZE_X / 2, SIZE_Y / 2, -5, 1}; // Adjust as needed
+//     t_tuple center;
+
+//     center.x = SIZE_X / 2;
+//     center.y = SIZE_Y / 2;
+//     center.z = 0;
+//     center.w = 1;
+//     t_sphere shape = ft_sphere(center, 1); // Initialize as needed
+
+//     mlx_ptr = mlx_init();
+//     win_ptr = mlx_new_window(mlx_ptr, SIZE_X, SIZE_Y, "Ray Tracer");
+//     win.mlx = mlx_ptr;
+//     win.win = win_ptr;
+
+//     for (int y = 0; y < canvas_pixels; y++)
+//     {
+//         double world_y = half - pixel_size * y;
+//         for (int x = 0; x < canvas_pixels; x++)
+//         {
+//             double world_x = -half + pixel_size * x;
+//             t_tuple position = {world_x, world_y, wall_z, 1};
+//             t_tuple direction = ft_normalization(ft_dif_tuple(position, ray_origin));
+//             t_ray r = ft_ray(ray_origin, direction);
+//             t_intersection *xs = ft_intersect(r, shape);
+//             if (ft_hit(xs, 2) != NULL)
+//             {
+//                 put_pixel(&win, x, y, 0xFF0000); // Red color
+//             }
+//         }
+//     }
+//     mlx_loop(mlx_ptr);
+//     return (0);
+// }
+
+// int main(void)
+// {
+//     void *mlx_ptr;
+//     void *win_ptr;
+//     t_win win;
+//     t_tuple ray_origin = {CENTER_X, CENTER_Y, -5, 1}; // Adjust as needed
+
+//     float wall_z = 10.0;
+//     float wall_size = 7.0;
+
+//     float canvas_pixels = SIZE_X;
+//     float pixel_size = wall_size / canvas_pixels;
+
+//     float half = wall_size / 2;
+
+//     mlx_ptr = mlx_init();
+//     win_ptr = mlx_new_window(mlx_ptr, SIZE_X, SIZE_Y, "Ray Tracer");
+//     win.mlx = mlx_ptr;
+//     win.win = win_ptr;
+
+//     t_tuple center = {CENTER_X, CENTER_Y, 0, 1};
+
+//     t_sphere shape = ft_sphere(center, 1.0);
+
+//     for ( int y = 0; y < canvas_pixels - 1; y++)
+//     {
+//         float world_y = half - pixel_size * y;
+//         for (int x = 0; x < canvas_pixels - 1; x++)
+//         {
+//             float world_x = -half + pixel_size * x;
+//             t_tuple position = {world_x, world_y, wall_z, 1};
+//             t_tuple direction = ft_normalization(ft_dif_tuple(position, ray_origin));
+//             t_ray r = ft_ray(ray_origin, direction);
+//             t_intersection *xs = ft_intersect(r, shape);
+//             if (ft_hit(xs, 2) != NULL)
+//             {
+//                 put_pixel(&win, x, y, 0xFF0000); // Red color
+//             }
+//         }
+//     }
+//     mlx_loop(mlx_ptr);
+//     return (0);
+// }

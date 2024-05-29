@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/29 11:13:33 by udumas           ###   ########.fr       */
+/*   Updated: 2024/05/29 14:14:47 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,17 @@
 # endif
 # define EPSILON 0.00001
 # define INFINITY 1e10
-# define SIZE_X 1280
-# define SIZE_Y 800
+# define SIZE_X 100
+# define SIZE_Y 100
+# define CENTER_X SIZE_X / 2
+# define CENTER_Y SIZE_Y / 2
 # include "get_next_line.h"
 # include "libft.h"
 # include "mlx.h"
 # include <X11/keysym.h>
 # include <fcntl.h>
 # include <math.h>
+# include <stdarg.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/stat.h>
@@ -51,6 +54,14 @@ typedef enum e_dtype
 	PL,
 	CY
 }						t_dtype;
+
+typedef struct t_wall
+{
+	float				x;
+	float				y;
+	float				z;
+	float				size;
+}						t_wall;
 
 typedef struct s_tuple
 {
@@ -109,6 +120,7 @@ typedef struct s_sphere
 	struct s_sphere		*next;
 	float				radius;
 	int					id;
+	float				**matrix;
 }						t_sphere;
 
 typedef struct s_intersection
@@ -128,7 +140,7 @@ typedef struct s_plan
 typedef struct s_cylindre
 {
 	t_tuple				coord;
-	t_tuple				vector;
+	t_tuple				n_vector;
 	float				diameter;
 	float				height;
 	t_color				colors;
@@ -315,4 +327,16 @@ float					**shearing(float shear[6]);
 
 t_ray					ft_ray(t_tuple origin, t_tuple direction);
 t_tuple					ft_position(t_ray r, float t);
+
+// INTERSECTIONS //
+t_intersection			*ft_intersections_tab(int count, ...);
+void					ft_sort_intersections(t_intersection *intersections,
+							int count);
+t_intersection			*ft_hit(t_intersection *intersections, int count);
+t_intersection			*ft_intersect(t_ray ray, t_sphere sphere);
+t_discriminant			ft_discriminant(t_ray ray, t_sphere sphere);
+t_sphere				ft_sphere(t_tuple center, float radius);
+t_intersection			ft_intersection(float t, t_sphere sphere);
+t_ray					ray_transform(t_ray ray, float **matrix);
+t_tuple					ft_mult_matrix_tuple(float **matrix, t_tuple tuple);
 #endif

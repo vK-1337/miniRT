@@ -29,7 +29,7 @@ LIBFT			= $(LIBFT_DIR)$(LIBFT_NAME)
 
 NAME			= MiniRT
 CC				= cc
-FLAGS			= -Wall -Werror -Wextra
+FLAGS			= -Wall -Werror -Wextra -g3
 RM				= rm -f
 AR				= ar rcs
 NORM			= ./includes\
