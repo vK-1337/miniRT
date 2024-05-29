@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 12:56:18 by udumas            #+#    #+#             */
-/*   Updated: 2024/05/29 09:49:25 by udumas           ###   ########.fr       */
+/*   Updated: 2024/05/29 18:24:43 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ float   **scaling(float x, float y, float z)
     return (mat);
 }
 
-void    rotation_x(t_tuple *t, float rad)
+float    **rotation_x(float rad)
 {
     float **mat;
 
@@ -44,12 +44,10 @@ void    rotation_x(t_tuple *t, float rad)
     mat[1][2] = -sin(rad);
     mat[2][1] = sin(rad);
     mat[2][2] = cos(rad);
-    ft_mult_mat_tuple(t, mat);
-    free(mat);
-    return ;
+    return (mat);
 }
 
-void    rotation_y(t_tuple *t, float rad)
+float    **rotation_y(float rad)
 {
     float **mat;
 
@@ -58,12 +56,10 @@ void    rotation_y(t_tuple *t, float rad)
     mat[0][2] = sin(rad);
     mat[2][0] = -sin(rad);
     mat[2][2] = cos(rad);
-    *t = ft_mult_mat_tuple(t, mat);
-    free(mat);
-    return ;
+    return (mat);
 }
 
-void rotation_z(t_tuple *t, float rad)
+float **rotation_z(float rad)
 {
     float **mat;
     
@@ -72,9 +68,7 @@ void rotation_z(t_tuple *t, float rad)
     mat[0][1] = -sin(rad);
     mat[1][0] = sin(rad);
     mat[1][1] = cos(rad);
-    ft_mult_mat_tuple(t, mat);
-    free(mat);
-    return ;
+    return (mat);
 }
 
 

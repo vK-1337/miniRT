@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/29 14:14:47 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/29 18:25:17 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -284,8 +284,8 @@ t_color					ft_mult_color_tog(t_color c1, t_color c2);
 
 float					**ft_mult_mat(float **mat1, float **mat2);
 t_tuple					ft_mult_mat_tuple(t_tuple *tuple, float **mat);
-void					ft_transpose(float mat[4][4]);
-int						ft_comp_mat(float mat1[4][4], float mat2[4][4]);
+float					**ft_transpose(float **mat);
+int						ft_comp_mat(float **mat1, float **mat2, int row_col);
 float					**ft_inversion(float **matrice, int row_col);
 
 //										UTILS								//
@@ -312,10 +312,11 @@ float					ft_cofactor2_2(float **mat, int row, int col);
 
 float					**translation(float x, float y, float z);
 float					**scaling(float x, float y, float z);
-void					rotation_x(t_tuple *t, float rad);
-void					rotation_y(t_tuple *t, float rad);
-void					rotation_z(t_tuple *t, float rad);
+float					**rotation_x(float rad);
+float					**rotation_y(float rad);
+float					**rotation_z(float rad);
 float					**shearing(float shear[6]);
+void					set_transform(t_sphere *sphere, float **matrix);
 
 /******************************************************************************/
 /*                                                                            */
@@ -335,7 +336,7 @@ void					ft_sort_intersections(t_intersection *intersections,
 t_intersection			*ft_hit(t_intersection *intersections, int count);
 t_intersection			*ft_intersect(t_ray ray, t_sphere sphere);
 t_discriminant			ft_discriminant(t_ray ray, t_sphere sphere);
-t_sphere				ft_sphere(t_tuple center, float radius);
+t_sphere				ft_sphere(void);
 t_intersection			ft_intersection(float t, t_sphere sphere);
 t_ray					ray_transform(t_ray ray, float **matrix);
 t_tuple					ft_mult_matrix_tuple(float **matrix, t_tuple tuple);

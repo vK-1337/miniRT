@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 12:08:49 by udumas            #+#    #+#             */
-/*   Updated: 2024/05/29 09:40:24 by udumas           ###   ########.fr       */
+/*   Updated: 2024/05/29 18:23:01 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ t_tuple	ft_mult_mat_tuple(t_tuple *tuple, float **mat)
 	return (new);
 }
 
-void	ft_transpose(float mat[4][4])
+float	**ft_transpose(float **mat)
 {
 	int		i;
 	int		j;
@@ -65,18 +65,19 @@ void	ft_transpose(float mat[4][4])
 		}
 		i++;
 	}
+	return (mat);
 }
 
-int	ft_comp_mat(float mat1[4][4], float mat2[4][4])
+int	ft_comp_mat(float **mat1, float **mat2, int row_col)
 {
 	int	x;
 	int	y;
 
 	x = 0;
-	while (x < 4)
+	while (x < row_col)
 	{
 		y = 0;
-		while (y < 4)
+		while (y < row_col)
 		{
 			if (ft_comp_float(mat1[y][x], mat2[y][x]) == 0)
 				return (0);
