@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/29 18:25:17 by udumas           ###   ########.fr       */
+/*   Updated: 2024/05/29 18:35:50 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ typedef struct s_sphere
 typedef struct s_intersection
 {
 	float				t;
-	t_sphere			object;
+	t_sphere			*object;
 }						t_intersection;
 
 typedef struct s_plan
@@ -340,4 +340,5 @@ t_sphere				ft_sphere(void);
 t_intersection			ft_intersection(float t, t_sphere sphere);
 t_ray					ray_transform(t_ray ray, float **matrix);
 t_tuple					ft_mult_matrix_tuple(float **matrix, t_tuple tuple);
+void					set_transform(t_sphere *sphere, float **matrix);
 #endif
