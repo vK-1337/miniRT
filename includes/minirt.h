@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/29 15:47:11 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/29 21:03:13 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 # endif
 # define EPSILON 0.00001
 # define INFINITY 1e10
-# define SIZE_X 100
-# define SIZE_Y 100
+# define SIZE_X 1000
+# define SIZE_Y 1000
 # define CENTER_X SIZE_X / 2
 # define CENTER_Y SIZE_Y / 2
 # include "get_next_line.h"
@@ -73,9 +73,9 @@ typedef struct s_tuple
 
 typedef struct s_color
 {
-	unsigned char		r;
-	unsigned char		g;
-	unsigned char		b;
+	double				r;
+	double 				g;
+	double 				b;
 }						t_color;
 
 typedef struct t_discriminant
@@ -107,10 +107,20 @@ typedef struct s_camera
 
 typedef struct s_light
 {
-	t_tuple				coord;
+	t_tuple				position;
 	float				light_ratio;
 	t_color				colors;
+	t_color				intensity;
 }						t_light;
+
+typedef struct s_material
+{
+	t_color				*color;
+	float				ambient;
+	float				diffuse;
+	float				specular;
+	float				shininess;
+}						t_material;
 
 typedef struct s_sphere
 {
@@ -121,6 +131,7 @@ typedef struct s_sphere
 	float				radius;
 	int					id;
 	float				**matrix;
+	t_material			*material;
 }						t_sphere;
 
 typedef struct s_intersection
@@ -269,7 +280,7 @@ t_tuple					cross_product(t_tuple v1, t_tuple v2);
 
 t_color					ft_sum_color(t_color c1, t_color c2);
 t_color					ft_dif_color(t_color c1, t_color c2);
-t_color					ft_mult_color(t_color c, int scalar);
+t_color					ft_mult_color(t_color c, float scalar);
 t_color					ft_mult_color_tog(t_color c1, t_color c2);
 
 /******************************************************************************/
@@ -284,7 +295,7 @@ t_color					ft_mult_color_tog(t_color c1, t_color c2);
 
 float					**ft_mult_mat(float **mat1, float **mat2);
 t_tuple					ft_mult_mat_tuple(t_tuple *tuple, float **mat);
-void					ft_transpose(float mat[4][4]);
+float					**ft_transpose(float **mat);
 int						ft_comp_mat(float mat1[4][4], float mat2[4][4]);
 float					**ft_inversion(float **matrice, int row_col);
 
@@ -340,4 +351,20 @@ t_intersection			ft_intersection(float t, t_sphere *sphere);
 t_ray					ray_transform(t_ray ray, float **matrix);
 t_tuple					ft_mult_matrix_tuple(float **matrix, t_tuple tuple);
 void					set_transform(t_sphere *sphere, float **matrix);
+
+/******************************************************************************/
+/*                                                                            */
+/*                                                                            */
+/*                                   REFLECTIONS                              */
+/*                                                                            */
+/*                                                                            */
+/******************************************************************************/
+
+t_tuple					ft_reflect(t_tuple in, t_tuple normal);
+t_material				*ft_material(void);
+t_light					ft_point_light(t_tuple *position, t_color *intensity);
+t_color					ft_lighting(t_material *m, t_light light,
+							t_tuple position, t_tuple eyev, t_tuple normalv);
+void					color_black(t_color *color);
+
 #endif

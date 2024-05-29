@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   matrix_calcul.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 12:08:49 by udumas            #+#    #+#             */
-/*   Updated: 2024/05/29 09:40:24 by udumas           ###   ########.fr       */
+/*   Updated: 2024/05/29 20:36:18 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ t_tuple	ft_mult_mat_tuple(t_tuple *tuple, float **mat)
 	return (new);
 }
 
-void	ft_transpose(float mat[4][4])
+float	**ft_transpose(float **mat)
 {
 	int		i;
 	int		j;
@@ -65,6 +65,7 @@ void	ft_transpose(float mat[4][4])
 		}
 		i++;
 	}
+	return (mat);
 }
 
 int	ft_comp_mat(float mat1[4][4], float mat2[4][4])
