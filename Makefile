@@ -88,7 +88,7 @@ clean:
 					@make clean -C $(LIBFT_DIR)
 
 fclean:			clean
-					@echo "Removing push_swap..."
+					@echo "Removing Mini_rt..."
 					@rm -f $(NAME)
 					@rm -f $(LIBFT_DIR)$(LIBFT_NAME)
 

@@ -3,16 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/27 14:22:08 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/29 11:13:33 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINIRT_H
 # define MINIRT_H
 
+# ifndef M_PI
+#  define M_PI 3.14159265358979323846
+# endif
 # define EPSILON 0.00001
 # define INFINITY 1e10
 # define SIZE_X 1280
@@ -66,10 +69,10 @@ typedef struct s_color
 
 typedef struct t_discriminant
 {
-    float				a;
-    float				b;
-    float				c;
-    float				result;
+	float				a;
+	float				b;
+	float				c;
+	float				result;
 }						t_discriminant;
 
 typedef struct s_ray
@@ -81,53 +84,54 @@ typedef struct s_ray
 typedef struct s_alight
 {
 	float				alight;
-	t_color                colors;
+	t_color				colors;
 }						t_alight;
 
 typedef struct s_camera
 {
-	t_tuple                coord;
-	t_tuple               vector;
+	t_tuple				coord;
+	t_tuple				vector;
 	int					fov;
 }						t_camera;
 
 typedef struct s_light
 {
-	t_tuple               coord;
+	t_tuple				coord;
 	float				light_ratio;
-	t_color                colors;
+	t_color				colors;
 }						t_light;
 
 typedef struct s_sphere
 {
-	t_tuple                center;
+	t_tuple				center;
 	float				diameter;
-	t_color                colors;
+	t_color				colors;
 	struct s_sphere		*next;
-    float              radius;
+	float				radius;
 	int					id;
 }						t_sphere;
 
-typedef struct s_intersection {
-    float				t;
-    t_sphere			object;
+typedef struct s_intersection
+{
+	float				t;
+	t_sphere			object;
 }						t_intersection;
 
 typedef struct s_plan
 {
-	t_tuple                coord;
-	t_tuple              vector;
-	t_color                colors;
+	t_tuple				coord;
+	t_tuple				vector;
+	t_color				colors;
 	struct s_plan		*next;
 }						t_plan;
 
 typedef struct s_cylindre
 {
 	t_tuple				coord;
-	t_tuple                vector;
+	t_tuple				vector;
 	float				diameter;
 	float				height;
-	t_color                colors;
+	t_color				colors;
 	struct s_cylindre	*next;
 }						t_cylindre;
 
@@ -141,7 +145,6 @@ typedef struct s_data
 	t_cylindre			**cylindre;
 	int					counter[6];
 }						t_data;
-
 
 typedef struct s_win
 {
@@ -236,6 +239,8 @@ void					free_data(t_data *data);
 /*                                                                            */
 /******************************************************************************/
 
+//										TUPLE									//
+t_tuple					ft_init_tuple(float x, float y, float z, float w);
 t_tuple					ft_sum_tuple(t_tuple t1, t_tuple t2);
 t_tuple					ft_dif_tuple(t_tuple t1, t_tuple t2);
 t_tuple					ft_neg_tuple(t_tuple t);
@@ -266,7 +271,7 @@ t_color					ft_mult_color_tog(t_color c1, t_color c2);
 //										CALCUL								//
 
 float					**ft_mult_mat(float **mat1, float **mat2);
-void					ft_mult_mat_tuple(float tuple[4], float mat[4][4]);
+t_tuple					ft_mult_mat_tuple(t_tuple *tuple, float **mat);
 void					ft_transpose(float mat[4][4]);
 int						ft_comp_mat(float mat1[4][4], float mat2[4][4]);
 float					**ft_inversion(float **matrice, int row_col);
@@ -290,6 +295,15 @@ float					ft_determinant3_3(float **mat);
 float					ft_cofactorinversion(float **mat, int row, int col);
 float					ft_determinant4_4(float **matrice);
 float					ft_cofactor2_2(float **mat, int row, int col);
+
+//										TRANSFORMATION						//
+
+float					**translation(float x, float y, float z);
+float					**scaling(float x, float y, float z);
+void					rotation_x(t_tuple *t, float rad);
+void					rotation_y(t_tuple *t, float rad);
+void					rotation_z(t_tuple *t, float rad);
+float					**shearing(float shear[6]);
 
 /******************************************************************************/
 /*                                                                            */
