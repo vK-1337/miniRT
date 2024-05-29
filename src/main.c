@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:55 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/27 19:13:49 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/29 14:31:31 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,33 +181,89 @@ t_win *init_mlx(void)
 //     return (0);
 // }
 
-int main(void)
-{
-    t_intersection i1;
-    t_intersection i2;
-    t_intersection i3;
-    t_intersection i4;
-    t_intersection *xs;
-    t_sphere sphere;
+// int main(void)
+// {
+//     void *mlx_ptr;
+//     void *win_ptr;
+//     t_win win;
+//     int canvas_pixels = SIZE_X; // Assuming SIZE_X is the size of your canvas
+//     double half = canvas_pixels / 2.0;
+//     double pixel_size = 1.0; // Adjust as needed
+//     double wall_z = 10.0; // Adjust as needed
+//     t_tuple ray_origin = {SIZE_X / 2, SIZE_Y / 2, -5, 1}; // Adjust as needed
+//     t_tuple center;
 
-    sphere.center.x = 0;
-    sphere.center.y = 0;
-    sphere.center.z = 0;
-    sphere.radius = 1;
+//     center.x = SIZE_X / 2;
+//     center.y = SIZE_Y / 2;
+//     center.z = 0;
+//     center.w = 1;
+//     t_sphere shape = ft_sphere(center, 1); // Initialize as needed
 
-    i1 = ft_intersection(5, sphere);
-    i2 = ft_intersection(7, sphere);
-    i3 = ft_intersection(-3, sphere);
-    i4 = ft_intersection(2, sphere);
+//     mlx_ptr = mlx_init();
+//     win_ptr = mlx_new_window(mlx_ptr, SIZE_X, SIZE_Y, "Ray Tracer");
+//     win.mlx = mlx_ptr;
+//     win.win = win_ptr;
 
-    xs = ft_intersections_tab(4, i4, i3, i1, i2);
+//     for (int y = 0; y < canvas_pixels; y++)
+//     {
+//         double world_y = half - pixel_size * y;
+//         for (int x = 0; x < canvas_pixels; x++)
+//         {
+//             double world_x = -half + pixel_size * x;
+//             t_tuple position = {world_x, world_y, wall_z, 1};
+//             t_tuple direction = ft_normalization(ft_dif_tuple(position, ray_origin));
+//             t_ray r = ft_ray(ray_origin, direction);
+//             t_intersection *xs = ft_intersect(r, shape);
+//             if (ft_hit(xs, 2) != NULL)
+//             {
+//                 put_pixel(&win, x, y, 0xFF0000); // Red color
+//             }
+//         }
+//     }
+//     mlx_loop(mlx_ptr);
+//     return (0);
+// }
 
-    int i = 0;
-    while (i < 4)
-    {
-        printf("xs[%d].t = %f\n", i, xs[i].t);
-        i++;
-    }
+// int main(void)
+// {
+//     void *mlx_ptr;
+//     void *win_ptr;
+//     t_win win;
+//     t_tuple ray_origin = {CENTER_X, CENTER_Y, -5, 1}; // Adjust as needed
 
-    printf("\nft_hit(inter) = %f\n", ft_hit(xs, 4)->t);
-}
+//     float wall_z = 10.0;
+//     float wall_size = 7.0;
+
+//     float canvas_pixels = SIZE_X;
+//     float pixel_size = wall_size / canvas_pixels;
+
+//     float half = wall_size / 2;
+
+//     mlx_ptr = mlx_init();
+//     win_ptr = mlx_new_window(mlx_ptr, SIZE_X, SIZE_Y, "Ray Tracer");
+//     win.mlx = mlx_ptr;
+//     win.win = win_ptr;
+
+//     t_tuple center = {CENTER_X, CENTER_Y, 0, 1};
+
+//     t_sphere shape = ft_sphere(center, 1.0);
+
+//     for ( int y = 0; y < canvas_pixels - 1; y++)
+//     {
+//         float world_y = half - pixel_size * y;
+//         for (int x = 0; x < canvas_pixels - 1; x++)
+//         {
+//             float world_x = -half + pixel_size * x;
+//             t_tuple position = {world_x, world_y, wall_z, 1};
+//             t_tuple direction = ft_normalization(ft_dif_tuple(position, ray_origin));
+//             t_ray r = ft_ray(ray_origin, direction);
+//             t_intersection *xs = ft_intersect(r, shape);
+//             if (ft_hit(xs, 2) != NULL)
+//             {
+//                 put_pixel(&win, x, y, 0xFF0000); // Red color
+//             }
+//         }
+//     }
+//     mlx_loop(mlx_ptr);
+//     return (0);
+// }

@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 09:54:05 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/28 10:57:32 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/29 14:26:51 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ t_sphere	ft_sphere(t_tuple center, float radius)
 
 	s.center = center;
 	s.radius = radius;
+    s.matrix = identity_matrix(4);
 	s.id = id++;
 	return (s);
 }
@@ -51,6 +52,7 @@ t_discriminant	ft_discriminant(t_ray ray, t_sphere sphere)
 	dis.c = ft_dotproduct(sphere_to_ray, sphere_to_ray) - sphere.radius
 		* sphere.radius;
 	dis.result = dis.b * dis.b - 4 * dis.a * dis.c;
+    printf("dis.result = %f\n", dis.result);
 	return (dis);
 }
 
@@ -59,8 +61,11 @@ t_intersection	*ft_intersect(t_ray ray, t_sphere sphere)
 	t_discriminant	dis;
 	float			t1;
 	float			t2;
+    // t_ray          new_ray;
 
+    // new_ray = ray_transform(ray, ft_inversion(sphere.matrix, 4));
 	dis = ft_discriminant(ray, sphere);
+    printf(" %p\n", sphere.matrix);
 	if (dis.result < 0)
 		return (0);
 	t1 = (-dis.b - sqrt(dis.result)) / (2 * dis.a);

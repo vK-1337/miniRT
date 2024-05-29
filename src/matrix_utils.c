@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   matrix_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 15:10:22 by udumas            #+#    #+#             */
-/*   Updated: 2024/05/25 15:15:39 by udumas           ###   ########.fr       */
+/*   Updated: 2024/05/29 12:00:20 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 float	**ft_matcre(float *tab, int row_col)
 {
-	int i;
-	int j;
-	int k;
-	float **matrice;
-	
+	int		i;
+	int		j;
+	int		k;
+	float	**matrice;
+
 	i = -1;
 	k = 0;
 	matrice = malloc(sizeof(float *) * row_col);
@@ -35,14 +35,14 @@ float	**ft_matcre(float *tab, int row_col)
 	{
 		j = -1;
 		while (++j < row_col)
-			matrice[i][j] = tab[k++];	
+			matrice[i][j] = tab[k++];
 	}
 	return (matrice);
 }
 
-void ft_free_mat(float **mat, int row_col)
+void	ft_free_mat(float **mat, int row_col)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < row_col)
@@ -53,11 +53,11 @@ void ft_free_mat(float **mat, int row_col)
 	free(mat);
 }
 
-float **ft_create_mat_null(int row_col)
+float	**ft_create_mat_null(int row_col)
 {
-	float **new_mat;
-	int i;
-	int j;
+	float	**new_mat;
+	int		i;
+	int		j;
 
 	new_mat = malloc(sizeof(float *) * row_col);
 	i = 0;
@@ -124,5 +124,3 @@ float	**ft_submat(float **matrice, int row_col, int row, int col)
 	}
 	return (new_mat);
 }
-
-
