@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rays.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 09:54:05 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/29 14:26:51 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/29 17:56:40 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,14 @@ t_tuple	ft_position(t_ray r, float t)
 	return (position);
 }
 
-t_sphere	ft_sphere(t_tuple center, float radius)
+t_sphere	ft_sphere(void)
 {
 	t_sphere	s;
 	static int	id;
 
-	s.center = center;
-	s.radius = radius;
-    s.matrix = identity_matrix(4);
+	s.center = ft_init_tuple(0, 0, 0, 1);
+	s.radius = 1;
+	s.matrix = identity_matrix(4);
 	s.id = id++;
 	return (s);
 }
@@ -52,7 +52,7 @@ t_discriminant	ft_discriminant(t_ray ray, t_sphere sphere)
 	dis.c = ft_dotproduct(sphere_to_ray, sphere_to_ray) - sphere.radius
 		* sphere.radius;
 	dis.result = dis.b * dis.b - 4 * dis.a * dis.c;
-    printf("dis.result = %f\n", dis.result);
+	printf("dis.result = %f\n", dis.result);
 	return (dis);
 }
 
@@ -61,11 +61,11 @@ t_intersection	*ft_intersect(t_ray ray, t_sphere sphere)
 	t_discriminant	dis;
 	float			t1;
 	float			t2;
-    // t_ray          new_ray;
 
-    // new_ray = ray_transform(ray, ft_inversion(sphere.matrix, 4));
+	// t_ray          new_ray;
+	// new_ray = ray_transform(ray, ft_inversion(sphere.matrix, 4));
 	dis = ft_discriminant(ray, sphere);
-    printf(" %p\n", sphere.matrix);
+	printf(" %p\n", sphere.matrix);
 	if (dis.result < 0)
 		return (0);
 	t1 = (-dis.b - sqrt(dis.result)) / (2 * dis.a);
@@ -165,8 +165,8 @@ t_tuple	ft_mult_matrix_tuple(float **matrix, t_tuple tuple)
 		* tuple.z + matrix[3][3] * tuple.w;
 	return (new_tuple);
 }
-void set_transform(t_sphere *sphere, float **matrix)
+void	set_transform(t_sphere *sphere, float **matrix)
 {
-    sphere->matrix = matrix;
-    return;
+	sphere->matrix = matrix;
+	return ;
 }
