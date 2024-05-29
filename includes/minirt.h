@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/29 14:14:47 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/29 15:47:11 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ typedef struct s_sphere
 typedef struct s_intersection
 {
 	float				t;
-	t_sphere			object;
+	t_sphere			*object;
 }						t_intersection;
 
 typedef struct s_plan
@@ -333,10 +333,11 @@ t_intersection			*ft_intersections_tab(int count, ...);
 void					ft_sort_intersections(t_intersection *intersections,
 							int count);
 t_intersection			*ft_hit(t_intersection *intersections, int count);
-t_intersection			*ft_intersect(t_ray ray, t_sphere sphere);
-t_discriminant			ft_discriminant(t_ray ray, t_sphere sphere);
+t_intersection			*ft_intersect(t_ray ray, t_sphere *sphere);
+t_discriminant			ft_discriminant(t_ray ray, t_sphere *sphere);
 t_sphere				ft_sphere(t_tuple center, float radius);
-t_intersection			ft_intersection(float t, t_sphere sphere);
+t_intersection			ft_intersection(float t, t_sphere *sphere);
 t_ray					ray_transform(t_ray ray, float **matrix);
 t_tuple					ft_mult_matrix_tuple(float **matrix, t_tuple tuple);
+void					set_transform(t_sphere *sphere, float **matrix);
 #endif
