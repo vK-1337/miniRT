@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/28 10:56:55 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/29 18:08:42 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,9 +166,9 @@ int	init_light(t_data *data, char **data_split)
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return (free(light) ,0);
-	light->coord.x = atof(split[0]);
-	light->coord.y = atof(split[1]);
-	light->coord.z = atof(split[2]);
+	light->position.x = atof(split[0]);
+	light->position.y = atof(split[1]);
+	light->position.z = atof(split[2]);
 	free_char_tab(split);
 	light->light_ratio = atof(data_split[2]);
 	split = ft_split(data_split[3], ',');
