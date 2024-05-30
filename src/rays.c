@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 09:54:05 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/29 18:37:23 by udumas           ###   ########.fr       */
+/*   Updated: 2024/05/30 11:30:37 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ t_sphere	ft_sphere(void)
 	s.center = ft_init_tuple(0, 0, 0, 1);
 	s.radius = 1;
 	s.matrix = identity_matrix(4);
+    s.material = ft_material();
 	s.id = id++;
 	return (s);
 }
@@ -51,7 +52,7 @@ t_discriminant	ft_discriminant(t_ray ray, t_sphere *sphere)
 	dis.b = 2 * ft_dotproduct(ray.direction, sphere_to_ray);
 	dis.c = ft_dotproduct(sphere_to_ray, sphere_to_ray) - sphere->radius
 		* sphere->radius;
-	dis.result = dis.b * dis.b - 4 * dis.a * dis.c;
+	dis.result = (dis.b * dis.b) - 4 * dis.a * dis.c;
 	return (dis);
 }
 
