@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/30 11:29:57 by udumas           ###   ########.fr       */
+/*   Updated: 2024/05/30 15:12:37 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,8 @@ typedef struct s_tuple
 typedef struct s_color
 {
 	double				r;
-	double 				g;
-	double 				b;
+	double				g;
+	double				b;
 }						t_color;
 
 typedef struct t_discriminant
@@ -179,6 +179,14 @@ typedef struct s_win
 	int					line_length;
 	int					endian;
 }						t_win;
+
+typedef struct s_camera
+{
+	unsigned int		hsize;
+	unsigned int		vsize;
+	t_tuple				vector;
+	int					fov;
+}						t_camera;
 
 void					print_char_tab(char **tab);
 /******************************************************************************/
