@@ -6,11 +6,25 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 14:30:46 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/30 17:13:57 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/30 19:15:04 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
+
+void render(t_camera *camera, t_world *world, t_win *win)
+{
+    for (int y = 0; y < camera->vsize; y++)
+    {
+        for (int x = 0; x < camera->hsize; x++)
+        {
+            t_ray ray = ray_for_pixel(camera, x, y);
+            t_color color = color_at(world, &ray);
+            unsigned int color_int = color_to_int(color); // Convert color to int
+            mlx_pixel_put(win->mlx, win->win, x, y, color_int);
+        }
+    }
+}
 
 t_camera	ft_new_camera(float hsize, float vsize, double fov)
 {
@@ -66,5 +80,3 @@ t_ray	ray_for_pixel(t_camera *camera, int px, int py)
 	direction = ft_normalization(ft_dif_tuple(pixel, origin));
 	return (ft_ray(origin, direction));
 }
-
-

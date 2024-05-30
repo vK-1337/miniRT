@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/30 17:00:05 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/30 20:23:11 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ typedef struct s_light
 	float				light_ratio;
 	t_color				colors;
 	t_color				intensity;
+    t_light                *next;
 }						t_light;
 
 typedef struct s_material
