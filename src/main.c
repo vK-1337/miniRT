@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:55 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/29 21:10:11 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/30 10:24:00 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,7 @@ int main(void)
     sphere.material->color->b = 1;
 
     t_tuple light_position = {-10, 10, -10, 1};
-    t_color light_color = {0.8, 0.8, 0.8};
+    t_color light_color = {1, 1, 1};
     t_light light = ft_point_light(&light_position, &light_color);
 
     win = init_mlx();
