@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:55 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/30 17:15:28 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/30 19:09:15 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ int main(void)
 {
     t_tuple ray_origin = {0, 0, -5, 1};
     t_tuple center = {0, 0, 0, 1};
-    t_sphere sphere = ft_sphere(center, 1);
+    t_sphere sphere = ft_sphere();
     double wall_z = 10.0;
     double wall_size = 7.0;
     double canvas_pixels = SIZE_X;
@@ -244,7 +244,6 @@ int main(void)
 
 int main(void)
 {
-
-
+    
     return (0);
 }
