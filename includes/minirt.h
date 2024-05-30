@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/30 15:12:37 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/30 17:00:05 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,13 +98,6 @@ typedef struct s_alight
 	t_color				colors;
 }						t_alight;
 
-typedef struct s_camera
-{
-	t_tuple				coord;
-	t_tuple				vector;
-	int					fov;
-}						t_camera;
-
 typedef struct s_light
 {
 	t_tuple				position;
@@ -158,6 +151,18 @@ typedef struct s_cylindre
 	struct s_cylindre	*next;
 }						t_cylindre;
 
+typedef struct s_camera
+{
+	float				hsize;
+	float				vsize;
+	t_tuple				vector;
+	float				fov;
+	float				**matrix;
+	float				pixel_size;
+	float				half_width;
+	float				half_height;
+}						t_camera;
+
 typedef struct s_data
 {
 	t_alight			*alight;
@@ -179,14 +184,6 @@ typedef struct s_win
 	int					line_length;
 	int					endian;
 }						t_win;
-
-typedef struct s_camera
-{
-	unsigned int		hsize;
-	unsigned int		vsize;
-	t_tuple				vector;
-	int					fov;
-}						t_camera;
 
 void					print_char_tab(char **tab);
 /******************************************************************************/
@@ -353,10 +350,10 @@ t_intersection			*ft_intersections_tab(int count, ...);
 void					ft_sort_intersections(t_intersection *intersections,
 							int count);
 t_intersection			*ft_hit(t_intersection *intersections, int count);
-t_intersection			*ft_intersect(t_ray ray, t_sphere sphere);
-t_discriminant			ft_discriminant(t_ray ray, t_sphere sphere);
+t_intersection			*ft_intersect(t_ray ray, t_sphere *sphere);
+t_discriminant			ft_discriminant(t_ray ray, t_sphere *sphere);
 t_sphere				ft_sphere(void);
-t_intersection			ft_intersection(float t, t_sphere sphere);
+t_intersection			ft_intersection(float t, t_sphere *sphere);
 t_ray					ray_transform(t_ray ray, float **matrix);
 t_tuple					ft_mult_matrix_tuple(float **matrix, t_tuple tuple);
 void					set_transform(t_sphere *sphere, float **matrix);
@@ -375,5 +372,17 @@ t_light					ft_point_light(t_tuple *position, t_color *intensity);
 t_color					ft_lighting(t_material *m, t_light light,
 							t_tuple position, t_tuple eyev, t_tuple normalv);
 void					color_black(t_color *color);
+t_tuple					ft_normal_at(t_sphere sphere, t_tuple world_point);
+unsigned int			color_to_int(t_color color);
+/******************************************************************************/
+/*                                                                            */
+/*                                                                            */
+/*                                   CAMERA                                   */
+/*                                                                            */
+/*                                                                            */
+/******************************************************************************/
 
+t_camera				ft_new_camera(float hsize, float vsize, double fov);
+float					compute_pixel_size(t_camera *camera);
+t_ray					ray_for_pixel(t_camera *camera, int px, int py);
 #endif

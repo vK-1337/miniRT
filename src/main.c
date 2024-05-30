@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:55 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/30 10:24:00 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/30 17:15:28 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,34 +129,6 @@ t_win	*init_mlx(void)
 //     // print_all_data(&data);
 //     return (EXIT_SUCCESS);
 // }
-t_tuple ft_normal_at(t_sphere sphere, t_tuple world_point)
-{
-    t_tuple object_point;
-    t_tuple object_normal;
-    t_tuple world_normal;
-
-    object_point = ft_mult_matrix_tuple(ft_inversion(sphere.matrix, 4), world_point);
-    object_normal = ft_dif_tuple(object_point, ft_init_tuple(0, 0, 0, 1));
-    world_normal = ft_mult_matrix_tuple(ft_transpose(ft_inversion(sphere.matrix, 4)), object_normal);
-    world_normal.w = 0;
-    return (ft_normalization(world_normal));
-}
-
-unsigned int color_to_int(t_color color)
-{
-
-    if (color.r > 1)
-        color.r = 1;
-    if (color.g > 1)
-        color.g = 1;
-    if (color.b > 1)
-        color.b = 1;
-    int r = (unsigned int)(color.r * 255);
-    int g = (unsigned int)(color.g * 255);
-    int b = (unsigned int)(color.b * 255);
-
-    return (r << 16) | (g << 8) | b;
-}
 
 int main(void)
 {
@@ -199,8 +171,6 @@ int main(void)
                 t_tuple normal = ft_normal_at(*xs->object, point);
                 t_tuple eye = ft_neg_tuple(r.direction);
                 t_color color = ft_lighting(xs->object->material, light, point, eye, normal);
-
-
                 put_pixel(win, x, y, color_to_int(color));
             }
         }
@@ -214,7 +184,7 @@ int main(void)
 // {
 //     t_tuple position = {0, 0, 0, 1};
 //     t_color intensity = {1, 1, 1};
-// 	t_light light;
+// 	t_light light;normal_at
 
 //     printf("TESTING LIGHT \n\n");
 //     light = ft_point_light(&position, &intensity);
@@ -271,3 +241,10 @@ int main(void)
 //     printf("shininess = %f\n\n", s.material->shininess);
 // 	return (0);
 // }
+
+int main(void)
+{
+
+
+    return (0);
+}
