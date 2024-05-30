@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/30 11:29:57 by udumas           ###   ########.fr       */
+/*   Updated: 2024/05/30 20:22:25 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,8 @@ typedef struct s_tuple
 typedef struct s_color
 {
 	double				r;
-	double 				g;
-	double 				b;
+	double				g;
+	double				b;
 }						t_color;
 
 typedef struct t_discriminant
@@ -111,6 +111,7 @@ typedef struct s_light
 	float				light_ratio;
 	t_color				colors;
 	t_color				intensity;
+	struct s_light				*next;
 }						t_light;
 
 typedef struct s_material
@@ -137,6 +138,7 @@ typedef struct s_sphere
 typedef struct s_intersection
 {
 	float				t;
+	int					count;
 	t_sphere			*object;
 }						t_intersection;
 
@@ -157,6 +159,16 @@ typedef struct s_cylindre
 	t_color				colors;
 	struct s_cylindre	*next;
 }						t_cylindre;
+
+typedef struct s_comps
+{
+	float				t;
+	t_sphere			*object;
+	t_tuple				point;
+	t_tuple				eyev;
+	t_tuple				normalv;
+	int					inside;
+}						t_comps;
 
 typedef struct s_data
 {
@@ -263,7 +275,7 @@ void					free_data(t_data *data);
 /******************************************************************************/
 
 //										TUPLE									//
-t_tuple					ft_init_tuple(float x, float y, float z, float w);
+t_tuple					*ft_init_tuple(float x, float y, float z, float w);
 t_tuple					ft_sum_tuple(t_tuple t1, t_tuple t2);
 t_tuple					ft_dif_tuple(t_tuple t1, t_tuple t2);
 t_tuple					ft_neg_tuple(t_tuple t);
@@ -282,6 +294,7 @@ t_color					ft_sum_color(t_color c1, t_color c2);
 t_color					ft_dif_color(t_color c1, t_color c2);
 t_color					ft_mult_color(t_color c, float scalar);
 t_color					ft_mult_color_tog(t_color c1, t_color c2);
+t_color					*ft_color(float r, float g, float b);
 
 /******************************************************************************/
 /*                                                                            */
@@ -345,10 +358,10 @@ t_intersection			*ft_intersections_tab(int count, ...);
 void					ft_sort_intersections(t_intersection *intersections,
 							int count);
 t_intersection			*ft_hit(t_intersection *intersections, int count);
-t_intersection			*ft_intersect(t_ray ray, t_sphere sphere);
-t_discriminant			ft_discriminant(t_ray ray, t_sphere sphere);
-t_sphere				ft_sphere(void);
-t_intersection			ft_intersection(float t, t_sphere sphere);
+t_intersection			*ft_intersect(t_ray ray, t_sphere *sphere);
+t_discriminant			ft_discriminant(t_ray ray, t_sphere *sphere);
+t_sphere				*ft_sphere(void);
+t_intersection			ft_intersection(float t, t_sphere *sphere);
 t_ray					ray_transform(t_ray ray, float **matrix);
 t_tuple					ft_mult_matrix_tuple(float **matrix, t_tuple tuple);
 void					set_transform(t_sphere *sphere, float **matrix);
@@ -363,9 +376,26 @@ void					set_transform(t_sphere *sphere, float **matrix);
 
 t_tuple					ft_reflect(t_tuple in, t_tuple normal);
 t_material				*ft_material(void);
-t_light					ft_point_light(t_tuple *position, t_color *intensity);
+t_light					*ft_point_light(t_tuple *position, t_color *intensity);
+void					ft_point_light2(t_light *light, t_tuple position,
+							t_color intensity);
 t_color					ft_lighting(t_material *m, t_light light,
 							t_tuple position, t_tuple eyev, t_tuple normalv);
 void					color_black(t_color *color);
+t_tuple					ft_normal_at(t_sphere sphere, t_tuple world_point);
 
+/******************************************************************************/
+/*                                                                            */
+/*                                                                            */
+/*                                   SCENES									         */
+/*                                                                            */
+/*                                                                            */
+/******************************************************************************/
+
+t_data					*ft_default_world(void);
+t_comps					ft_prepare_computations(t_intersection *i, t_ray ray);
+t_intersection			*ft_intersect_world(t_ray ray, t_data **data);
+t_color					ft_shade_hit(t_data *data, t_comps *comps);
+float					**ft_view_transform(t_tuple from, t_tuple to,
+							t_tuple up);
 #endif
