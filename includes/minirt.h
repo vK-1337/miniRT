@@ -6,7 +6,7 @@
 /*   By: vk <vk@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/31 10:19:03 by vk               ###   ########.fr       */
+/*   Updated: 2024/05/31 11:20:29 by vk               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ typedef struct s_comps
 	int					inside;
 }						t_comps;
 
-typedef struct s_data
+typedef struct s_world
 {
 	t_alight			*alight;
 	t_camera			*camera;
@@ -184,7 +184,7 @@ typedef struct s_data
 	t_plan				**plan;
 	t_cylindre			**cylindre;
 	int					counter[6];
-}						t_data;
+}						t_world;
 
 typedef struct s_win
 {
@@ -207,10 +207,10 @@ void					print_char_tab(char **tab);
 /******************************************************************************/
 
 int						scene_name_check(char *av);
-t_data					init_all_data(int fd);
-void					null_data(t_data *data);
-int						init_corresponding_data(char *file_data, t_data *data);
-int						init_data_w_line(t_data *data, t_dtype type,
+t_world					init_all_data(int fd);
+void					null_data(t_world *data);
+int						init_corresponding_data(char *file_data, t_world *data);
+int						init_data_w_line(t_world *data, t_dtype type,
 							char **data_split);
 t_dtype					determine_type(char *data);
 int						char_tab_len(char **tab);
@@ -232,15 +232,15 @@ int						check_fov_syntax(char *data);
 int						check_vect_syntax(char *data);
 int						check_coord_syntax(char *data);
 
-int						init_alight(t_data *data, char **data_split);
-int						init_camera(t_data *data, char **data_split);
-int						init_light(t_data *data, char **data_split);
-int						init_sphere(t_data *data, char **data_split);
-int						init_plan(t_data *data, char **data_split);
-int						init_cylindre(t_data *data, char **data_split);
+int						init_alight(t_world *data, char **data_split);
+int						init_camera(t_world *data, char **data_split);
+int						init_light(t_world *data, char **data_split);
+int						init_sphere(t_world *data, char **data_split);
+int						init_plan(t_world *data, char **data_split);
+int						init_cylindre(t_world *data, char **data_split);
 t_dtype					determine_type(char *data);
-void					null_data(t_data *data);
-void					print_all_data(t_data *data);
+void					null_data(t_world *data);
+void					print_all_data(t_world *data);
 
 /******************************************************************************/
 /*                                                                            */
@@ -269,7 +269,7 @@ void					print_sphere_list(t_sphere **sphere_list);
 void					print_plan_list(t_plan **plan_list);
 void					print_cylindre_list(t_cylindre **cylindre_list);
 
-void					free_data(t_data *data);
+void					free_data(t_world *data);
 
 /******************************************************************************/
 /*                                                                            */
@@ -401,6 +401,7 @@ unsigned int			color_to_int(t_color color);
 t_camera				ft_new_camera(float hsize, float vsize, double fov);
 float					compute_pixel_size(t_camera *camera);
 t_ray					ray_for_pixel(t_camera *camera, int px, int py);
+void render(t_camera *camera, t_world *world, t_win *win);
 
 /******************************************************************************/
 /*                                                                            */
@@ -410,10 +411,10 @@ t_ray					ray_for_pixel(t_camera *camera, int px, int py);
 /*                                                                            */
 /******************************************************************************/
 
-t_data					*ft_default_world(void);
+t_world					*ft_default_world(void);
 t_comps					ft_prepare_computations(t_intersection *i, t_ray ray);
-t_intersection			*ft_intersect_world(t_ray ray, t_data **data);
-t_color					ft_shade_hit(t_data *data, t_comps *comps);
+t_intersection			*ft_intersect_world(t_ray ray, t_world **data);
+t_color					ft_shade_hit(t_world *data, t_comps *comps);
 float					**ft_view_transform(t_tuple from, t_tuple to,
 							t_tuple up);
 #endif

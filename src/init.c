@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vk <vk@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/30 16:59:39 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/31 11:01:02 by vk               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
 
-t_data	init_all_data(int fd)
+t_world	init_all_data(int fd)
 {
-	t_data	data;
+	t_world	data;
 	char	*file_data;
 
 	null_data(&data);
@@ -47,7 +47,7 @@ t_data	init_all_data(int fd)
 	return (data);
 }
 
-int	init_corresponding_data(char *file_data, t_data *data)
+int	init_corresponding_data(char *file_data, t_world *data)
 {
 	char	**data_split;
 	t_dtype	type;
@@ -73,7 +73,7 @@ int	init_corresponding_data(char *file_data, t_data *data)
 	return (EXIT_SUCCESS);
 }
 
-int	init_data_w_line(t_data *data, t_dtype type, char **data_split)
+int	init_data_w_line(t_world *data, t_dtype type, char **data_split)
 {
 	if (type == A)
 	{
@@ -108,7 +108,7 @@ int	init_data_w_line(t_data *data, t_dtype type, char **data_split)
 	return (1);
 }
 
-int	init_alight(t_data *data, char **data_split)
+int	init_alight(t_world *data, char **data_split)
 {
 	char		**color_split;
 	t_alight	*alight;
@@ -128,7 +128,7 @@ int	init_alight(t_data *data, char **data_split)
 	return (1);
 }
 
-int	init_camera(t_data *data, char **data_split)
+int	init_camera(t_world *data, char **data_split)
 {
 	char		**split;
 	t_camera	*camera;
@@ -155,7 +155,7 @@ int	init_camera(t_data *data, char **data_split)
 	return (1);
 }
 
-int	init_light(t_data *data, char **data_split)
+int	init_light(t_world *data, char **data_split)
 {
 	char	**split;
 	t_light	*light;
@@ -182,7 +182,7 @@ int	init_light(t_data *data, char **data_split)
 	return (1);
 }
 
-int	init_sphere(t_data *data, char **data_split)
+int	init_sphere(t_world *data, char **data_split)
 {
     char		**split;
     t_sphere	*sphere;
@@ -219,7 +219,7 @@ int	init_sphere(t_data *data, char **data_split)
     return (1);
 }
 
-int	init_plan(t_data *data, char **data_split)
+int	init_plan(t_world *data, char **data_split)
 {
 	char	**split;
 	t_plan	*plan;
@@ -261,7 +261,7 @@ int	init_plan(t_data *data, char **data_split)
 	return (1);
 }
 
-int	init_cylindre(t_data *data, char **data_split)
+int	init_cylindre(t_world *data, char **data_split)
 {
 	char		**split;
 	t_cylindre	*cylindre;
@@ -330,7 +330,7 @@ t_dtype	determine_type(char *data)
 	return (NOTYPE);
 }
 
-void	null_data(t_data *data)
+void	null_data(t_world *data)
 {
 	int	i;
 
