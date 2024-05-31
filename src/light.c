@@ -3,22 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   light.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vk <vk@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 18:04:20 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/30 15:57:18 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/31 10:19:54 by vk               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
 
-t_light	ft_point_light(t_tuple *position, t_color *intensity)
+t_light	*ft_point_light(t_tuple *position, t_color *intensity)
 {
-	t_light	light;
+	t_light	*light;
 
-	light.position = *position;
-	light.intensity = *intensity;
+	light = malloc(sizeof(t_light));
+	light->position = *position;
+	light->intensity = *intensity;
 	return (light);
+}
+
+void	ft_point_light2(t_light *light, t_tuple position, t_color intensity)
+{
+	light->position = position;
+	light->intensity = intensity;
 }
 
 t_material	*ft_material(void)

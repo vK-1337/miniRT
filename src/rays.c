@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rays.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vk <vk@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 09:54:05 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/30 15:55:38 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/31 10:19:35 by vk               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,17 @@ t_tuple	ft_position(t_ray r, float t)
 	return (position);
 }
 
-t_sphere	ft_sphere(void)
+t_sphere	*ft_sphere(void)
 {
-	t_sphere	s;
+	t_sphere	*s;
 	static int	id;
 
-	s.center = ft_init_tuple(0, 0, 0, 1);
-	s.radius = 1;
-	s.matrix = identity_matrix(4);
-    s.material = ft_material();
-	s.id = id++;
+	s = malloc(sizeof(t_sphere));
+	s->center = *ft_init_tuple(0, 0, 0, 1);
+	s->radius = 1;
+	s->matrix = identity_matrix(4);
+    s->material = ft_material();
+	s->id = id++;
 	return (s);
 }
 
@@ -121,6 +122,7 @@ void	ft_sort_intersections(t_intersection *intersections, int count)
 				intersections[i] = intersections[j];
 				intersections[j] = tmp;
 			}
+			intersections[i].count = count;
 			j++;
 		}
 		i++;

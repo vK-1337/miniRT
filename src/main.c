@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vk <vk@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:55 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/30 19:09:15 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/31 10:21:09 by vk               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,74 @@ t_win	*init_mlx(void)
 //     return (EXIT_SUCCESS);
 // }
 
+unsigned int color_to_int(t_color color)
+{
+
+    if (color.r > 1)
+        color.r = 1;
+    if (color.g > 1)
+        color.g = 1;
+    if (color.b > 1)
+        color.b = 1;
+    int r = (unsigned int)(color.r * 255);
+    int g = (unsigned int)(color.g * 255);
+    int b = (unsigned int)(color.b * 255);
+
+    return (r << 16) | (g << 8) | b;
+}
+
+// int main(void)
+// {
+//     t_tuple ray_origin = {0, 0, -5, 1};
+//     t_tuple center = {0, 0, 0, 1};
+//     t_sphere s1 = ft_sphere();
+//     t_sphere s2 = ft_sphere();
+//     double wall_z = 10.0;
+//     double wall_size = 7.0;
+//     double canvas_pixels = SIZE_X;
+//     double pixel_size = wall_size / canvas_pixels;
+//     double half = wall_size / 2;
+//     t_win *win;
+
+//     t_material *m = ft_material();
+//     t_material *m2 = ft_material();
+
+//     s2.material = m2;
+//     s1.material = m;
+
+//     ft_color(s1.material->color, 1, 0.2, 1);
+//     s1.material->diffuse = 0.7;
+//     s1.material->specular = 0.2;
+
+//     s2.matrix = ft_mult_mat(scaling(0.5,0.5,0.5), s2.matrix);
+
+//     t_data data;
+//     (**data.sphere) = s1;
+//     sphere_lstadd_back(data.sphere, &s2);
+
+//     t_tuple light_position = {-10, 10, -10, 1};
+//     t_color light_color = {1, 1, 1};
+//     t_light light = ft_point_light(&light_position, &light_color);
+
+//     win = init_mlx();
+//     for ( int y = 0; y < canvas_pixels - 1; y++)
+//     {
+//         double world_y = half - pixel_size * y;
+//         for (int x = 0; x < canvas_pixels - 1; x++)
+//         {
+//             double world_x = -half + pixel_size * x;
+//             t_tuple position = {world_x, world_y, wall_z, 1};
+//             t_tuple direction = ft_normalization(ft_dif_tuple(position,
+// 			ray_origin));
+//             t_ray r = ft_ray(ray_origin, direction);
+//             t_intersection *xs = ft_intersect_world(r, data);
+//             if (ft_hit(xs, 2) != NULL)
+//             {
+//                 t_tuple point = ft_position(r, xs->t);
+//                 t_tuple normal = ft_normal_at(*xs->object, point);
+//                 t_tuple eye = ft_neg_tuple(r.direction);
+//                 t_color color = ft_lighting(xs->object->material, light, point, eye, normal);
+
 int main(void)
 {
     t_tuple ray_origin = {0, 0, -5, 1};
@@ -142,7 +210,21 @@ int main(void)
     double half = wall_size / 2;
     t_win *win;
 
-    t_material *m = ft_material();
+    // ft_color(s1.material->color, 1, 0.2, 1);
+    // s1.material->diffuse = 0.7;
+    // s1.material->specular = 0.2;
+
+    // s2.matrix = ft_mult_mat(scaling(0.5,0.5,0.5), s2.matrix);
+
+    // t_data *data;
+    // data = ft_default_world();
+	// data->light = ft_point_light(ft_init_tuple(0,0.25,0, 1), ft_color(1,1,1));
+    // t_tuple ray_origin = *ft_init_tuple(0, 0, 0, 1);
+    // t_tuple direction = *ft_init_tuple(0, 0, 1, 0);
+    // t_ray r = ft_ray(ray_origin, direction);
+    // t_intersection *xs = ft_intersect_world(r, &data);
+
+    // t_comps comps;
 
     sphere.material = m;
     sphere.material->color->r = 1;
@@ -178,7 +260,23 @@ int main(void)
     mlx_put_image_to_window(win->mlx, win->win, win->img, 0, 0);
     mlx_loop(win->mlx);
     return (0);
+    // comps = ft_prepare_computations(ft_hit(xs, xs[0].count), r);
+    // t_color color = ft_shade_hit(data, &comps);
+    // float **mat;
+
+	// mat = ft_view_transform(*ft_init_tuple(1, 3, 2, 1), *ft_init_tuple(4, -2, 8, 1), *ft_init_tuple(1, 1, 0, 0));
+	// print_matrix(mat,4);
+    // return (0);
+
 }
+//                 put_pixel(win, x, y, color_to_int(color));
+//             }
+//         }
+//     }
+//     mlx_put_image_to_window(win->mlx, win->win, win->img, 0, 0);
+//     mlx_loop(win->mlx);
+//     return (0);
+// }
 
 // int	main(void)
 // {
@@ -244,6 +342,6 @@ int main(void)
 
 int main(void)
 {
-    
+
     return (0);
 }

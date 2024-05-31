@@ -46,7 +46,11 @@ SRC_DIR_F		= src/
 SRC_FUNCTIONS_F	= main color_calculation tuple_calculations tuple_calculations2 rays \
 					matrix_calcul matrix_deter_cofac matrix_utils matrix_utils2 utils init \
 					parsing get_next_line get_next_line_utils cylindre_lst sphere_lst plan_lst \
+<<<<<<< HEAD
 					reflections light tuple_init camera matrix_transformation\
+=======
+					reflections light tuple_init scene matrix_transformation matrix_transformation2\
+>>>>>>> 815d6075a48baad6dc5a7e9ce9ce1aeef53bc524
 
 FRACT_SRC		= $(addprefix $(SRC_DIR_F), $(addsuffix .c, $(SRC_FUNCTIONS_F)))
 FRACT_OBJ		= $(addprefix $(OBJ_DIR_F), $(addsuffix .o, $(SRC_FUNCTIONS_F)))
