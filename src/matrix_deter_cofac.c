@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 15:13:02 by udumas            #+#    #+#             */
-/*   Updated: 2024/05/25 15:14:32 by udumas           ###   ########.fr       */
+/*   Updated: 2024/05/30 18:40:30 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ float	ft_determinant4_4(float **matrice)
 	det = 0;
 	sign = 1;
 	i = 0;
+	
 	while (i < 4)
 	{
 		mat = ft_submat(matrice, 4, 0, i);
