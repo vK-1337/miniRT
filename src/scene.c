@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   scene.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vk <vk@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 11:41:54 by udumas            #+#    #+#             */
-/*   Updated: 2024/05/30 20:18:14 by udumas           ###   ########.fr       */
+/*   Updated: 2024/05/31 11:01:02 by vk               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_intersection	*ft_add_t(t_intersection *t_tab, t_intersection t[2], int count)
 	return (new_t_tab);
 }
 
-t_intersection	*ft_intersect_world(t_ray ray, t_data **data)
+t_intersection	*ft_intersect_world(t_ray ray, t_world **data)
 {
 	t_discriminant	dis;
 	t_intersection	*t_tab;
@@ -82,7 +82,7 @@ t_comps	ft_prepare_computations(t_intersection *i, t_ray ray)
 	return (comps);
 }
 
-t_color	ft_shade_hit(t_data *data, t_comps *comps)
+t_color	ft_shade_hit(t_world *data, t_comps *comps)
 {
 	// t_color	color;
 	// t_color temp;
@@ -101,7 +101,7 @@ t_color	ft_shade_hit(t_data *data, t_comps *comps)
 			comps->eyev, comps->normalv));
 }
 
-t_color ft_color_at(t_data *data, t_ray ray)
+t_color ft_color_at(t_world *data, t_ray ray)
 {
 	t_intersection	*xs;
 	t_comps			comps;
@@ -139,13 +139,13 @@ float **ft_view_transform(t_tuple from, t_tuple to, t_tuple up)
 	return (orientation);
 }
 
-t_data	*ft_default_world(void)
+t_world	*ft_default_world(void)
 {
-	t_data *data;
+	t_world *data;
 	t_sphere *s1;
 	t_sphere *s2;
 
-	data = malloc(sizeof(t_data));
+	data = malloc(sizeof(t_world));
 	data->light = ft_point_light(ft_init_tuple(-10, 10, -10, 1),
 			ft_color(1, 1, 1));
 	data->sphere = malloc(sizeof(t_sphere *));
