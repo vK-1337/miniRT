@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   scene.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vk <vk@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 11:41:54 by udumas            #+#    #+#             */
-/*   Updated: 2024/05/31 11:01:02 by vk               ###   ########.fr       */
+/*   Updated: 2024/05/31 15:43:53 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,13 @@ t_intersection	*ft_add_t(t_intersection *t_tab, t_intersection t[2], int count)
 	while (i < count - 2)
 	{
 		new_t_tab[i] = t_tab[i];
+		new_t_tab[i].status = 1;
 		i++;
 	}
 	new_t_tab[i] = t[0];
+	new_t_tab[i].status = 1;
 	new_t_tab[i + 1] = t[1];
+	new_t_tab[i + 1].status = 1;
 	free(t_tab);
 	return (new_t_tab);
 }
@@ -59,7 +62,7 @@ t_intersection	*ft_intersect_world(t_ray ray, t_world **data)
 		t_tab = ft_add_t(t_tab, t, count);
 		sphere = sphere->next;
 	}
-	ft_sort_intersections(t_tab, count);
+	ft_sort_intersections(t_tab, count);	
 	return (t_tab);
 }
 
@@ -67,10 +70,21 @@ t_comps	ft_prepare_computations(t_intersection *i, t_ray ray)
 {
 	t_comps	comps;
 
+	if (i == NULL)
+	{
+		comps.t = 0;
+		comps.object = NULL;
+		comps.point = *ft_init_tuple(0, 0, 0, 0);
+		comps.eyev = *ft_init_tuple(0, 0, 0, 0);
+		comps.normalv = *ft_init_tuple(0, 0, 0, 0);
+		comps.inside = 0;
+		return (comps);
+	}
 	comps.t = i[0].t;
 	comps.object = i[0].object;
 	comps.point = ft_position(ray, comps.t);
 	comps.eyev = ft_neg_tuple(ray.direction);
+	printf("object->center.x = %f\n", comps.object->center.x);
 	comps.normalv = ft_normal_at(*comps.object, comps.point);
 	if (ft_dotproduct(comps.normalv, comps.eyev) < 0)
 	{
@@ -156,7 +170,7 @@ t_world	*ft_default_world(void)
 	s1->material->color = ft_color(0.8, 1.0, 0.6);
 	s1->material->diffuse = 0.7;
 	s1->material->specular = 0.2;
-	s2->matrix = ft_mult_mat(scaling(0.5, 0.5, 0.5), s2->matrix);
+	s2->matrix = ft_mult_mat(scaling(0.25, 0.25, 0.25), s2->matrix);
 	*(data->sphere) = s1;
 	s1->next = NULL;
 	s2->next = NULL;

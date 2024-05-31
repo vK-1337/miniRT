@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   camera.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 14:30:46 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/30 19:15:04 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/31 15:09:07 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ void render(t_camera *camera, t_world *world, t_win *win)
         for (int x = 0; x < camera->hsize; x++)
         {
             t_ray ray = ray_for_pixel(camera, x, y);
-            t_color color = color_at(world, &ray);
+            t_color color = ft_color_at(world, ray);
             unsigned int color_int = color_to_int(color); // Convert color to int
-            mlx_pixel_put(win->mlx, win->win, x, y, color_int);
+            put_pixel(win, x, y, color_int);
         }
     }
 }
@@ -67,16 +67,16 @@ t_ray	ray_for_pixel(t_camera *camera, int px, int py)
 	t_tuple	pixel;
 	t_tuple	origin;
 	t_tuple	direction;
-	t_tuple	tmp_comput;
+	t_tuple	*tmp_comput;
 
 	xoffset = (px + 0.5) * camera->pixel_size;
 	yoffset = (py + 0.5) * camera->pixel_size;
 	world_x = camera->half_width - xoffset;
 	world_y = camera->half_height - yoffset;
 	tmp_comput = ft_init_tuple(world_x, world_y, -1, 1);
-	pixel = ft_mult_mat_tuple(&tmp_comput, ft_inversion(camera->matrix, 4));
+	pixel = ft_mult_mat_tuple(tmp_comput, ft_inversion(camera->matrix, 4));
 	tmp_comput = ft_init_tuple(0, 0, 0, 1);
-	origin = ft_mult_mat_tuple(&tmp_comput, ft_inversion(camera->matrix, 4));
+	origin = ft_mult_mat_tuple(tmp_comput, ft_inversion(camera->matrix, 4));
 	direction = ft_normalization(ft_dif_tuple(pixel, origin));
 	return (ft_ray(origin, direction));
 }
