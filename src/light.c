@@ -6,7 +6,7 @@
 /*   By: vk <vk@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 18:04:20 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/31 10:36:51 by vk               ###   ########.fr       */
+/*   Updated: 2024/06/01 09:56:09 by vk               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ t_material	*ft_material(void)
 }
 
 t_color	ft_lighting(t_material *m, t_light light, t_tuple position, t_tuple eyev,
-		t_tuple normalv)
+		t_tuple normalv, int in_shadow)
 {
 	t_color	effective_color;
 	t_tuple	lightv;
@@ -63,10 +63,10 @@ t_color	ft_lighting(t_material *m, t_light light, t_tuple position, t_tuple eyev
 	lightv = ft_normalization(ft_dif_tuple(light.position, position));
 	ambient = ft_mult_color(effective_color, m->ambient);
 	light_dot_normal = ft_dotproduct(lightv, normalv);
-	if (light_dot_normal < 0)
+	if (light_dot_normal < 0 || in_shadow)
 	{
 		color_black(&diffuse);
-	    color_black(&specular);
+	  color_black(&specular);
 	}
 	else
 	{
@@ -109,5 +109,3 @@ void	color_black(t_color *color)
 	color->b = 0.0;
 	return ;
 }
-
-
