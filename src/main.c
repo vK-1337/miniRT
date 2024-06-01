@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vk <vk@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 10:26:12 by vk                #+#    #+#             */
-/*   Updated: 2024/06/01 10:42:59 by vk               ###   ########.fr       */
+/*   Updated: 2024/06/01 13:25:16 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,12 +164,12 @@ int main(void) // Tests for shadows
 
   // First test //
 
-  t_tuple eyev = ft_init_tuple(0, 0, -1, 0);
-  t_tuple normalv = ft_init_tuple(0, 0, -1, 0);
+  t_tuple *eyev = ft_init_tuple(0, 0, -1, 0);
+  t_tuple *normalv = ft_init_tuple(0, 0, -1, 0);
 
-  t_light light = ft_point_light(ft_init_tuple(0, 0, -10, 1), ft_init_color(1, 1, 1));
+  t_light *light = ft_point_light(ft_init_tuple(0, 0, -10, 1), ft_color(1, 1, 1));
 
-  t_color result = ft_lighting(ft_material(), light, ft_init_tuple(0, 0, 0, 1), eyev, normalv, 1);
+  t_color result = ft_lighting(ft_material(), *light, *(ft_init_tuple(0, 0, 0, 1)), *eyev, *normalv, 1);
 
 
   printf(" First test results : \n\n");
@@ -183,9 +183,9 @@ int main(void) // Tests for shadows
   // Second test //
 
   t_world *world = ft_default_world();
-  t_tuple point1 = ft_init_tuple(0, 10, 0, 1);
+  t_tuple *point1 = ft_init_tuple(0, 10, 0, 1);
 
-  int result2 = ft_is_shadowed(world, point1);
+  int result2 = ft_is_shadowed(world, *point1);
 
   printf(" Second test results : \n\n");
 
@@ -193,8 +193,8 @@ int main(void) // Tests for shadows
 
   // Third test //
 
-  t_tuple point2 = ft_init_tuple(10, -10, 10, 1);
-  int result3 = ft_is_shadowed(world, point2);
+  t_tuple *point2 = ft_init_tuple(10, -10, 10, 1);
+  int result3 = ft_is_shadowed(world, *point2);
 
   printf(" Third test results : \n\n");
 
@@ -202,8 +202,8 @@ int main(void) // Tests for shadows
 
   // Fourth test //
 
-  t_tuple point3 = ft_init_tuple(-20, 20, -20, 1);
-  int result4 = ft_is_shadowed(world, point3);
+  t_tuple *point3 = ft_init_tuple(-20, 20, -20, 1);
+  int result4 = ft_is_shadowed(world, *point3);
 
   printf(" Fourth test results : \n\n");
 
@@ -211,8 +211,8 @@ int main(void) // Tests for shadows
 
   // Five test //
 
-  t_tuple point4 = ft_init_tuple(-2, 2, -2, 1);
-  int result5 = ft_is_shadowed(world, point4);
+  t_tuple *point4 = ft_init_tuple(-2, 2, -2, 1);
+  int result5 = ft_is_shadowed(world, *point4);
 
   printf(" Five test results : \n\n");
 

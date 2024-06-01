@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   scene.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 11:41:54 by udumas            #+#    #+#             */
-/*   Updated: 2024/05/31 15:43:53 by bainur           ###   ########.fr       */
+/*   Updated: 2024/06/01 13:27:38 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ t_intersection	*ft_intersect_world(t_ray ray, t_world **data)
 		t_tab = ft_add_t(t_tab, t, count);
 		sphere = sphere->next;
 	}
-	ft_sort_intersections(t_tab, count);	
+	ft_sort_intersections(t_tab, count);
 	return (t_tab);
 }
 
@@ -112,7 +112,7 @@ t_color	ft_shade_hit(t_world *data, t_comps *comps)
 	// 	light = light->next;
 	// }
 	return (ft_lighting(comps->object->material, *data->light, comps->point,
-			comps->eyev, comps->normalv));
+			comps->eyev, comps->normalv, ft_is_shadowed(data, comps->point)));
 }
 
 t_color ft_color_at(t_world *data, t_ray ray)
