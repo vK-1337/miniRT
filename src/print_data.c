@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   print_data.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vk <vk@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:55 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/25 12:02:20 by udumas           ###   ########.fr       */
+/*   Updated: 2024/05/31 11:01:02 by vk               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-void print_all_data(t_data *data)
+void print_all_data(t_world *data)
 {
     printf(" Data content :\n");
     printf("\n\nData.alight : \n");
@@ -41,7 +41,7 @@ void print_all_data(t_data *data)
 int main(int ac, char **av)
 {
     int fd;
-    t_data data;
+    t_world data;
 
     if (ac != 2 || !scene_name_check(av[1]))
     {
