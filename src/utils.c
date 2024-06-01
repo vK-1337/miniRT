@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vk <vk@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 21:45:44 by vk                #+#    #+#             */
-/*   Updated: 2024/05/24 17:46:12 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/05/31 11:01:02 by vk               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	char_tab_len(char **tab)
 	return (i);
 }
 
-void	free_data(t_data *data)
+void	free_data(t_world *data)
 {
 	if (data->alight)
 		free(data->alight);

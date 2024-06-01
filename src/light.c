@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   light.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vk <vk@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 18:04:20 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/30 19:35:53 by udumas           ###   ########.fr       */
+/*   Updated: 2024/05/31 10:36:51 by vk               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,22 @@ t_color	ft_lighting(t_material *m, t_light light, t_tuple position, t_tuple eyev
 	return (ft_sum_color(ft_sum_color(ambient, diffuse), specular));
 }
 
+unsigned int color_to_int(t_color color)
+{
+
+    if (color.r > 1)
+        color.r = 1;
+    if (color.g > 1)
+        color.g = 1;
+    if (color.b > 1)
+        color.b = 1;
+    int r = (unsigned int)(color.r * 255);
+    int g = (unsigned int)(color.g * 255);
+    int b = (unsigned int)(color.b * 255);
+
+    return (r << 16) | (g << 8) | b;
+}
+
 void	color_black(t_color *color)
 {
 	color->r = 0.0;
@@ -93,3 +109,5 @@ void	color_black(t_color *color)
 	color->b = 0.0;
 	return ;
 }
+
+
