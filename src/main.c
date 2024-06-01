@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 10:26:12 by vk                #+#    #+#             */
-/*   Updated: 2024/06/01 13:25:16 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/06/01 17:08:32 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,64 +159,156 @@ t_color ft_pixel_at(t_world *world, t_camera *camera, int x, int y)
 //     return (0);
 // }
 
-int main(void) // Tests for shadows
+// int main(void)
+// {
+//     // Given
+//     t_world *w = ft_default_world();
+//     w->light = ft_point_light(ft_init_tuple(0, 0, -10, 1), ft_color(1, 1, 1));
+//     t_sphere *s1 = ft_sphere();
+//     w->sphere = &s1;
+//     t_sphere *s2 = ft_sphere();
+//     s2->matrix = translation(0, 0, 10);
+//     s1->next = s2;
+//     t_ray r = ft_ray(*(ft_init_tuple(0, 0, 5, 1)), *(ft_init_tuple(0, 0, 1, 0)));
+//     t_intersection i = ft_intersection(4, s2);
+
+//     // When
+//     t_comps comps = ft_prepare_computations(&i, r);
+//     t_color c = ft_shade_hit(w, &comps);
+
+//     // Then
+//     printf("Color.r = %f\n", c.r);
+//     printf("Color.g = %f\n", c.g);
+//     printf("Color.b = %f\n", c.b);
+//     return 0;
+// }
+
+int main(void) // Programme pour modeliser spheres avec scene
 {
+    t_sphere *floor = ft_sphere();
+    floor->matrix = scaling(10, 0.01, 10);
+    floor->material = ft_material();
+    floor->material->color = ft_color(1, 0.9, 0.9);
+    floor->material->specular = 0;
 
-  // First test //
+    t_sphere *left_wall = ft_sphere();
+    left_wall->matrix = ft_mult_mat(translation(0, 0, 5), rotation_y(-M_PI / 4));
+    left_wall->matrix = ft_mult_mat(left_wall->matrix, rotation_x(M_PI / 2));
+    left_wall->matrix = ft_mult_mat(left_wall->matrix, scaling(10, 0.01, 10));
+    left_wall->material = floor->material;
 
-  t_tuple *eyev = ft_init_tuple(0, 0, -1, 0);
-  t_tuple *normalv = ft_init_tuple(0, 0, -1, 0);
+    t_sphere *right_wall = ft_sphere();
+    right_wall->matrix = ft_mult_mat(translation(0, 0, 5), rotation_y(M_PI / 4));
+    right_wall->matrix = ft_mult_mat(right_wall->matrix, rotation_x(M_PI / 2));
+    right_wall->matrix = ft_mult_mat(right_wall->matrix, scaling(10, 0.01, 10));
+    right_wall->material = floor->material;
 
-  t_light *light = ft_point_light(ft_init_tuple(0, 0, -10, 1), ft_color(1, 1, 1));
+    t_sphere *middle = ft_sphere();
+    middle->matrix = translation(-0.5, 1, 0.5);
+    middle->material = ft_material();
+    middle->material->color = ft_color(0.1, 1, 0.5);
+    middle->material->diffuse = 0.7;
+    middle->material->specular = 0.3;
 
-  t_color result = ft_lighting(ft_material(), *light, *(ft_init_tuple(0, 0, 0, 1)), *eyev, *normalv, 1);
+    t_sphere *right = ft_sphere();
+    right->matrix = ft_mult_mat(translation(1.5, 0.5, -0.5), scaling(0.5, 0.5, 0.5));
+    right->material = ft_material();
+    right->material->color = ft_color(0.5, 1, 0.1);
+    right->material->diffuse = 0.7;
+    right->material->specular = 0.3;
 
+    t_sphere *left = ft_sphere();
+    left->matrix = ft_mult_mat(translation(-1.5, 0.33, -0.75), scaling(0.33, 0.33, 0.33));
+    left->material = ft_material();
+    left->material->color = ft_color(1, 0.8, 0.1);
+    left->material->diffuse = 0.7;
+    left->material->specular = 0.3;
 
-  printf(" First test results : \n\n");
+    t_world *world;
+    world = malloc(sizeof(t_world));
+    world->light = ft_point_light(ft_init_tuple(-10, 10, -10, 1), ft_color(1, 1, 1));
+    world->sphere = &floor;
+    floor->next = left_wall;
+    left_wall->next = right_wall;
+    right_wall->next = middle;
+    middle->next = right;
+    right->next = left;
+    left->next = NULL;
+    t_camera camera = ft_new_camera(1000, 500, M_PI / 3);
+    world->camera = &camera;
+    world->camera->matrix = ft_view_transform(*ft_init_tuple(0, 1.5, -5, 1), *ft_init_tuple(0, 1, 0, 1), *ft_init_tuple(0, 1, 0, 0));
 
+    t_win *win = init_mlx();
 
-  printf("Result.r = %f | Expected : 0.1\n", result.r);
-  printf("Result.g = %f | Expected : 0.1\n", result.g);
-  printf("Result.b = %f | Expected : 0.1\n\n", result.b);
-
-
-  // Second test //
-
-  t_world *world = ft_default_world();
-  t_tuple *point1 = ft_init_tuple(0, 10, 0, 1);
-
-  int result2 = ft_is_shadowed(world, *point1);
-
-  printf(" Second test results : \n\n");
-
-  printf("Result = %d | Expected : 0\n\n", result2);
-
-  // Third test //
-
-  t_tuple *point2 = ft_init_tuple(10, -10, 10, 1);
-  int result3 = ft_is_shadowed(world, *point2);
-
-  printf(" Third test results : \n\n");
-
-  printf("Result = %d | Expected : 1\n\n", result3);
-
-  // Fourth test //
-
-  t_tuple *point3 = ft_init_tuple(-20, 20, -20, 1);
-  int result4 = ft_is_shadowed(world, *point3);
-
-  printf(" Fourth test results : \n\n");
-
-  printf("Result = %d | Expected : 0\n\n", result4);
-
-  // Five test //
-
-  t_tuple *point4 = ft_init_tuple(-2, 2, -2, 1);
-  int result5 = ft_is_shadowed(world, *point4);
-
-  printf(" Five test results : \n\n");
-
-  printf("Result = %d | Expected : 0\n\n", result5);
-
-  return (0);
+    render(world->camera, world, win);
+    mlx_put_image_to_window(win->mlx, win->win, win->img, 0, 0);
+    mlx_loop(win->mlx);
 }
+
+// int main(void)
+// {
+//     t_tuple *eyev = ft_init_tuple(0, 0, -1, 0);
+//     t_tuple *normalv = ft_init_tuple(0, 0, -1, 0);
+//     t_light *light = ft_point_light(ft_init_tuple(0, 0, -10, 1), ft_color(1, 1, 1));
+//     int in_shadow = 1;
+
+//     t_color c = ft_lighting(ft_material(), *light, *ft_init_tuple(0, 0, 0, 1), *eyev, *normalv, in_shadow);
+
+//     printf("Color.r = %f\n", c.r);
+//     printf("Color.g = %f\n", c.g);
+//     printf("Color.b = %f\n", c.b);
+
+//     t_world *world = ft_default_world();
+//     t_tuple *point = ft_init_tuple(0, 10, 0, 1);
+
+//     int shadowed = ft_is_shadowed(world, *point);
+
+//     printf("Shadowed in firs test = %s\n", shadowed ? "True" : "False");
+
+//     point = ft_init_tuple(10, -10, 10, 1);
+//     shadowed = ft_is_shadowed(world, *point);
+
+//     printf("Shadowed in second test = %s\n", shadowed ? "True" : "False");\
+
+//     point = ft_init_tuple(-20, 20, -20, 1);
+//     shadowed = ft_is_shadowed(world, *point);
+
+//     printf("Shadowed in third test = %s\n", shadowed ? "True" : "False");
+
+//     point = ft_init_tuple(-2, 2, -2, 1);
+
+//     shadowed = ft_is_shadowed(world, *point);
+
+//     printf("Shadowed in fourth test = %s\n", shadowed ? "True" : "False");
+// }
+
+// int main(void)
+// {
+//     t_world *world = ft_default_world();
+
+//     world->light = ft_point_light(ft_init_tuple(0, 0, -10, 1), ft_color(1, 1, 1));
+
+//     t_sphere *s1 = ft_sphere();
+
+//     world->sphere = &s1;
+
+//     t_sphere *s2 = ft_sphere();
+
+//     s2->matrix = translation(0, 0, 10);
+
+//     s1->next = s2;
+
+//     t_ray r = ft_ray(*ft_init_tuple(0, 0, 5, 1), *ft_init_tuple(0, 0, 1, 0));
+
+//     t_intersection i = ft_intersection(4, s2);
+
+//     t_comps comps = ft_prepare_computations(&i, r);
+
+//     t_color c = ft_shade_hit(world, &comps);
+
+//     printf("Color.r = %f\n", c.r);
+//     printf("Color.g = %f\n", c.g);
+//     printf("Color.b = %f\n", c.b);
+
+//     return 0;
+// }

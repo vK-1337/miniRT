@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 11:41:54 by udumas            #+#    #+#             */
-/*   Updated: 2024/06/01 13:27:38 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/06/01 16:44:14 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ t_intersection	*ft_intersect_world(t_ray ray, t_world **data)
 	return (t_tab);
 }
 
+
+
 t_comps	ft_prepare_computations(t_intersection *i, t_ray ray)
 {
 	t_comps	comps;
@@ -84,7 +86,6 @@ t_comps	ft_prepare_computations(t_intersection *i, t_ray ray)
 	comps.object = i[0].object;
 	comps.point = ft_position(ray, comps.t);
 	comps.eyev = ft_neg_tuple(ray.direction);
-	printf("object->center.x = %f\n", comps.object->center.x);
 	comps.normalv = ft_normal_at(*comps.object, comps.point);
 	if (ft_dotproduct(comps.normalv, comps.eyev) < 0)
 	{
@@ -93,29 +94,20 @@ t_comps	ft_prepare_computations(t_intersection *i, t_ray ray)
 	}
 	else
 		comps.inside = 0;
+	comps.over_point = ft_sum_tuple(comps.point, ft_mult_vector(comps.normalv, EPSILON));
 	return (comps);
 }
 
 t_color	ft_shade_hit(t_world *data, t_comps *comps)
 {
-	// t_color	color;
-	// t_color temp;
-	// t_light	*light;
+    int    in_shadow;
 
-	// color = *ft_color(0, 0, 0);
-	// light = data->light;
-	// while (light != NULL)
-	// {
-	// 	temp = ft_lighting(comps->object->material, *light, comps->point,
-	// 			comps->eyev, comps->normalv);
-	// 	color = ft_sum_color(color, temp);
-	// 	light = light->next;
-	// }
-	return (ft_lighting(comps->object->material, *data->light, comps->point,
-			comps->eyev, comps->normalv, ft_is_shadowed(data, comps->point)));
+    in_shadow = ft_is_shadowed(data, comps->over_point);
+	return (ft_lighting(comps->object->material, *data->light,
+			comps->over_point, comps->eyev, comps->normalv, in_shadow));
 }
 
-t_color ft_color_at(t_world *data, t_ray ray)
+t_color	ft_color_at(t_world *data, t_ray ray)
 {
 	t_intersection	*xs;
 	t_comps			comps;
@@ -127,13 +119,13 @@ t_color ft_color_at(t_world *data, t_ray ray)
 	return (ft_shade_hit(data, &comps));
 }
 
-float **ft_view_transform(t_tuple from, t_tuple to, t_tuple up)
+float	**ft_view_transform(t_tuple from, t_tuple to, t_tuple up)
 {
-	t_tuple forward;
-	t_tuple upm;
-	t_tuple left;
-	t_tuple true_up;
-	float **orientation;
+	t_tuple	forward;
+	t_tuple	upm;
+	t_tuple	left;
+	t_tuple	true_up;
+	float	**orientation;
 
 	forward = ft_normalization(ft_dif_tuple(to, from));
 	upm = ft_normalization(up);
@@ -149,19 +141,20 @@ float **ft_view_transform(t_tuple from, t_tuple to, t_tuple up)
 	orientation[2][0] = -forward.x;
 	orientation[2][1] = -forward.y;
 	orientation[2][2] = -forward.z;
-	orientation = ft_mult_mat(orientation, translation(-from.x, -from.y, -from.z));
+	orientation = ft_mult_mat(orientation, translation(-from.x, -from.y,
+				-from.z));
 	return (orientation);
 }
 
 t_world	*ft_default_world(void)
 {
-	t_world *data;
-	t_sphere *s1;
-	t_sphere *s2;
+	t_world		*data;
+	t_sphere	*s1;
+	t_sphere	*s2;
 
 	data = malloc(sizeof(t_world));
-	data->light = ft_point_light(ft_init_tuple(-10, 10, -10, 1),
-			ft_color(1, 1, 1));
+	data->light = ft_point_light(ft_init_tuple(-10, 10, -10, 1), ft_color(1, 1,
+				1));
 	data->sphere = malloc(sizeof(t_sphere *));
 	s1 = ft_sphere();
 	s2 = ft_sphere();
