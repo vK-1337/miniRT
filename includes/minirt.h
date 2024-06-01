@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/06/01 13:21:56 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/06/01 13:41:22 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,6 +173,7 @@ typedef struct s_comps
 	t_tuple point;
 	t_tuple eyev;
 	t_tuple normalv;
+    t_tuple over_point;
 	int inside;
 } t_comps;
 
