@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/31 15:22:24 by bainur           ###   ########.fr       */
+/*   Updated: 2024/06/01 13:21:56 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -385,8 +385,8 @@ t_material *ft_material(void);
 t_light *ft_point_light(t_tuple *position, t_color *intensity);
 void ft_point_light2(t_light *light, t_tuple position,
 					 t_color intensity);
-t_color ft_lighting(t_material *m, t_light light,
-					t_tuple position, t_tuple eyev, t_tuple normalv);
+t_color	ft_lighting(t_material *m, t_light light, t_tuple position, t_tuple eyev,
+		t_tuple normalv, int in_shadow);
 void color_black(t_color *color);
 t_tuple ft_normal_at(t_sphere sphere, t_tuple world_point);
 unsigned int color_to_int(t_color color);
@@ -423,6 +423,6 @@ t_color ft_color_at(t_world *data, t_ray ray);
 
 
 
-
+int ft_is_shadowed(t_world *world, t_tuple point);
 void	put_pixel(t_win *win, int x, int y, unsigned int color);
 #endif
