@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 09:54:05 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/06/01 15:12:31 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/06/03 20:39:40 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ t_intersection	*ft_hit(t_intersection *intersections, int count)
 		return (NULL);
 	while (i < count && intersections)
 	{
-		if (intersections[i].t >= 0)
+		if (intersections[i].t > 0)
 			return (&intersections[i]);
 		i++;
 	}

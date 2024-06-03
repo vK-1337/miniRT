@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 11:41:54 by udumas            #+#    #+#             */
-/*   Updated: 2024/06/01 16:44:14 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/06/03 21:27:46 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,10 @@ t_comps	ft_prepare_computations(t_intersection *i, t_ray ray)
 		comps.normalv = ft_neg_tuple(comps.normalv);
 	}
 	else
-		comps.inside = 0;
-	comps.over_point = ft_sum_tuple(comps.point, ft_mult_vector(comps.normalv, EPSILON));
+    {
+        comps.inside = 0;
+    }
+    comps.over_point = ft_sum_tuple(comps.point, ft_mult_vector(comps.normalv, EPSILON));
 	return (comps);
 }
 
