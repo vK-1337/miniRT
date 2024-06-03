@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 10:43:44 by vk                #+#    #+#             */
-/*   Updated: 2024/06/01 17:19:46 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/06/03 21:21:04 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ int	ft_is_shadowed(t_world *world, t_tuple point)
 	if (hit)
 		printf("hit %f\n", hit->t);
 	printf("distance %f\n", distance);
-	if (hit && hit->t < distance && intersections->count >= 6)
+	if (hit && hit->t < distance)
 		return (1);
-	return (0);
+    else
+	    return (0);
 }
