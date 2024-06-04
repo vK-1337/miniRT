@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vk <vk@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/31 11:01:02 by vk               ###   ########.fr       */
+/*   Updated: 2024/06/01 13:16:36 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,9 +139,9 @@ int	init_camera(t_world *data, char **data_split)
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return (free(camera) , 0);
-	// camera->coord.x = atof(split[0]);
-	// camera->coord.y = atof(split[1]);
-	// camera->coord.z = atof(split[2]);
+	// camera->coord.x = atof(split[0]); // TODO
+	// camera->coord.y = atof(split[1]); // TODO
+	// camera->coord.z = atof(split[2]); // TODO
 	free_char_tab(split);
 	split = ft_split(data_split[2], ',');
 	if (!split)
