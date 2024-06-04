@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shadows.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 10:43:44 by vk                #+#    #+#             */
-/*   Updated: 2024/06/03 21:21:04 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/06/04 10:44:29 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,6 @@ int	ft_is_shadowed(t_world *world, t_tuple point)
 	r = ft_ray(point, direction);
 	intersections = ft_intersect_world(r, &world);
 	hit = ft_hit(intersections, intersections->count);
-	if (hit)
-		printf("hit %f\n", hit->t);
-	printf("distance %f\n", distance);
 	if (hit && hit->t < distance)
 		return (1);
     else

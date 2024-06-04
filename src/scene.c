@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   scene.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 11:41:54 by udumas            #+#    #+#             */
-/*   Updated: 2024/06/03 21:27:46 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/06/04 10:32:35 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ t_intersection	*ft_intersect_world(t_ray ray, t_world **data)
 	count = 0;
 	sphere = *(*data)->sphere;
 	t_tab = malloc(sizeof(t_intersection));
+	t_tab[0].status = 0;
 	while (sphere != NULL)
 	{
 		new_ray = ray_transform(ray, ft_inversion(sphere->matrix, 4));
@@ -79,6 +80,7 @@ t_comps	ft_prepare_computations(t_intersection *i, t_ray ray)
 		comps.point = *ft_init_tuple(0, 0, 0, 0);
 		comps.eyev = *ft_init_tuple(0, 0, 0, 0);
 		comps.normalv = *ft_init_tuple(0, 0, 0, 0);
+		comps.over_point = *ft_init_tuple(0, 0, 0, 0);
 		comps.inside = 0;
 		return (comps);
 	}
@@ -96,7 +98,7 @@ t_comps	ft_prepare_computations(t_intersection *i, t_ray ray)
     {
         comps.inside = 0;
     }
-    comps.over_point = ft_sum_tuple(comps.point, ft_mult_vector(comps.normalv, EPSILON));
+	comps.over_point = ft_sum_tuple(comps.point, ft_mult_vector(comps.normalv, EPSILON));
 	return (comps);
 }
 
