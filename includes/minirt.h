@@ -6,7 +6,7 @@
 /*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/31 15:22:24 by bainur           ###   ########.fr       */
+/*   Updated: 2024/06/04 10:37:35 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
-#define EPSILON 0.00001
+#define EPSILON 0.001
 #define INFINITY 1e10
 #define SIZE_X 1000
 #define SIZE_Y 1000
@@ -173,6 +173,7 @@ typedef struct s_comps
 	t_tuple point;
 	t_tuple eyev;
 	t_tuple normalv;
+    t_tuple over_point;
 	int inside;
 } t_comps;
 
@@ -278,7 +279,7 @@ void free_data(t_world *data);
 /*                                   TUPLE_CALCULATION                        */
 /*                                                                            */
 /*                                                                            */
-/******************************************************************************/
+/*************************************************************	printf("Hit\n");*****************/
 
 //										TUPLE									//
 t_tuple *ft_init_tuple(float x, float y, float z, float w);
@@ -385,8 +386,8 @@ t_material *ft_material(void);
 t_light *ft_point_light(t_tuple *position, t_color *intensity);
 void ft_point_light2(t_light *light, t_tuple position,
 					 t_color intensity);
-t_color ft_lighting(t_material *m, t_light light,
-					t_tuple position, t_tuple eyev, t_tuple normalv);
+t_color	ft_lighting(t_material *m, t_light light, t_tuple position, t_tuple eyev,
+		t_tuple normalv, int in_shadow);
 void color_black(t_color *color);
 t_tuple ft_normal_at(t_sphere sphere, t_tuple world_point);
 unsigned int color_to_int(t_color color);
@@ -423,6 +424,6 @@ t_color ft_color_at(t_world *data, t_ray ray);
 
 
 
-
+int ft_is_shadowed(t_world *world, t_tuple point);
 void	put_pixel(t_win *win, int x, int y, unsigned int color);
 #endif

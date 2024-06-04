@@ -6,7 +6,7 @@
 /*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 10:26:12 by vk                #+#    #+#             */
-/*   Updated: 2024/05/31 15:43:15 by bainur           ###   ########.fr       */
+/*   Updated: 2024/06/04 09:27:39 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,30 @@ t_color ft_pixel_at(t_world *world, t_camera *camera, int x, int y)
 //     return (0);
 // }
 
+// int main(void)
+// {
+//     // Given
+//     t_world *w = ft_default_world();
+//     w->light = ft_point_light(ft_init_tuple(0, 0, -10, 1), ft_color(1, 1, 1));
+//     t_sphere *s1 = ft_sphere();
+//     w->sphere = &s1;
+//     t_sphere *s2 = ft_sphere();
+//     s2->matrix = translation(0, 0, 10);
+//     s1->next = s2;
+//     t_ray r = ft_ray(*(ft_init_tuple(0, 0, 5, 1)), *(ft_init_tuple(0, 0, 1, 0)));
+//     t_intersection i = ft_intersection(4, s2);
+
+//     // When
+//     t_comps comps = ft_prepare_computations(&i, r);
+//     t_color c = ft_shade_hit(w, &comps);
+
+//     // Then
+//     printf("Color.r = %f\n", c.r);
+//     printf("Color.g = %f\n", c.g);
+//     printf("Color.b = %f\n", c.b);
+//     return 0;
+// }
+
 int main(void) // Programme pour modeliser spheres avec scene
 {
     t_sphere *floor = ft_sphere();
@@ -220,3 +244,71 @@ int main(void) // Programme pour modeliser spheres avec scene
     mlx_put_image_to_window(win->mlx, win->win, win->img, 0, 0);
     mlx_loop(win->mlx);
 }
+
+// int main(void)
+// {
+//     t_tuple *eyev = ft_init_tuple(0, 0, -1, 0);
+//     t_tuple *normalv = ft_init_tuple(0, 0, -1, 0);
+//     t_light *light = ft_point_light(ft_init_tuple(0, 0, -10, 1), ft_color(1, 1, 1));
+//     int in_shadow = 1;
+
+//     t_color c = ft_lighting(ft_material(), *light, *ft_init_tuple(0, 0, 0, 1), *eyev, *normalv, in_shadow);
+
+//     printf("Color.r = %f\n", c.r);
+//     printf("Color.g = %f\n", c.g);
+//     printf("Color.b = %f\n", c.b);
+
+//     t_world *world = ft_default_world();
+//     t_tuple *point = ft_init_tuple(0, 10, 0, 1);
+
+//     int shadowed = ft_is_shadowed(world, *point);
+
+//     printf("Shadowed in firs test = %s\n", shadowed ? "True" : "False");
+
+//     point = ft_init_tuple(10, -10, 10, 1);
+//     shadowed = ft_is_shadowed(world, *point);
+
+//     printf("Shadowed in second test = %s\n", shadowed ? "True" : "False");
+
+//     point = ft_init_tuple(-20, 20, -20, 1);
+//     shadowed = ft_is_shadowed(world, *point);
+
+//     printf("Shadowed in third test = %s\n", shadowed ? "True" : "False");
+
+//     point = ft_init_tuple(-2, 2, -2, 1);
+
+//     shadowed = ft_is_shadowed(world, *point);
+
+//     printf("Shadowed in fourth test = %s\n", shadowed ? "True" : "False");
+// }
+
+// int main(void)
+// {
+//     t_world *world = ft_default_world();
+
+//     world->light = ft_point_light(ft_init_tuple(0, 0, -10, 1), ft_color(1, 1, 1));
+
+//     t_sphere *s1 = ft_sphere();
+
+//     world->sphere = &s1;
+
+//     t_sphere *s2 = ft_sphere();
+
+//     s2->matrix = translation(0, 0, 10);
+
+//     s1->next = s2;
+
+//     t_ray r = ft_ray(*ft_init_tuple(0, 0, 5, 1), *ft_init_tuple(0, 0, 1, 0));
+
+//     t_intersection i = ft_intersection(4, s2);
+
+//     t_comps comps = ft_prepare_computations(&i, r);
+
+//     t_color c = ft_shade_hit(world, &comps);
+
+//     printf("Color.r = %f\n", c.r);
+//     printf("Color.g = %f\n", c.g);
+//     printf("Color.b = %f\n", c.b);
+
+//     return 0;
+// }
