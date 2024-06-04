@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/06/01 13:41:22 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/06/04 10:37:35 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
-#define EPSILON 0.00001
+#define EPSILON 0.001
 #define INFINITY 1e10
 #define SIZE_X 1000
 #define SIZE_Y 1000
@@ -279,7 +279,7 @@ void free_data(t_world *data);
 /*                                   TUPLE_CALCULATION                        */
 /*                                                                            */
 /*                                                                            */
-/******************************************************************************/
+/*************************************************************	printf("Hit\n");*****************/
 
 //										TUPLE									//
 t_tuple *ft_init_tuple(float x, float y, float z, float w);

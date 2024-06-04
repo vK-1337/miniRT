@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 10:26:12 by vk                #+#    #+#             */
-/*   Updated: 2024/06/01 17:08:32 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/06/04 09:27:39 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -268,7 +268,7 @@ int main(void) // Programme pour modeliser spheres avec scene
 //     point = ft_init_tuple(10, -10, 10, 1);
 //     shadowed = ft_is_shadowed(world, *point);
 
-//     printf("Shadowed in second test = %s\n", shadowed ? "True" : "False");\
+//     printf("Shadowed in second test = %s\n", shadowed ? "True" : "False");
 
 //     point = ft_init_tuple(-20, 20, -20, 1);
 //     shadowed = ft_is_shadowed(world, *point);
