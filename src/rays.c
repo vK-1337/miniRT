@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rays.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 09:54:05 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/06/04 10:44:58 by bainur           ###   ########.fr       */
+/*   Updated: 2024/06/04 22:59:06 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,12 @@ t_tuple	ft_position(t_ray r, float t)
 t_sphere	*ft_sphere(void)
 {
 	t_sphere	*s;
-	static int	id;
 
 	s = malloc(sizeof(t_sphere));
 	s->center = *ft_init_tuple(0, 0, 0, 1);
 	s->radius = 1;
 	s->matrix = identity_matrix(4);
     s->material = ft_material();
-	s->id = id++;
 	return (s);
 }
 
@@ -79,7 +77,7 @@ t_intersection	ft_intersection(float t, t_sphere *sphere)
 	t_intersection	i;
 
 	i.t = t;
-	i.object = sphere;
+	i.sphere = sphere;
 	return (i);
 }
 
@@ -111,6 +109,8 @@ void	ft_sort_intersections(t_intersection *intersections, int count)
 	t_intersection	tmp;
 
 	i = 0;
+	if (count == 1)
+		intersections[0].count = count;
 	while (i < count)
 	{
 		j = i + 1;
@@ -135,16 +135,11 @@ t_intersection	*ft_hit(t_intersection *intersections, int count)
 
 	i = 0;
 	if (intersections[0].status == 0)
-	{
-		printf("No hit\n");
 		return (NULL);
-	}
 	while (i < count && intersections)
 	{
 		if (intersections[i].t > 0.01)
-		{
 			return (&intersections[i]);
-		}
 		i++;
 	}
 	return (NULL);
