@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 10:26:12 by vk                #+#    #+#             */
-/*   Updated: 2024/06/04 09:27:39 by bainur           ###   ########.fr       */
+/*   Updated: 2024/06/04 23:47:29 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,23 +185,23 @@ t_color ft_pixel_at(t_world *world, t_camera *camera, int x, int y)
 
 int main(void) // Programme pour modeliser spheres avec scene
 {
-    t_sphere *floor = ft_sphere();
-    floor->matrix = scaling(10, 0.01, 10);
-    floor->material = ft_material();
-    floor->material->color = ft_color(1, 0.9, 0.9);
-    floor->material->specular = 0;
+    // t_sphere *floor = ft_sphere();
+    // floor->matrix = scaling(10, 0.01, 10);
+    // floor->material = ft_material();
+    // floor->material->color = ft_color(1, 0.9, 0.9);
+    // floor->material->specular = 0;
 
-    t_sphere *left_wall = ft_sphere();
-    left_wall->matrix = ft_mult_mat(translation(0, 0, 5), rotation_y(-M_PI / 4));
-    left_wall->matrix = ft_mult_mat(left_wall->matrix, rotation_x(M_PI / 2));
-    left_wall->matrix = ft_mult_mat(left_wall->matrix, scaling(10, 0.01, 10));
-    left_wall->material = floor->material;
+    // t_sphere *left_wall = ft_sphere();
+    // left_wall->matrix = ft_mult_mat(translation(0, 0, 5), rotation_y(-M_PI / 4));
+    // left_wall->matrix = ft_mult_mat(left_wall->matrix, rotation_x(M_PI / 2));
+    // left_wall->matrix = ft_mult_mat(left_wall->matrix, scaling(10, 0.01, 10));
+    // left_wall->material = floor->material;
 
-    t_sphere *right_wall = ft_sphere();
-    right_wall->matrix = ft_mult_mat(translation(0, 0, 5), rotation_y(M_PI / 4));
-    right_wall->matrix = ft_mult_mat(right_wall->matrix, rotation_x(M_PI / 2));
-    right_wall->matrix = ft_mult_mat(right_wall->matrix, scaling(10, 0.01, 10));
-    right_wall->material = floor->material;
+    // t_sphere *right_wall = ft_sphere();
+    // right_wall->matrix = ft_mult_mat(translation(0, 0, 5), rotation_y(M_PI / 4));
+    // right_wall->matrix = ft_mult_mat(right_wall->matrix, rotation_x(M_PI / 2));
+    // right_wall->matrix = ft_mult_mat(right_wall->matrix, scaling(10, 0.01, 10));
+    // right_wall->material = floor->material;
 
     t_sphere *middle = ft_sphere();
     middle->matrix = translation(-0.5, 1, 0.5);
@@ -224,17 +224,28 @@ int main(void) // Programme pour modeliser spheres avec scene
     left->material->diffuse = 0.7;
     left->material->specular = 0.3;
 
+    // t_plan *plan = plan1();
     t_world *world;
     world = malloc(sizeof(t_world));
     world->light = ft_point_light(ft_init_tuple(-10, 10, -10, 1), ft_color(1, 1, 1));
-    world->sphere = &floor;
-    floor->next = left_wall;
-    left_wall->next = right_wall;
-    right_wall->next = middle;
+    world->sphere = &middle;
     middle->next = right;
     right->next = left;
     left->next = NULL;
-    t_camera camera = ft_new_camera(1000, 500, M_PI / 3);
+
+    t_plan *wall = plan1();
+    wall->matrix = ft_mult_mat(translation(5, 0, 0), wall->matrix);
+    wall->matrix = ft_mult_mat(rotation_x(M_PI / 2), wall->matrix);
+    // world->sphere = &floor;
+    // floor->next = left_wall;
+    // left_wall->next = right_wall;
+    // right_wall->next = middle;
+    // middle->next = right;
+    // right->next = left;
+    // left->next = NULL;
+    world->plan = &wall;
+    wall->next = NULL;
+    t_camera camera = ft_new_camera(SIZE_X, SIZE_Y, M_PI / 2);
     world->camera = &camera;
     world->camera->matrix = ft_view_transform(*ft_init_tuple(0, 1.5, -5, 1), *ft_init_tuple(0, 1, 0, 1), *ft_init_tuple(0, 1, 0, 0));
 

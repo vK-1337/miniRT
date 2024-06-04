@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 11:41:54 by udumas            #+#    #+#             */
-/*   Updated: 2024/06/04 18:52:32 by udumas           ###   ########.fr       */
+/*   Updated: 2024/06/04 23:26:28 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_intersection	*ft_add_t(t_intersection *t_tab, t_intersection t[2], int count)
 	int				i;
 
 	i = 0;
-	new_t_tab = malloc(sizeof(t_intersection) * count);
+	new_t_tab = malloc(sizeof(t_intersection) * (count));
 	while (i < count - 2)
 	{
 		new_t_tab[i] = t_tab[i];
@@ -33,41 +33,57 @@ t_intersection	*ft_add_t(t_intersection *t_tab, t_intersection t[2], int count)
 	return (new_t_tab);
 }
 
-t_intersection	*ft_intersect_world(t_ray ray, t_world **data)
+void	ft_sphere_intersections(t_intersection **t_tab, t_sphere **sphere,
+		t_ray ray, int *count)
 {
 	t_discriminant	dis;
-	t_intersection	*t_tab;
 	t_intersection	t[2];
 	t_ray			new_ray;
+
+	if (*sphere == NULL)
+		return ;
+	new_ray = ray_transform(ray, ft_inversion((*sphere)->matrix, 4));
+	dis = ft_discriminant(new_ray, *sphere);
+	if (dis.result < 0)
+	{
+		*sphere = (*sphere)->next;
+		return ;
+	}
+	t[0].t = (-dis.b - sqrt(dis.result)) / (2 * dis.a);
+	t[0].sphere = *sphere;
+	t[0].plan = NULL;
+	t[1].t = (-dis.b + sqrt(dis.result)) / (2 * dis.a);
+	t[1].sphere = *sphere;
+	t[1].plan = NULL;
+	*count += 2;
+	*t_tab = ft_add_t(*t_tab, t, *count);
+	*sphere = (*sphere)->next;
+}
+t_intersection	*ft_intersect_world(t_ray ray, t_world **data)
+{
+	t_intersection	*t_tab;
 	int				count;
 	t_sphere		*sphere;
+	t_plan			*plan;
 
 	count = 0;
-	sphere = *(*data)->sphere;
+	if (*data == NULL)
+		return (NULL);
+	if ((*data)->sphere)
+		sphere = *(*data)->sphere;
+	else
+		sphere = NULL;
+	plan = *(*data)->plan;
 	t_tab = malloc(sizeof(t_intersection));
 	t_tab[0].status = 0;
-	while (sphere != NULL)
+	while (sphere != NULL || plan != NULL)
 	{
-		new_ray = ray_transform(ray, ft_inversion(sphere->matrix, 4));
-		dis = ft_discriminant(new_ray, sphere);
-		if (dis.result < 0)
-		{
-			sphere = sphere->next;
-			continue ;
-		}
-		t[0].t = (-dis.b - sqrt(dis.result)) / (2 * dis.a);
-		t[0].object = sphere;
-		t[1].t = (-dis.b + sqrt(dis.result)) / (2 * dis.a);
-		t[1].object = sphere;
-		count += 2;
-		t_tab = ft_add_t(t_tab, t, count);
-		sphere = sphere->next;
+		ft_sphere_intersections(&t_tab, &sphere, ray, &count);
+		ft_plan_intersect(&t_tab, &plan, ray, &count);
 	}
 	ft_sort_intersections(t_tab, count);
 	return (t_tab);
 }
-
-
 
 t_comps	ft_prepare_computations(t_intersection *i, t_ray ray)
 {
@@ -76,7 +92,9 @@ t_comps	ft_prepare_computations(t_intersection *i, t_ray ray)
 	if (i == NULL)
 	{
 		comps.t = 0;
-		comps.object = NULL;
+		comps.sphere = NULL;
+		comps.plan = NULL;
+		comps.point = *ft_init_tuple(0, 0, 0, 0);
 		comps.point = *ft_init_tuple(0, 0, 0, 0);
 		comps.eyev = *ft_init_tuple(0, 0, 0, 0);
 		comps.normalv = *ft_init_tuple(0, 0, 0, 0);
@@ -85,29 +103,47 @@ t_comps	ft_prepare_computations(t_intersection *i, t_ray ray)
 		return (comps);
 	}
 	comps.t = i[0].t;
-	comps.object = i[0].object;
-	comps.point = ft_position(ray, comps.t);
 	comps.eyev = ft_neg_tuple(ray.direction);
-	comps.normalv = ft_normal_at(*comps.object, comps.point);
+	comps.point = ft_position(ray, comps.t);
+	if (i[0].sphere == NULL)
+	{
+		comps.plan = i[0].plan;
+		comps.sphere = NULL;
+		t_tuple world_normal;
+		world_normal = ft_mult_matrix_tuple(ft_transpose(ft_inversion(i[0].plan->matrix, 4)), i[0].plan->normal);
+    	world_normal.w = 0;
+		comps.normalv = ft_normalization(world_normal);
+	}
+	else
+	{
+		comps.sphere = i[0].sphere;
+		comps.plan = NULL;
+		comps.normalv = ft_normal_at(*comps.sphere, comps.point);
+	}
 	if (ft_dotproduct(comps.normalv, comps.eyev) < 0)
 	{
 		comps.inside = 1;
 		comps.normalv = ft_neg_tuple(comps.normalv);
 	}
 	else
-    {
-        comps.inside = 0;
-    }
-	comps.over_point = ft_sum_tuple(comps.point, ft_mult_vector(comps.normalv, EPSILON));
+	{
+		comps.inside = 0;
+	}
+	comps.over_point = ft_sum_tuple(comps.point, ft_mult_vector(comps.normalv,
+				EPSILON));
 	return (comps);
 }
 
 t_color	ft_shade_hit(t_world *data, t_comps *comps)
 {
-    int    in_shadow;
+	int	in_shadow;
 
-    in_shadow = ft_is_shadowed(data, comps->over_point);
-	return (ft_lighting(comps->object->material, *data->light,
+	in_shadow = ft_is_shadowed(data, comps->over_point);
+	if (comps->sphere == NULL)
+		return (ft_lighting(comps->plan->material, *data->light,
+			comps->over_point, comps->eyev, comps->normalv, in_shadow));
+	else
+		return (ft_lighting(comps->sphere->material, *data->light,
 			comps->over_point, comps->eyev, comps->normalv, in_shadow));
 }
 
