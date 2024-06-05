@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vk <vk@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 21:45:44 by vk                #+#    #+#             */
-/*   Updated: 2024/05/31 11:01:02 by vk               ###   ########.fr       */
+/*   Updated: 2024/06/05 19:31:33 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	free_data(t_world *data)
 		plan_lstfree(data->plan);
 	if (data->sphere)
 		sphere_lstfree(data->sphere);
-	if (data->cylindre)
-		cylindre_lstfree(data->cylindre);
+	if (data->cylinder)
+		cylinder_lstfree(data->cylinder);
 	return ;
 }

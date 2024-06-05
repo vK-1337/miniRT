@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:52 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/25 12:05:47 by udumas           ###   ########.fr       */
+/*   Updated: 2024/06/05 19:31:33 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	verified_content(char **data, t_dtype type)
 	else if (type == SP)
 		return (verify_sphere(data));
 	else if (type == CY)
-		return (verify_cylindre(data));
+		return (verify_cylinder(data));
 	return (0);
 }
 
@@ -264,7 +264,7 @@ int	verify_plan(char **data)
 	return (1);
 }
 
-int	verify_cylindre(char **data)
+int	verify_cylinder(char **data)
 {
 	if (char_tab_len(data) != 6)
 		return (0);

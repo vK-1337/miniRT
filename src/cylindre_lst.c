@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   cylindre_lst.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 12:11:43 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/25 12:12:26 by udumas           ###   ########.fr       */
+/*   Updated: 2024/06/05 19:31:33 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
 
-t_cylindre	*cylindre_lstlast(t_cylindre *lst)
+t_cylinder	*cylinder_lstlast(t_cylinder *lst)
 {
 	if (!lst)
 		return (NULL);
@@ -24,7 +24,7 @@ t_cylindre	*cylindre_lstlast(t_cylindre *lst)
 	return (lst);
 }
 
-int	cylindre_lstsize(t_cylindre *lst)
+int	cylinder_lstsize(t_cylinder *lst)
 {
 	size_t	i;
 
@@ -39,25 +39,25 @@ int	cylindre_lstsize(t_cylindre *lst)
 	return (i + 1);
 }
 
-void	cylindre_lstadd_back(t_cylindre **lst, t_cylindre *new)
+void	cylinder_lstadd_back(t_cylinder **lst, t_cylinder *new)
 {
-	t_cylindre	*tmp;
+	t_cylinder	*tmp;
 
 	tmp = NULL;
 	if (!lst || !new)
 		return ;
 	if (*lst)
 	{
-		tmp = cylindre_lstlast((*lst));
+		tmp = cylinder_lstlast((*lst));
 		tmp->next = new;
 	}
 	else
 		*lst = new;
 }
 
-void cylindre_lstfree(t_cylindre **lst)
+void cylinder_lstfree(t_cylinder **lst)
 {
-  t_cylindre	*tmp;
+  t_cylinder	*tmp;
 
   if (!lst)
     return ;

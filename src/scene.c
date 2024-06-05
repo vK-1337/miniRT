@@ -6,7 +6,7 @@
 /*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 11:41:54 by udumas            #+#    #+#             */
-/*   Updated: 2024/06/05 18:27:57 by bainur           ###   ########.fr       */
+/*   Updated: 2024/06/05 19:30:47 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,15 @@ void ft_sphere_intersections(t_intersection **t_tab, t_sphere **sphere,
 	*t_tab = ft_add_t(*t_tab, t, *count);
 	*sphere = (*sphere)->next;
 }
+
 t_intersection *ft_intersect_world(t_ray ray, t_world **data)
 {
 	t_intersection *t_tab;
 	int count;
 	t_sphere *sphere;
 	t_plan *plan;
-
+	t_cylinder *cylinder;
+	
 	count = 0;
 	if (*data == NULL)
 		return (NULL);
@@ -74,12 +76,14 @@ t_intersection *ft_intersect_world(t_ray ray, t_world **data)
 	else
 		sphere = NULL;
 	plan = *(*data)->plan;
+	cylinder = *(*data)->cylinder;
 	t_tab = malloc(sizeof(t_intersection));
 	t_tab[0].status = 0;
-	while (sphere != NULL || plan != NULL)
+	while (sphere != NULL || plan != NULL || cylinder != NULL)
 	{
 		ft_plan_intersect(&t_tab, &plan, ray, &count);
 		ft_sphere_intersections(&t_tab, &sphere, ray, &count);
+		ft_cylinder_intersections(&t_tab, &cylinder, ray, &count);
 	}
 	ft_sort_intersections(t_tab, count);
 	return (t_tab);

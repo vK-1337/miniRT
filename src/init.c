@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/06/01 13:16:36 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/06/05 19:31:33 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ int	init_data_w_line(t_world *data, t_dtype type, char **data_split)
 	}
 	else if (type == CY)
 	{
-		if (!init_cylindre(data, data_split))
+		if (!init_cylinder(data, data_split))
 			return (free_data(data), 0);
 	}
 	return (1);
@@ -261,47 +261,47 @@ int	init_plan(t_world *data, char **data_split)
 	return (1);
 }
 
-int	init_cylindre(t_world *data, char **data_split)
+int	init_cylinder(t_world *data, char **data_split)
 {
 	char		**split;
-	t_cylindre	*cylindre;
+	t_cylinder	*cylinder;
 
-	cylindre = malloc(sizeof(t_cylindre));
-	if (!cylindre)
+	cylinder = malloc(sizeof(t_cylinder));
+	if (!cylinder)
 		return (0);
 	split = ft_split(data_split[1], ',');
 	if (!split)
-		return (free(cylindre), 0);
-	cylindre->coord.x = atof(split[0]);
-	cylindre->coord.y = atof(split[1]);
-	cylindre->coord.z = atof(split[2]);
+		return (free(cylinder), 0);
+	cylinder->coord.x = atof(split[0]);
+	cylinder->coord.y = atof(split[1]);
+	cylinder->coord.z = atof(split[2]);
 	free_char_tab(split);
 	split = ft_split(data_split[2], ',');
 	if (!split)
-		return (free(cylindre), 0);
-	cylindre->n_vector.x = atof(split[0]);
-	cylindre->n_vector.y = atof(split[1]);
-	cylindre->n_vector.z = atof(split[2]);
-	cylindre->diameter = atof(data_split[3]);
-	cylindre->height = atof(data_split[4]);
+		return (free(cylinder), 0);
+	cylinder->n_vector.x = atof(split[0]);
+	cylinder->n_vector.y = atof(split[1]);
+	cylinder->n_vector.z = atof(split[2]);
+	cylinder->diameter = atof(data_split[3]);
+	cylinder->height = atof(data_split[4]);
 	free_char_tab(split);
 	split = ft_split(data_split[5], ',');
 	if (!split)
-		return (free(cylindre), 0);
-	cylindre->colors.r = ft_atoi(split[0]);
-	cylindre->colors.g = ft_atoi(split[1]);
-	cylindre->colors.b = ft_atoi(split[2]);
-    cylindre->next = NULL;
+		return (free(cylinder), 0);
+	cylinder->colors.r = ft_atoi(split[0]);
+	cylinder->colors.g = ft_atoi(split[1]);
+	cylinder->colors.b = ft_atoi(split[2]);
+    cylinder->next = NULL;
     free_char_tab(split);
-    if (!data->cylindre)
+    if (!data->cylinder)
     {
-        data->cylindre = malloc(sizeof(t_cylindre*));
-        if (!data->cylindre)
-            return (free(cylindre), 0);
-        *data->cylindre = cylindre;
+        data->cylinder = malloc(sizeof(t_cylinder*));
+        if (!data->cylinder)
+            return (free(cylinder), 0);
+        *data->cylinder = cylinder;
     }
     else
-	    cylindre_lstadd_back(data->cylindre, cylindre);
+	    cylinder_lstadd_back(data->cylinder, cylinder);
 	return (1);
 }
 
@@ -336,7 +336,7 @@ void	null_data(t_world *data)
 
 	data->alight = NULL;
 	data->camera = NULL;
-	data->cylindre = NULL;
+	data->cylinder = NULL;
 	data->light = NULL;
 	data->plan = NULL;
 	data->sphere = NULL;
