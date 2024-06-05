@@ -6,7 +6,7 @@
 /*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/06/05 18:22:47 by bainur           ###   ########.fr       */
+/*   Updated: 2024/06/05 19:31:33 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,10 +133,19 @@ typedef struct s_sphere
 	t_color colors;
 	struct s_sphere *next;
 	float radius;
-	int id;
 	float **matrix;
 	t_material *material;
 } t_sphere;
+
+typedef struct s_cylinder
+{
+	t_tuple position;
+	t_tuple direction;
+	float radius;
+	float **matrix;
+	t_material *material;
+	struct s_cylinder *next;
+} t_cylinder;
 
 typedef struct s_plan
 {
@@ -150,15 +159,15 @@ typedef struct s_plan
 	int type;
 } t_plan;
 
-typedef struct s_cylindre
+typedef struct s_cylinder
 {
 	t_tuple coord;
 	t_tuple n_vector;
 	float diameter;
 	float height;
 	t_color colors;
-	struct s_cylindre *next;
-} t_cylindre;
+	struct s_cylinder *next;
+} t_cylinder;
 
 typedef struct s_camera
 {
@@ -192,6 +201,7 @@ typedef struct s_intersection
 	int status;
 	t_sphere *sphere;
 	t_plan *plan;
+	t_cylinder *cylinder;
 } t_intersection;
 
 typedef struct s_world
@@ -201,7 +211,7 @@ typedef struct s_world
 	t_light *light;
 	t_sphere **sphere;
 	t_plan **plan;
-	t_cylindre **cylindre;
+	t_cylinder **cylinder;
 	int counter[6];
 } t_world;
 
@@ -241,7 +251,7 @@ int verify_camera(char **data);
 int verify_light(char **data);
 int verify_plan(char **data);
 int verify_sphere(char **data);
-int verify_cylindre(char **data);
+int verify_cylinder(char **data);
 int verified_content(char **data, t_dtype type);
 int verify_coord(char *data);
 int verify_vect(char *data);
@@ -256,7 +266,7 @@ int init_camera(t_world *data, char **data_split);
 int init_light(t_world *data, char **data_split);
 int init_sphere(t_world *data, char **data_split);
 int init_plan(t_world *data, char **data_split);
-int init_cylindre(t_world *data, char **data_split);
+int init_cylinder(t_world *data, char **data_split);
 t_dtype determine_type(char *data);
 void null_data(t_world *data);
 void print_all_data(t_world *data);
@@ -269,10 +279,10 @@ void print_all_data(t_world *data);
 /*                                                                            */
 /******************************************************************************/
 
-t_cylindre *cylindre_lstlast(t_cylindre *lst);
-int cylindre_lstsize(t_cylindre *lst);
-void cylindre_lstadd_back(t_cylindre **lst, t_cylindre *new);
-void cylindre_lstfree(t_cylindre **lst);
+t_cylinder *cylinder_lstlast(t_cylinder *lst);
+int cylinder_lstsize(t_cylinder *lst);
+void cylinder_lstadd_back(t_cylinder **lst, t_cylinder *new);
+void cylinder_lstfree(t_cylinder **lst);
 
 t_sphere *sphere_lstlast(t_sphere *lst);
 int sphere_lstsize(t_sphere *lst);
@@ -286,7 +296,7 @@ void plan_lstfree(t_plan **lst);
 
 void print_sphere_list(t_sphere **sphere_list);
 void print_plan_list(t_plan **plan_list);
-void print_cylindre_list(t_cylindre **cylindre_list);
+void print_cylinder_list(t_cylinder **cylinder_list);
 
 void free_data(t_world *data);
 
