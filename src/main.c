@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 10:26:12 by vk                #+#    #+#             */
-/*   Updated: 2024/06/04 23:47:29 by udumas           ###   ########.fr       */
+/*   Updated: 2024/06/05 18:58:39 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,18 +224,32 @@ int main(void) // Programme pour modeliser spheres avec scene
     left->material->diffuse = 0.7;
     left->material->specular = 0.3;
 
-    // t_plan *plan = plan1();
+    
     t_world *world;
     world = malloc(sizeof(t_world));
-    world->light = ft_point_light(ft_init_tuple(-10, 10, -10, 1), ft_color(1, 1, 1));
+    world->light = ft_point_light(ft_init_tuple(0, 9, -5, 1), ft_color(1, 1, 1));
     world->sphere = &middle;
     middle->next = right;
     right->next = left;
     left->next = NULL;
 
+    t_plan *plan = plan1();
+    plan->normal= *ft_init_tuple(0, 1, 0, 0);
     t_plan *wall = plan1();
-    wall->matrix = ft_mult_mat(translation(5, 0, 0), wall->matrix);
-    wall->matrix = ft_mult_mat(rotation_x(M_PI / 2), wall->matrix);
+    wall->coord = *ft_init_tuple(0, 0, 5, 1);
+    wall->normal = ft_sum_tuple(wall->normal, *ft_init_tuple(0, 0, 1, 0));
+
+    t_plan *left_wall = plan1();
+    left_wall->coord = *ft_init_tuple(5, 0, 0, 1);
+    left_wall->normal = ft_sum_tuple(left_wall->normal, *ft_init_tuple(1, 0, 0, 0));
+
+    t_plan *right_wall = plan1();
+    right_wall->coord = *ft_init_tuple(-5, 0, 0, 1);
+    right_wall->normal = ft_sum_tuple(right_wall->normal, *ft_init_tuple(1, 0, 0, 0));
+    
+    t_plan *ceiling = plan1();
+    ceiling->coord = *ft_init_tuple(0, 10, 0, 1);
+    ceiling->normal = *ft_init_tuple(0, 1, 0, 0);
     // world->sphere = &floor;
     // floor->next = left_wall;
     // left_wall->next = right_wall;
@@ -243,11 +257,15 @@ int main(void) // Programme pour modeliser spheres avec scene
     // middle->next = right;
     // right->next = left;
     // left->next = NULL;
-    world->plan = &wall;
-    wall->next = NULL;
+    world->plan = &plan;
+    plan->next = wall;
+    wall->next = ceiling;
+    ceiling->next = left_wall;
+    left_wall->next = right_wall;
+    right_wall->next = NULL;
     t_camera camera = ft_new_camera(SIZE_X, SIZE_Y, M_PI / 2);
     world->camera = &camera;
-    world->camera->matrix = ft_view_transform(*ft_init_tuple(0, 1.5, -5, 1), *ft_init_tuple(0, 1, 0, 1), *ft_init_tuple(0, 1, 0, 0));
+    world->camera->matrix = ft_view_transform(*ft_init_tuple(0, 1, -10, 1), *ft_init_tuple(0, 1 , 0, 1), *ft_init_tuple(0, 1, 0, 0));
 
     t_win *win = init_mlx();
 
