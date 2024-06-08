@@ -6,7 +6,7 @@
 /*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:42:34 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/06/05 14:25:31 by bainur           ###   ########.fr       */
+/*   Updated: 2024/06/07 20:43:23 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,29 @@ t_tuple ft_normal_at(t_comps object, t_tuple world_point)
         matrix = object.plan->matrix;
         object_normal = object.plan->normal;
     }
+    else if (object.type == CYLINDER)
+    {
+        matrix = object.cylinder->matrix;   
+        object_point = ft_mult_matrix_tuple(ft_inversion(matrix, 4), world_point);
+        float dist = object_point.x * object_point.x + object_point.z * object_point.z;
+        if (dist < 1 && (object_point.y >= (object.cylinder->y_max - EPSILON)))
+            object_normal = *ft_init_tuple(0, 1, 0, 0);
+        else if (dist < 1 && (object_point.y <= (object.cylinder->y_min + EPSILON)))
+            object_normal = *ft_init_tuple(0, -1, 0, 0);
+        else
+            object_normal = *ft_init_tuple(object_point.x, 0, object_point.z, 0);
+    }
+    else if (object.type == CONE)
+    {
+        matrix = object.cone->matrix;
+        object_point = ft_mult_matrix_tuple(ft_inversion(matrix, 4), world_point);
+        float y = sqrt(object_point.x * object_point.x + object_point.z * object_point.z);
+        if (object_point.y > 0)
+           y = -y;
+        object_normal = *ft_init_tuple(object_point.x, y, object_point.z, 0);
+    }
     world_normal = ft_mult_matrix_tuple(ft_transpose(ft_inversion(matrix, 4)), object_normal);
+    
     world_normal.w = 0;
     return (ft_normalization(world_normal));
 }

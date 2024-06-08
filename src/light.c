@@ -6,7 +6,7 @@
 /*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 18:04:20 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/06/05 18:59:21 by bainur           ###   ########.fr       */
+/*   Updated: 2024/06/07 00:51:39 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,6 @@ t_material	*ft_material(void)
 	material->diffuse = 0.9;
 	material->specular = 0.9;
 	material->shininess = 200;
-	material->pattern = ft_pattern(ft_color(0, 0, 0), ft_color(1, 1, 1));
-	material->pattern->transform = scaling(0.1, 0.1, 0.1);
 	return (material);
 }
 

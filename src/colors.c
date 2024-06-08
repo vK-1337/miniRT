@@ -6,7 +6,7 @@
 /*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:28:52 by bainur            #+#    #+#             */
-/*   Updated: 2024/06/05 18:56:42 by bainur           ###   ########.fr       */
+/*   Updated: 2024/06/07 14:53:47 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,24 @@ t_material *ft_set_pattern(t_comps *comps, int type)
 		*pattern_point = ft_mult_mat_tuple(object_point, ft_inversion(comps->plan->material->pattern->transform, 4));
 		comps->plan->material->color = ft_stripe_at(comps->plan->material->pattern, *pattern_point);
 		return (comps->plan->material);
+	}
+	else if (type == CYLINDER)
+	{
+		if (comps->cylinder->material->pattern == NULL)
+			return (comps->cylinder->material);
+		*object_point = ft_mult_mat_tuple(&comps->over_point, ft_inversion(comps->cylinder->matrix, 4));
+		*pattern_point = ft_mult_mat_tuple(object_point, ft_inversion(comps->cylinder->material->pattern->transform, 4));
+		comps->cylinder->material->color = ft_stripe_at(comps->cylinder->material->pattern, *pattern_point);
+		return (comps->cylinder->material);
+	}
+	else if (type == CONE)
+	{
+		if (comps->cone->material->pattern == NULL)
+			return (comps->cone->material);
+		*object_point = ft_mult_mat_tuple(&comps->over_point, ft_inversion(comps->cone->matrix, 4));
+		*pattern_point = ft_mult_mat_tuple(object_point, ft_inversion(comps->cone->material->pattern->transform, 4));
+		comps->cone->material->color = ft_stripe_at(comps->cone->material->pattern, *pattern_point);
+		return (comps->cone->material);
 	}
 	return (NULL);
 }

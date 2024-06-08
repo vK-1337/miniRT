@@ -6,7 +6,7 @@
 /*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/06/05 19:31:33 by bainur           ###   ########.fr       */
+/*   Updated: 2024/06/07 14:48:09 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 #define CENTER_Y SIZE_Y / 2
 #define SPHERE 0
 #define PLAN 1
+#define CYLINDER 2
+#define CONE 3
 #include "get_next_line.h"
 #include "libft.h"
 #include "mlx.h"
@@ -129,7 +131,6 @@ typedef struct s_material
 typedef struct s_sphere
 {
 	t_tuple center;
-	float diameter;
 	t_color colors;
 	struct s_sphere *next;
 	float radius;
@@ -139,13 +140,31 @@ typedef struct s_sphere
 
 typedef struct s_cylinder
 {
-	t_tuple position;
-	t_tuple direction;
+	t_tuple coord;
+	t_tuple n_vector;
 	float radius;
-	float **matrix;
+	float y_max;
+	float y_min;
 	t_material *material;
+	t_color colors;
+	float **matrix;
 	struct s_cylinder *next;
+	int closed;
 } t_cylinder;
+
+typedef struct s_cone
+{
+	t_tuple coord;
+	t_tuple n_vector;
+	float radius;
+	float y_max;
+	float y_min;
+	t_material *material;
+	t_color colors;
+	float **matrix;
+	struct s_cone *next;
+	int closed;
+} t_cone;
 
 typedef struct s_plan
 {
@@ -158,16 +177,6 @@ typedef struct s_plan
 	struct s_plan *next;
 	int type;
 } t_plan;
-
-typedef struct s_cylinder
-{
-	t_tuple coord;
-	t_tuple n_vector;
-	float diameter;
-	float height;
-	t_color colors;
-	struct s_cylinder *next;
-} t_cylinder;
 
 typedef struct s_camera
 {
@@ -187,6 +196,8 @@ typedef struct s_comps
 	int type;
 	t_sphere *sphere;
 	t_plan *plan;
+	t_cylinder *cylinder;
+	t_cone *cone;
 	t_tuple point;
 	t_tuple eyev;
 	t_tuple normalv;
@@ -202,6 +213,7 @@ typedef struct s_intersection
 	t_sphere *sphere;
 	t_plan *plan;
 	t_cylinder *cylinder;
+	t_cone *cone;
 } t_intersection;
 
 typedef struct s_world
@@ -212,6 +224,7 @@ typedef struct s_world
 	t_sphere **sphere;
 	t_plan **plan;
 	t_cylinder **cylinder;
+	t_cone **cone;
 	int counter[6];
 } t_world;
 
@@ -439,7 +452,7 @@ void render(t_camera *camera, t_world *world, t_win *win);
 /******************************************************************************/
 /*                                                                            */
 /*                                                                            */
-/*                                   SCENES												*/
+/*                                   SCENES									  */
 /*                                                                            */
 /*                                                                            */
 /******************************************************************************/
@@ -456,6 +469,13 @@ int ft_is_shadowed(t_world *world, t_tuple point);
 void put_pixel(t_win *win, int x, int y, unsigned int color);
 void ft_plan_intersect(t_intersection **t_tab, t_plan **plan,
 					   t_ray ray, int *count);
-t_plan *plan1(void);
+t_plan *ft_plan(void);
+void ft_cylinder_intersect(t_intersection **t_tab, t_cylinder **cylinder, t_ray ray, int *count);
+t_cylinder *ft_cylinder(void);
+t_intersection *ft_add_t(t_intersection *t_tab, t_intersection t[2], int count);
+t_intersection *ft_add_one_t(t_intersection *t_tab, t_intersection t, int count);
+void ft_cylinder_caps_intersect(t_intersection **t_tab, t_cylinder **cylinder, t_ray ray, int *count);
+void ft_cone_intersect(t_intersection **t_tab, t_cone **cone, t_ray ray, int *count);
+t_cone *ft_cone(void);
 
 #endif

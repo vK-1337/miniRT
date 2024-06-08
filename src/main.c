@@ -6,7 +6,7 @@
 /*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 10:26:12 by vk                #+#    #+#             */
-/*   Updated: 2024/06/05 18:58:39 by bainur           ###   ########.fr       */
+/*   Updated: 2024/06/07 20:39:13 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,19 +29,6 @@
 //     (void) data;
 //     return (EXIT_SUCCESS);
 // }
-
-typedef struct s_env
-{
-    t_tuple gravity;
-    t_tuple wind;
-} t_env;
-
-typedef struct s_projectile
-{
-    t_tuple position;
-    t_tuple velocity;
-} t_projectile;
-
 void put_pixel(t_win *win, int x, int y, unsigned int color)
 {
     char *dst;
@@ -50,42 +37,6 @@ void put_pixel(t_win *win, int x, int y, unsigned int color)
         return;
     dst = win->addr + (y * win->line_length + x * (win->bits_per_pixel / 8));
     *(unsigned int *)dst = color;
-}
-
-void tick(t_win *win)
-{
-    t_projectile pro;
-    t_env env;
-    int i;
-
-    pro.position.x = 0;
-    pro.position.y = 1;
-    pro.position.z = 0;
-    pro.position.w = 1;
-    pro.velocity.x = 1;
-    pro.velocity.y = 1.8;
-    pro.velocity.z = 0;
-    pro.velocity.w = 0;
-    env.gravity.x = 0;
-    env.gravity.y = -0.1;
-    env.gravity.z = 0;
-    env.gravity.w = 0;
-    env.wind.x = -0.01;
-    env.wind.y = 0;
-    env.wind.z = 0;
-    env.wind.w = 0;
-    i = 0;
-    pro.velocity = ft_normalization(pro.velocity);
-    pro.velocity = ft_mult_vector(pro.velocity, 11.25);
-    while (pro.position.y > 0)
-    {
-        put_pixel(win, pro.position.x, SIZE_Y - pro.position.y, 0xFFFFFF);
-        pro.position = ft_sum_tuple(pro.position, pro.velocity);
-        pro.velocity = ft_sum_tuple(pro.velocity, ft_sum_tuple(env.gravity,
-                                                               env.wind));
-        i++;
-    }
-    mlx_put_image_to_window(win->mlx, win->win, win->img, 0, 0);
 }
 
 int exit_window(t_win *win)
@@ -224,39 +175,43 @@ int main(void) // Programme pour modeliser spheres avec scene
     left->material->diffuse = 0.7;
     left->material->specular = 0.3;
 
-    
     t_world *world;
     world = malloc(sizeof(t_world));
-    world->light = ft_point_light(ft_init_tuple(0, 9, -5, 1), ft_color(1, 1, 1));
+    world->light = ft_point_light(ft_init_tuple(0, 5, -10, 1), ft_color(1, 1, 1));
     world->sphere = &middle;
     middle->next = right;
     right->next = left;
     left->next = NULL;
+    world->sphere = NULL;
+    t_plan *plan = ft_plan();
 
-    t_plan *plan = plan1();
-    plan->normal= *ft_init_tuple(0, 1, 0, 0);
-    t_plan *wall = plan1();
-    wall->coord = *ft_init_tuple(0, 0, 5, 1);
-    wall->normal = ft_sum_tuple(wall->normal, *ft_init_tuple(0, 0, 1, 0));
+    t_plan *wall = ft_plan();
+    wall->matrix = ft_mult_mat(rotation_x(M_PI / 2), translation(0, 8, 0));
+    t_plan *left_wall = ft_plan();
+    left_wall->matrix = rotation_x(M_PI / 2);
+    left_wall->matrix = ft_mult_mat(rotation_y(-M_PI / 2), left_wall->matrix);
+    left_wall->matrix = ft_mult_mat(translation(5, 0, 8), left_wall->matrix);
 
-    t_plan *left_wall = plan1();
-    left_wall->coord = *ft_init_tuple(5, 0, 0, 1);
-    left_wall->normal = ft_sum_tuple(left_wall->normal, *ft_init_tuple(1, 0, 0, 0));
+    t_plan *right_wall = ft_plan();
+    right_wall->matrix = ft_mult_mat(rotation_y(M_PI / 2), translation(0, 0, 0));
+    // right_wall->coord = *ft_init_tuple(-5, 0, 0, 1);
+    // right_wall->normal = ft_sum_tuple(right_wall->normal, *ft_init_tuple(1, 0, 0, 0));
 
-    t_plan *right_wall = plan1();
-    right_wall->coord = *ft_init_tuple(-5, 0, 0, 1);
-    right_wall->normal = ft_sum_tuple(right_wall->normal, *ft_init_tuple(1, 0, 0, 0));
+    t_plan *ceiling = ft_plan();
+    ceiling->matrix = translation(0, 10, 0);
+    ceiling->material->color = ft_color(1, 0, 0);  
+
+    t_cylinder *cylinder = ft_cylinder();
+    cylinder->matrix = translation(0, 0, -5);
+
+    // t_cone *cone = ft_cone();
+    // cone->matrix = translation(0, 0, -5);
     
-    t_plan *ceiling = plan1();
-    ceiling->coord = *ft_init_tuple(0, 10, 0, 1);
-    ceiling->normal = *ft_init_tuple(0, 1, 0, 0);
-    // world->sphere = &floor;
-    // floor->next = left_wall;
-    // left_wall->next = right_wall;
-    // right_wall->next = middle;
-    // middle->next = right;
-    // right->next = left;
-    // left->next = NULL;
+    cylinder->material->color = ft_color(1, 0, 0);  
+    world->cylinder = &cylinder;
+    cylinder->next = NULL;
+    // world->cone = &cone;
+    // cone->next = NULL;
     world->plan = &plan;
     plan->next = wall;
     wall->next = ceiling;
@@ -265,7 +220,7 @@ int main(void) // Programme pour modeliser spheres avec scene
     right_wall->next = NULL;
     t_camera camera = ft_new_camera(SIZE_X, SIZE_Y, M_PI / 2);
     world->camera = &camera;
-    world->camera->matrix = ft_view_transform(*ft_init_tuple(0, 1, -10, 1), *ft_init_tuple(0, 1 , 0, 1), *ft_init_tuple(0, 1, 0, 0));
+    world->camera->matrix = ft_view_transform(*ft_init_tuple(0, 5, -7, 1), *ft_init_tuple(0, 0, 0, 1), *ft_init_tuple(0, 1, 0, 0));
 
     t_win *win = init_mlx();
 

@@ -6,7 +6,7 @@
 /*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/06/05 19:31:33 by bainur           ###   ########.fr       */
+/*   Updated: 2024/06/06 18:02:33 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,7 +197,7 @@ int	init_sphere(t_world *data, char **data_split)
     sphere->center.y = atof(split[1]);
     sphere->center.z = atof(split[2]);
     free_char_tab(split);
-    sphere->diameter = atof(data_split[2]);
+    sphere->radius = atof(data_split[2]) / 2;
     split = ft_split(data_split[3], ',');
     if (!split)
         return (free(sphere) , 0);
@@ -282,8 +282,9 @@ int	init_cylinder(t_world *data, char **data_split)
 	cylinder->n_vector.x = atof(split[0]);
 	cylinder->n_vector.y = atof(split[1]);
 	cylinder->n_vector.z = atof(split[2]);
-	cylinder->diameter = atof(data_split[3]);
-	cylinder->height = atof(data_split[4]);
+	cylinder->radius = atof(data_split[3]) / 2;
+	cylinder->y_max = atof(data_split[4]) / 2 + cylinder->coord.y;
+	cylinder->y_min = -atof(data_split[4]) / 2 + cylinder->coord.y;
 	free_char_tab(split);
 	split = ft_split(data_split[5], ',');
 	if (!split)

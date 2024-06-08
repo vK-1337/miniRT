@@ -145,7 +145,8 @@
 //   mlx_put_image_to_window(mlx,win1,im1,20,20);
 //   printf("OK\n");
 //   sleep(2);
-
+left_wall->coord = *ft_init_tuple(5, 0, 0, 1);
+    left_wall->normal = ft_sum_tuple(left_wall->normal, *ft_init_tuple(1, 0, 0, 0));
 //   printf(" => Destroy Image1 ... ");
 //   mlx_destroy_image(mlx, im1);
 //   printf("OK\n");
@@ -203,7 +204,8 @@
 //   data4 = mlx_get_data_addr(im4,&bpp4,&sl4,&endian4);
 //   color_map_2(data4,bpp4,sl4,IM3_SX,IM3_SY,endian4, 2);
 
-//   printf(" 3rd window, Installing hooks ...");
+//   printf(" 3rd window, Installing hooks ..."left_wall->coord = *ft_init_tuple(5, 0, 0, 1);
+    left_wall->normal = ft_sum_tuple(left_wall->normal, *ft_init_tuple(1, 0, 0, 0)););
 //   win3 = mlx_new_window(mlx,WIN1_SX,WIN1_SY,"Title3");
 //   mlx_expose_hook(win1,expose_win1,0);
 //   mlx_mouse_hook(win1,mouse_win1,0);
