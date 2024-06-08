@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   scene.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 11:41:54 by udumas            #+#    #+#             */
-/*   Updated: 2024/06/07 21:40:19 by bainur           ###   ########.fr       */
+/*   Updated: 2024/06/08 11:54:33 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ void ft_sphere_intersections(t_intersection **t_tab, t_sphere **sphere,
 	t[1].cylinder = NULL;
 	t[1].cone = NULL;
 	*count += 2;
-	printf("sphere\n");
 	*t_tab = ft_add_t(*t_tab, t, *count);
 	*sphere = (*sphere)->next;
 }
@@ -154,7 +153,6 @@ t_comps ft_prepare_computations(t_intersection *i, t_ray ray)
 	else if (i[0].cone != NULL)
 	{
 		comps.cone = i[0].cone;
-		print_matrix(comps.cone->matrix, 4);
 		comps.sphere = NULL;
 		comps.plan = NULL;
 		comps.cylinder = NULL;

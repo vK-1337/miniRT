@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   reflections.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:42:34 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/06/07 20:43:23 by bainur           ###   ########.fr       */
+/*   Updated: 2024/06/08 11:51:32 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,11 @@ t_tuple ft_normal_at(t_comps object, t_tuple world_point)
         if (object_point.y > 0)
            y = -y;
         object_normal = *ft_init_tuple(object_point.x, y, object_point.z, 0);
+    }
+    else
+    {
+        object_normal = *ft_init_tuple(0, 0, 0, 0);
+        matrix = identity_matrix(4);
     }
     world_normal = ft_mult_matrix_tuple(ft_transpose(ft_inversion(matrix, 4)), object_normal);
     

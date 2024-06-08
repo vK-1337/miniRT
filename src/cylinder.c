@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cylinder.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 19:02:29 by bainur            #+#    #+#             */
-/*   Updated: 2024/06/07 21:38:40 by bainur           ###   ########.fr       */
+/*   Updated: 2024/06/08 11:53:04 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ void ft_cylinder_intersect(t_intersection **t_tab, t_cylinder **cylinder, t_ray 
     y0 = new_ray.origin.y + t.t * new_ray.direction.y;
     if ((*cylinder)->y_min < y0 && y0 < (*cylinder)->y_max)
     {
-        printf("cylinder + 1\n");
         *count += 1;
         *t_tab = ft_add_one_t(*t_tab, t, *count);
     }
@@ -52,7 +51,6 @@ void ft_cylinder_intersect(t_intersection **t_tab, t_cylinder **cylinder, t_ray 
     y0 = new_ray.origin.y + t.t * new_ray.direction.y;
     if ((*cylinder)->y_min < y0 && y0 < (*cylinder)->y_max)
     {
-        printf("cylinder + 1\n");
         *count += 1;
         *t_tab = ft_add_one_t(*t_tab, t, *count);
     }
@@ -95,7 +93,6 @@ void ft_cylinder_caps_intersect(t_intersection **t_tab, t_cylinder **cylinder, t
         t.plan = NULL;
         t.sphere = NULL;
         *count += 1;
-        printf("cylinder caps+ 1\n");
         *t_tab = ft_add_one_t(*t_tab, t, *count);
     }
     t1 = ((*cylinder)->y_max - new_ray.origin.y) / new_ray.direction.y;
@@ -106,7 +103,6 @@ void ft_cylinder_caps_intersect(t_intersection **t_tab, t_cylinder **cylinder, t
         t.plan = NULL;
         t.sphere = NULL;
         *count += 1;
-        printf("cylinder caps + 1\n");
         *t_tab = ft_add_one_t(*t_tab, t, *count);
     }
 }
