@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   colors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:28:52 by bainur            #+#    #+#             */
-/*   Updated: 2024/06/07 14:53:47 by bainur           ###   ########.fr       */
+/*   Updated: 2024/06/13 15:26:09 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,38 +40,66 @@ t_material *ft_set_pattern(t_comps *comps, int type)
 	pattern_point = malloc(sizeof(t_tuple));
 	if (type == SPHERE)
 	{
-		if (comps->sphere->material->pattern == NULL)
+		if (comps->sphere->material->pattern == NULL && comps->sphere->material->texture == NULL)
 			return (comps->sphere->material);
+        else if (comps->sphere->material->pattern != NULL && comps->sphere->material->texture == NULL)
+        {
 		*object_point = ft_mult_mat_tuple(&comps->over_point, ft_inversion(comps->sphere->matrix, 4));
 		*pattern_point = ft_mult_mat_tuple(object_point, ft_inversion(comps->sphere->material->pattern->transform, 4));
 		comps->sphere->material->color = ft_stripe_at(comps->sphere->material->pattern, *pattern_point);
-		return (comps->sphere->material);
+        }
+        else if (comps->sphere->material->pattern == NULL && comps->sphere->material->texture != NULL)
+        {
+            ;
+        }
+        return (comps->sphere->material);
 	}
 	else if (type == PLAN)
 	{
-		if (comps->plan->material->pattern == NULL)
+		if (comps->plan->material->pattern == NULL && comps->plan->material->texture == NULL)
 			return (comps->plan->material);
+        else if (comps->plan->material->pattern != NULL && comps->plan->material->texture == NULL)
+        {
 		*object_point = ft_mult_mat_tuple(&comps->over_point, ft_inversion(comps->plan->matrix, 4));
 		*pattern_point = ft_mult_mat_tuple(object_point, ft_inversion(comps->plan->material->pattern->transform, 4));
 		comps->plan->material->color = ft_stripe_at(comps->plan->material->pattern, *pattern_point);
+        }
+        else if (comps->plan->material->pattern == NULL && comps->plan->material->texture != NULL)
+        {
+            ;
+        }
 		return (comps->plan->material);
 	}
 	else if (type == CYLINDER)
 	{
-		if (comps->cylinder->material->pattern == NULL)
+		if (comps->cylinder->material->pattern == NULL && comps->cylinder->material->texture == NULL)
 			return (comps->cylinder->material);
+        else if (comps->cylinder->material->pattern != NULL && comps->cylinder->material->texture == NULL)
+        {
 		*object_point = ft_mult_mat_tuple(&comps->over_point, ft_inversion(comps->cylinder->matrix, 4));
 		*pattern_point = ft_mult_mat_tuple(object_point, ft_inversion(comps->cylinder->material->pattern->transform, 4));
 		comps->cylinder->material->color = ft_stripe_at(comps->cylinder->material->pattern, *pattern_point);
+        }
+        else if (comps->cylinder->material->pattern == NULL && comps->cylinder->material->texture != NULL)
+        {
+            ;
+        }
 		return (comps->cylinder->material);
 	}
 	else if (type == CONE)
 	{
-		if (comps->cone->material->pattern == NULL)
+		if (comps->cone->material->pattern == NULL && comps->cone->material->texture == NULL)
 			return (comps->cone->material);
+        else if (comps->cone->material->pattern != NULL && comps->cone->material->texture == NULL)
+        {
 		*object_point = ft_mult_mat_tuple(&comps->over_point, ft_inversion(comps->cone->matrix, 4));
 		*pattern_point = ft_mult_mat_tuple(object_point, ft_inversion(comps->cone->material->pattern->transform, 4));
 		comps->cone->material->color = ft_stripe_at(comps->cone->material->pattern, *pattern_point);
+        }
+        else if (comps->cone->material->pattern == NULL && comps->cone->material->texture != NULL)
+        {
+            ;
+        }
 		return (comps->cone->material);
 	}
 	return (NULL);

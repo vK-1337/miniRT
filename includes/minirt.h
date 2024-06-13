@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/06/08 13:50:43 by udumas           ###   ########.fr       */
+/*   Updated: 2024/06/13 14:53:00 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,7 @@ typedef struct s_material
 	float specular;
 	float shininess;
 	t_pattern *pattern;
+    Image *texture;
 } t_material;
 
 typedef struct s_sphere
@@ -240,6 +241,16 @@ typedef struct s_win
 	int endian;
 } t_win;
 
+typedef struct {
+    void* img_ptr;
+    int width;
+    int height;
+    int bpp;
+    int size_line;
+    int endian;
+    char* data;
+} Image;
+
 void print_char_tab(char **tab);
 /******************************************************************************/
 /*                                                                            */
@@ -320,7 +331,7 @@ void free_data(t_world *data);
 /*                                   TUPLE_CALCULATION                        */
 /*                                                                            */
 /*                                                                            */
-/*************************************************************	printf("Hit\n");*****************/
+/******************************************************************************/
 
 //										TUPLE									//
 t_tuple *ft_init_tuple(float x, float y, float z, float w);
@@ -367,12 +378,7 @@ float **ft_inversion(float **matrice, int row_col);
 
 float **ft_matcre(float *tab, int row_col);
 void ft_free_mat(float **mat, int row_col);
-float **ft_create_mat_null(int row_col);
-void print_matrix(float **mat, int row_col);
-float **ft_submat(float **matrice, int row_col, int row,
-				  int col);
-
-//										UTILS2								//
+//										TUPLE									/					//
 float **identity_matrix(int size);
 
 //										DETER_COFAC							//
