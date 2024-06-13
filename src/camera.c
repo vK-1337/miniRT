@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   camera.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 14:30:46 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/06/06 23:43:26 by bainur           ###   ########.fr       */
+/*   Updated: 2024/06/13 21:03:00 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,21 @@ void render(t_camera *camera, t_world *world, t_win *win)
             unsigned int color_int = color_to_int(color); // Convert color to int
             put_pixel(win, x, y, color_int);
         }
+	
     }
+	
 }
 
-t_camera	ft_new_camera(float hsize, float vsize, double fov)
+t_camera	*ft_new_camera(float hsize, float vsize, double fov)
 {
-	t_camera	camera;
+	t_camera	*camera;
 
-	camera.hsize = hsize;
-	camera.vsize = vsize;
-	camera.fov = fov;
-	camera.matrix = identity_matrix(4);
-	camera.pixel_size = compute_pixel_size(&camera);
+	camera = malloc(sizeof(t_camera));
+	camera->hsize = hsize;
+	camera->vsize = vsize;
+	camera->fov = fov;
+	camera->matrix = identity_matrix(4);
+	camera->pixel_size = compute_pixel_size(camera);
 	return (camera);
 }
 

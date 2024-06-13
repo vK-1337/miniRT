@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/06/08 13:50:43 by udumas           ###   ########.fr       */
+/*   Updated: 2024/06/13 21:25:16 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,14 +105,12 @@ typedef struct s_ray
 
 typedef struct s_alight
 {
-	float alight;
 	t_color colors;
 } t_alight;
 
 typedef struct s_light
 {
 	t_tuple position;
-	float light_ratio;
 	t_color colors;
 	t_color intensity;
 	struct s_light *next;
@@ -121,7 +119,8 @@ typedef struct s_light
 typedef struct s_material
 {
 	t_color *color;
-	float ambient;
+	float ambiant;
+	t_color *ambiant_color;
 	float diffuse;
 	float specular;
 	float shininess;
@@ -149,7 +148,6 @@ typedef struct s_cylinder
 	t_color colors;
 	float **matrix;
 	struct s_cylinder *next;
-	int closed;
 } t_cylinder;
 
 typedef struct s_cone
@@ -164,7 +162,6 @@ typedef struct s_cone
 	t_color colors;
 	float **matrix;
 	struct s_cone *next;
-	int closed;
 } t_cone;
 
 typedef struct s_plan
@@ -219,7 +216,7 @@ typedef struct s_intersection
 
 typedef struct s_world
 {
-	t_alight *alight;
+	t_color *alight;
 	t_camera *camera;
 	t_light *light;
 	t_sphere **sphere;
@@ -445,7 +442,7 @@ unsigned int color_to_int(t_color color);
 /*                                                                            */
 /******************************************************************************/
 
-t_camera ft_new_camera(float hsize, float vsize, double fov);
+t_camera *ft_new_camera(float hsize, float vsize, double fov);
 float compute_pixel_size(t_camera *camera);
 t_ray ray_for_pixel(t_camera *camera, int px, int py);
 void render(t_camera *camera, t_world *world, t_win *win);
@@ -478,5 +475,6 @@ t_intersection *ft_add_one_t(t_intersection *t_tab, t_intersection t, int count)
 void ft_cylinder_caps_intersect(t_intersection **t_tab, t_cylinder **cylinder, t_ray ray, int *count);
 void ft_cone_intersect(t_intersection **t_tab, t_cone **cone, t_ray ray, int *count);
 t_cone *ft_cone(void);
-
+int ft_check_caps(t_ray ray, float t, float radius);
+int ft_equal_tuple(t_tuple *t1, t_tuple *t2);
 #endif

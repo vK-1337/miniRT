@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:42:34 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/06/08 11:51:32 by udumas           ###   ########.fr       */
+/*   Updated: 2024/06/11 17:07:02 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,25 @@ t_tuple ft_normal_at(t_comps object, t_tuple world_point)
     }
     else if (object.type == CONE)
     {
-        matrix = object.cone->matrix;
-        object_point = ft_mult_matrix_tuple(ft_inversion(matrix, 4), world_point);
-        float y = sqrt(object_point.x * object_point.x + object_point.z * object_point.z);
-        if (object_point.y > 0)
-           y = -y;
-        object_normal = *ft_init_tuple(object_point.x, y, object_point.z, 0);
+       matrix = object.cone->matrix;
+       object_point = ft_mult_matrix_tuple(ft_inversion(matrix, 4), world_point);
+       float dist = object_point.x * object_point.x + object_point.z * object_point.z;
+       float y = sqrt(dist);
+        if (dist < 1 && (object_point.y >= (object.cone->y_max - EPSILON)))
+              object_normal = *ft_init_tuple(0, 1, 0, 0);
+         else if (dist < 1 && (object_point.y <= (object.cone->y_min + EPSILON)))
+              object_normal = *ft_init_tuple(0, -1, 0, 0);
+         else
+         {
+            if (object_point.y > 0)
+            {
+                object_normal.y = -y;
+            }
+            else
+              object_normal.y = y;
+            object_normal.x = object_point.x;
+            object_normal.z = object_point.z;
+        }
     }
     else
     {

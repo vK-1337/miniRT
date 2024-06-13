@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/06/06 18:02:33 by bainur           ###   ########.fr       */
+/*   Updated: 2024/06/13 21:26:18 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_world	init_all_data(int fd)
 	}
 	if (init_corresponding_data(file_data, &data) == 2)
 	{
-        free_data(&data);
+		free_data(&data);
 		free(file_data);
 		exit(EXIT_FAILURE);
 	}
@@ -34,12 +34,13 @@ t_world	init_all_data(int fd)
 	{
 		free(file_data);
 		file_data = get_next_line(fd, 0);
+		printf("file_data = %s\n", file_data);
 		if (file_data && file_data[0] == '\n')
 			continue ;
 		if (init_corresponding_data(file_data, &data) == 2)
 		{
-            get_next_line(fd, 1);
-            free_data(&data);
+			get_next_line(fd, 1);
+			free_data(&data);
 			free(file_data);
 			exit(EXIT_FAILURE);
 		}
@@ -69,7 +70,7 @@ int	init_corresponding_data(char *file_data, t_world *data)
 		write(STDERR_FILENO, "A malloc failed.\n", 18);
 		return (free_char_tab(data_split), 2);
 	}
-    free_char_tab(data_split);
+	free_char_tab(data_split);
 	return (EXIT_SUCCESS);
 }
 
@@ -111,20 +112,18 @@ int	init_data_w_line(t_world *data, t_dtype type, char **data_split)
 int	init_alight(t_world *data, char **data_split)
 {
 	char		**color_split;
-	t_alight	*alight;
+	float		intensity;
 
-	alight = malloc(sizeof(t_alight));
-	if (!alight)
-		return (0);
-	alight->alight = atof(data_split[1]);
+	intensity = atof(data_split[1]);
 	color_split = ft_split(data_split[2], ',');
 	if (!color_split)
-		return (free(alight), 0);
-    alight->colors.r = ft_atoi(color_split[0]);
-	alight->colors.g = ft_atoi(color_split[1]);
-	alight->colors.b = ft_atoi(color_split[2]);
+		return ( 0);
+	data->alight = ft_color(ft_atoi(color_split[0]) / 255 * intensity,
+			ft_atoi(color_split[1]) / 255 * intensity,
+			ft_atoi(color_split[2]) / 255 * intensity);
+	if (!data->alight)
+		return(0);
 	free_char_tab(color_split);
-	data->alight = alight;
 	return (1);
 }
 
@@ -132,24 +131,24 @@ int	init_camera(t_world *data, char **data_split)
 {
 	char		**split;
 	t_camera	*camera;
-
-	camera = malloc(sizeof(t_camera));
+	t_tuple		from;
+	t_tuple		to;
+	t_tuple		up;
+	
+	camera = ft_new_camera(SIZE_X, SIZE_Y, atoi(data_split[3]) * (M_PI / 180));
 	if (!camera)
 		return (0);
 	split = ft_split(data_split[1], ',');
 	if (!split)
-		return (free(camera) , 0);
-	// camera->coord.x = atof(split[0]); // TODO
-	// camera->coord.y = atof(split[1]); // TODO
-	// camera->coord.z = atof(split[2]); // TODO
+		return (free(camera), 0);
+	from = *ft_init_tuple(atof(split[0]), atof(split[1]), atof(split[2]), 1);
 	free_char_tab(split);
 	split = ft_split(data_split[2], ',');
 	if (!split)
-		return (free(camera) , 0);
-	camera->vector.x = atof(split[0]);
-	camera->vector.y = atof(split[1]);
-	camera->vector.z = atof(split[2]);
-	camera->fov = atoi(data_split[3]);
+		return (free(camera), 0);
+	to = *ft_init_tuple(0, 0, 0, 0);
+	up = *ft_init_tuple(atof(split[0]), atof(split[1]), atof(split[2]), 0);
+	camera->matrix = ft_view_transform(from, to, up);
 	free_char_tab(split);
 	data->camera = camera;
 	return (1);
@@ -159,24 +158,25 @@ int	init_light(t_world *data, char **data_split)
 {
 	char	**split;
 	t_light	*light;
+	float	intensity;
 
 	light = malloc(sizeof(t_light));
 	if (!light)
 		return (0);
 	split = ft_split(data_split[1], ',');
 	if (!split)
-		return (free(light) ,0);
+		return (free(light), 0);
 	light->position.x = atof(split[0]);
 	light->position.y = atof(split[1]);
 	light->position.z = atof(split[2]);
 	free_char_tab(split);
-	light->light_ratio = atof(data_split[2]);
+	intensity = atof(data_split[2]);
 	split = ft_split(data_split[3], ',');
 	if (!split)
-		return (free(light) ,0);
-	light->colors.r = ft_atoi(split[0]);
-	light->colors.g = ft_atoi(split[1]);
-	light->colors.b = ft_atoi(split[2]);
+		return (free(light), 0);
+	light->colors.r = ft_atoi(split[0]) / 255 * intensity;
+	light->colors.g = ft_atoi(split[1]) / 255 * intensity;
+	light->colors.b = ft_atoi(split[2]) / 255 * intensity;
 	free_char_tab(split);
 	data->light = light;
 	return (1);
@@ -184,39 +184,42 @@ int	init_light(t_world *data, char **data_split)
 
 int	init_sphere(t_world *data, char **data_split)
 {
-    char		**split;
-    t_sphere	*sphere;
+	char		**split;
+	t_sphere	*sphere;
 
-    sphere = malloc(sizeof(t_sphere));
-    if (!sphere)
-        return (0);
-    split = ft_split(data_split[1], ',');
-    if (!split)
-        return (free(sphere) , 0);
-    sphere->center.x = atof(split[0]);
-    sphere->center.y = atof(split[1]);
-    sphere->center.z = atof(split[2]);
-    free_char_tab(split);
-    sphere->radius = atof(data_split[2]) / 2;
-    split = ft_split(data_split[3], ',');
-    if (!split)
-        return (free(sphere) , 0);
-    sphere->colors.r = ft_atoi(split[0]);
-    sphere->colors.g = ft_atoi(split[1]);
-    sphere->colors.b = ft_atoi(split[2]);
-    free_char_tab(split);
-    sphere->matrix = identity_matrix(4);
-    sphere->next = NULL;
-    if (!data->sphere)
-    {
-        data->sphere = malloc(sizeof(t_sphere*));
-        if (!data->sphere)
-            return (free(sphere), 0);
-        *data->sphere = sphere;
-    }
-    else
-        sphere_lstadd_back(data->sphere, sphere);
-    return (1);
+	sphere = malloc(sizeof(t_sphere));
+	if (!sphere)
+		return (0);
+	split = ft_split(data_split[1], ',');
+	if (!split)
+		return (free(sphere), 0);
+	sphere->matrix = identity_matrix(4);
+	sphere->matrix = ft_mult_mat(sphere->matrix, translation(atof(split[0]),
+				atof(split[1]), atof(split[2])));
+	free_char_tab(split);
+	sphere->radius = atof(data_split[2]) / 2;
+	split = ft_split(data_split[3], ',');
+	if (!split)
+		return (free(sphere), 0);
+	sphere->material = ft_material();
+	sphere->material->color->r = ft_atoi(split[0]) / 255;
+	sphere->material->color->g = ft_atoi(split[1]) / 255;
+	sphere->material->color->b = ft_atoi(split[2]) / 255;
+	if (data->alight != NULL)
+		sphere->material->ambiant_color = data->alight;
+		
+	free_char_tab(split);
+	sphere->next = NULL;
+	if (!data->sphere)
+	{
+		data->sphere = malloc(sizeof(t_sphere *));
+		if (!data->sphere)
+			return (free(sphere), 0);
+		*data->sphere = sphere;
+	}
+	else
+		sphere_lstadd_back(data->sphere, sphere);
+	return (1);
 }
 
 int	init_plan(t_world *data, char **data_split)
@@ -230,34 +233,37 @@ int	init_plan(t_world *data, char **data_split)
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return (free(plan), 0);
-	plan->coord.x = atof(split[0]);
-	plan->coord.y = atof(split[1]);
-	plan->coord.z = atof(split[2]);
+	plan->matrix = identity_matrix(4);
+	plan->matrix = ft_mult_mat(plan->matrix, translation(atof(split[0]),
+				atof(split[1]), atof(split[2])));
 	free_char_tab(split);
 	split = ft_split(data_split[2], ',');
 	if (!split)
 		return (free(plan), 0);
-	plan->vector.x = atof(split[0]);
-	plan->vector.y = atof(split[1]);
-	plan->vector.z = atof(split[2]);
+	plan->matrix = ft_mult_mat(plan->matrix, rotation_x(atoi(split[0]) * M_PI));
+	plan->matrix = ft_mult_mat(plan->matrix, rotation_y(atoi(split[1]) * M_PI));
+	plan->matrix = ft_mult_mat(plan->matrix, rotation_z(atoi(split[2]) * M_PI));
 	free_char_tab(split);
 	split = ft_split(data_split[3], ',');
 	if (!split)
 		return (free(plan), 0);
-	plan->colors.r = ft_atoi(split[0]);
-	plan->colors.g = ft_atoi(split[1]);
-	plan->colors.b = ft_atoi(split[2]);
-    plan->next = NULL;
-    free_char_tab(split);
-    if (!data->plan)
-    {
-        data->plan = malloc(sizeof(t_plan*));
-        if (!data->plan)
-            return (free(plan), 0);
-        *data->plan = plan;
-    }
-    else
-	    plan_lstadd_back(data->plan, plan);
+	plan->material = ft_material();
+	plan->material->color->r = ft_atoi(split[0]) / 255;
+	plan->material->color->g = ft_atoi(split[1]) / 255;
+	plan->material->color->b = ft_atoi(split[2]) / 255;
+	plan->next = NULL;
+	free_char_tab(split);
+	if (data->alight != NULL)
+		plan->material->ambiant_color = data->alight;
+	if (!data->plan)
+	{
+		data->plan = malloc(sizeof(t_plan *));
+		if (!data->plan)
+			return (free(plan), 0);
+		*data->plan = plan;
+	}
+	else
+		plan_lstadd_back(data->plan, plan);
 	return (1);
 }
 
@@ -272,16 +278,19 @@ int	init_cylinder(t_world *data, char **data_split)
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return (free(cylinder), 0);
-	cylinder->coord.x = atof(split[0]);
-	cylinder->coord.y = atof(split[1]);
-	cylinder->coord.z = atof(split[2]);
+	cylinder->matrix = identity_matrix(4);
+	cylinder->matrix = ft_mult_mat(cylinder->matrix, translation(atof(split[0]),
+				atof(split[1]), atof(split[2])));
 	free_char_tab(split);
 	split = ft_split(data_split[2], ',');
 	if (!split)
 		return (free(cylinder), 0);
-	cylinder->n_vector.x = atof(split[0]);
-	cylinder->n_vector.y = atof(split[1]);
-	cylinder->n_vector.z = atof(split[2]);
+	cylinder->matrix = ft_mult_mat(cylinder->matrix, rotation_x(atoi(split[0])
+				* M_PI));
+	cylinder->matrix = ft_mult_mat(cylinder->matrix, rotation_y(atoi(split[1])
+				* M_PI));
+	cylinder->matrix = ft_mult_mat(cylinder->matrix, rotation_z(atoi(split[2])
+				* M_PI));
 	cylinder->radius = atof(data_split[3]) / 2;
 	cylinder->y_max = atof(data_split[4]) / 2 + cylinder->coord.y;
 	cylinder->y_min = -atof(data_split[4]) / 2 + cylinder->coord.y;
@@ -289,20 +298,23 @@ int	init_cylinder(t_world *data, char **data_split)
 	split = ft_split(data_split[5], ',');
 	if (!split)
 		return (free(cylinder), 0);
-	cylinder->colors.r = ft_atoi(split[0]);
-	cylinder->colors.g = ft_atoi(split[1]);
-	cylinder->colors.b = ft_atoi(split[2]);
-    cylinder->next = NULL;
-    free_char_tab(split);
-    if (!data->cylinder)
-    {
-        data->cylinder = malloc(sizeof(t_cylinder*));
-        if (!data->cylinder)
-            return (free(cylinder), 0);
-        *data->cylinder = cylinder;
-    }
-    else
-	    cylinder_lstadd_back(data->cylinder, cylinder);
+	cylinder->material = ft_material();
+	cylinder->material->color->r = ft_atoi(split[0]) / 255;
+	cylinder->material->color->g = ft_atoi(split[1]) / 255;
+	cylinder->material->color->b = ft_atoi(split[2]) / 255;
+	cylinder->next = NULL;
+	free_char_tab(split);
+	if (data->alight != NULL)
+		cylinder->material->ambiant_color = data->alight;
+	if (!data->cylinder)
+	{
+		data->cylinder = malloc(sizeof(t_cylinder *));
+		if (!data->cylinder)
+			return (free(cylinder), 0);
+		*data->cylinder = cylinder;
+	}
+	else
+		cylinder_lstadd_back(data->cylinder, cylinder);
 	return (1);
 }
 

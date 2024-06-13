@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 11:41:54 by udumas            #+#    #+#             */
-/*   Updated: 2024/06/08 11:54:33 by udumas           ###   ########.fr       */
+/*   Updated: 2024/06/13 21:07:05 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ t_comps ft_prepare_computations(t_intersection *i, t_ray ray)
 
 	if (i == NULL)
 	{
+		printf("Error: Intersection is NULL\n");
 		comps.t = 0;
 		comps.sphere = NULL;
 		comps.plan = NULL;
@@ -176,21 +177,36 @@ t_comps ft_prepare_computations(t_intersection *i, t_ray ray)
 t_color ft_shade_hit(t_world *data, t_comps *comps)
 {
 	int in_shadow;
+	t_color *color;
+	t_color *tmp_color;
+	t_light *light;
 
-	in_shadow = ft_is_shadowed(data, comps->over_point);
-	if (comps->plan != NULL)
-		return (ft_lighting(ft_set_pattern(comps, PLAN), *data->light,
-							comps->over_point, comps->eyev, comps->normalv, in_shadow));
-	else if (comps->sphere != NULL)
-		return (ft_lighting(ft_set_pattern(comps, SPHERE), *data->light,
-							comps->over_point, comps->eyev, comps->normalv, in_shadow));
-	else if (comps->cylinder != NULL)
-		return (ft_lighting(ft_set_pattern(comps, CYLINDER), *data->light,
-							comps->over_point, comps->eyev, comps->normalv, in_shadow));
-	else if (comps->cone != NULL)
-		return (ft_lighting(ft_set_pattern(comps, CONE), *data->light,
-							comps->over_point, comps->eyev, comps->normalv, in_shadow));
-	return (*ft_color(0, 0, 0));
+	light = data->light;
+	color = ft_color(0, 0, 0);
+	while (light != NULL)
+	{
+		tmp_color = malloc(sizeof(t_color));
+		in_shadow = ft_is_shadowed(data, comps->over_point);
+		if (comps->plan != NULL)
+			*tmp_color = ft_lighting(ft_set_pattern(comps, PLAN), *light,
+								comps->over_point, comps->eyev, comps->normalv, in_shadow);
+		else if (comps->sphere != NULL)
+			*tmp_color = ft_lighting(ft_set_pattern(comps, SPHERE), *light,
+								comps->over_point, comps->eyev, comps->normalv, in_shadow);
+		else if (comps->cylinder != NULL)
+			*tmp_color = ft_lighting(ft_set_pattern(comps, CYLINDER), *light,
+								comps->over_point, comps->eyev, comps->normalv, in_shadow);
+		else if (comps->cone != NULL)
+			*tmp_color = ft_lighting(ft_set_pattern(comps, CONE), *light,
+								comps->over_point, comps->eyev, comps->normalv, in_shadow);
+		else
+			tmp_color = ft_color(0, 0, 0);
+		*color = ft_sum_color(*color, *tmp_color);
+		free(tmp_color);
+		light = light->next;
+	}
+	return (*color);
+
 }
 
 t_color ft_color_at(t_world *data, t_ray ray)
