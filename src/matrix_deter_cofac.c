@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 15:13:02 by udumas            #+#    #+#             */
-/*   Updated: 2024/05/30 18:40:30 by udumas           ###   ########.fr       */
+/*   Updated: 2024/06/13 20:48:03 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ float	ft_deter2_2(float **mat)
 float	ft_determinant3_3(float **mat)
 {
 	float	det;
-
+	
 	det = mat[0][0] * ((mat[1][1] * mat[2][2]) - (mat[2][1] * mat[1][2]))
 		- mat[0][1] * ((mat[1][0] * mat[2][2]) - (mat[2][0] * mat[1][2]))
 		+ mat[0][2] * ((mat[1][0] * mat[2][1]) - (mat[2][0] * mat[1][1]));
