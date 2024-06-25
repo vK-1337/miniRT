@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/06/13 21:25:16 by udumas           ###   ########.fr       */
+/*   Updated: 2024/06/25 15:12:55 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,7 @@ typedef struct s_material
 {
 	t_color *color;
 	float ambiant;
+	float ambiant_intensity;
 	t_color *ambiant_color;
 	float diffuse;
 	float specular;
@@ -217,6 +218,7 @@ typedef struct s_intersection
 typedef struct s_world
 {
 	t_color *alight;
+	float alight_intensity;
 	t_camera *camera;
 	t_light *light;
 	t_sphere **sphere;

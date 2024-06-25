@@ -6,7 +6,7 @@
 /*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/06/15 16:34:14 by bainur           ###   ########.fr       */
+/*   Updated: 2024/06/25 16:30:18 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ t_world	init_all_data(int fd)
 			continue ;
 		if (init_corresponding_data(file_data, &data) == 2)
 		{
+			printf("file_data = %s\n", file_data);
 			get_next_line(fd, 1);
 			free_data(&data);
 			free(file_data);
@@ -115,13 +116,14 @@ int	init_alight(t_world *data, char **data_split)
 	char		**color_split;
 	float		intensity;
 
-	intensity = atof(data_split[1]);
+	data->alight_intensity = atof(data_split[1]);
+	intensity = data->alight_intensity;
 	color_split = ft_split(data_split[2], ',');
 	if (!color_split)
 		return ( 0);
-	data->alight = ft_color(ft_atoi(color_split[0]) / 255 * intensity,
-			ft_atoi(color_split[1]) / 255 * intensity,
-			ft_atoi(color_split[2]) / 255 * intensity);
+	data->alight = ft_color(ft_atoi(color_split[0]) / 255.0f * intensity,
+			ft_atoi(color_split[1]) / 255.0f * intensity,
+			ft_atoi(color_split[2]) / 255.0f * intensity);
 	if (!data->alight)
 		return(0);
 	free_char_tab(color_split);
@@ -175,9 +177,9 @@ int	init_light(t_world *data, char **data_split)
 	split = ft_split(data_split[3], ',');
 	if (!split)
 		return (free(light), 0);
-	light->colors.r = ft_atoi(split[0]) / 255 * intensity;
-	light->colors.g = ft_atoi(split[1]) / 255 * intensity;
-	light->colors.b = ft_atoi(split[2]) / 255 * intensity;
+	light->colors.r = ft_atoi(split[0]) / 255.0f * intensity;
+	light->colors.g = ft_atoi(split[1]) / 255.0f * intensity;
+	light->colors.b = ft_atoi(split[2]) / 255.0f * intensity;
 	free_char_tab(split);
 	data->light = light;
 	return (1);
@@ -203,12 +205,14 @@ int	init_sphere(t_world *data, char **data_split)
 	if (!split)
 		return (free(sphere), 0);
 	sphere->material = ft_material();
-	sphere->material->color->r = ft_atoi(split[0]) / 255;
-	sphere->material->color->g = ft_atoi(split[1]) / 255;
-	sphere->material->color->b = ft_atoi(split[2]) / 255;
+	sphere->material->color->r = ft_atoi(split[0]) / 255.0f;
+	sphere->material->color->g = ft_atoi(split[1]) / 255.0f;
+	sphere->material->color->b = ft_atoi(split[2]) / 255.0f;
 	if (data->alight != NULL)
+	{
 		sphere->material->ambiant_color = data->alight;
-		
+		sphere->material->ambiant = data->alight_intensity;
+	}
 	free_char_tab(split);
 	sphere->next = NULL;
 	if (!data->sphere)
@@ -234,6 +238,7 @@ int	init_plan(t_world *data, char **data_split)
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return (free(plan), 0);
+	plan->normal = *ft_init_tuple(0,1,0, 0);
 	plan->matrix = identity_matrix(4);
 	plan->matrix = ft_mult_mat(plan->matrix, translation(atof(split[0]),
 				atof(split[1]), atof(split[2])));
@@ -241,21 +246,25 @@ int	init_plan(t_world *data, char **data_split)
 	split = ft_split(data_split[2], ',');
 	if (!split)
 		return (free(plan), 0);
-	plan->matrix = ft_mult_mat(plan->matrix, rotation_x(atoi(split[0]) * M_PI));
-	plan->matrix = ft_mult_mat(plan->matrix, rotation_y(atoi(split[1]) * M_PI));
-	plan->matrix = ft_mult_mat(plan->matrix, rotation_z(atoi(split[2]) * M_PI));
+	plan->matrix = ft_mult_mat(plan->matrix, rotation_x(atof(split[0]) * M_PI));
+	plan->matrix = ft_mult_mat(plan->matrix, rotation_y(atof(split[1]) * M_PI));
+	plan->matrix = ft_mult_mat(plan->matrix, rotation_z(atof(split[2]) * M_PI));
+	print_matrix(plan->matrix, 4);
 	free_char_tab(split);
 	split = ft_split(data_split[3], ',');
 	if (!split)
 		return (free(plan), 0);
 	plan->material = ft_material();
-	plan->material->color->r = ft_atoi(split[0]) / 255;
-	plan->material->color->g = ft_atoi(split[1]) / 255;
-	plan->material->color->b = ft_atoi(split[2]) / 255;
+	plan->material->color->r = ft_atoi(split[0]) / 255.0f;
+	plan->material->color->g = ft_atoi(split[1]) / 255.0f;
+	plan->material->color->b = ft_atoi(split[2]) / 255.0f;
 	plan->next = NULL;
 	free_char_tab(split);
 	if (data->alight != NULL)
+	{
 		plan->material->ambiant_color = data->alight;
+		plan->material->ambiant = data->alight_intensity;
+	}
 	if (!data->plan)
 	{
 		data->plan = malloc(sizeof(t_plan *));
@@ -300,9 +309,9 @@ int	init_cylinder(t_world *data, char **data_split)
 	if (!split)
 		return (free(cylinder), 0);
 	cylinder->material = ft_material();
-	cylinder->material->color->r = ft_atoi(split[0]) / 255;
-	cylinder->material->color->g = ft_atoi(split[1]) / 255;
-	cylinder->material->color->b = ft_atoi(split[2]) / 255;
+	cylinder->material->color->r = ft_atoi(split[0]) / 255.0f;
+	cylinder->material->color->g = ft_atoi(split[1]) / 255.0f;
+	cylinder->material->color->b = ft_atoi(split[2]) / 255.0f;
 	cylinder->next = NULL;
 	free_char_tab(split);
 	if (data->alight != NULL)

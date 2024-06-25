@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   matrix_transformation.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 12:56:18 by udumas            #+#    #+#             */
-/*   Updated: 2024/05/29 18:24:43 by udumas           ###   ########.fr       */
+/*   Updated: 2024/06/25 16:27:54 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ float    **rotation_y(float rad)
     mat[0][2] = sin(rad);
     mat[2][0] = -sin(rad);
     mat[2][2] = cos(rad);
+    print_matrix(mat, 4);
     return (mat);
 }
 

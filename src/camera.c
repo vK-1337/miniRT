@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   camera.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 14:30:46 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/06/13 21:03:00 by udumas           ###   ########.fr       */
+/*   Updated: 2024/06/25 15:24:26 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,7 @@ void render(t_camera *camera, t_world *world, t_win *win)
             unsigned int color_int = color_to_int(color); // Convert color to int
             put_pixel(win, x, y, color_int);
         }
-	
     }
-	
 }
 
 t_camera	*ft_new_camera(float hsize, float vsize, double fov)

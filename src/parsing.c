@@ -6,7 +6,7 @@
 /*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:52 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/06/05 19:31:33 by bainur           ###   ########.fr       */
+/*   Updated: 2024/06/25 15:55:46 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,7 +172,7 @@ int	check_vect_syntax(char *data) // ! OK
 		else if (!ft_isdigit(data[i]) && data[i] != '.' && data[i] != '-'
 			&& data[i] != ',')
 			return (0);
-		else if (ft_isdigit(data[i]) && data[i] != '1' && data[i] != '0')
+		else if (ft_isdigit(data[i]) && data[i] != '1' && data[i] != '0' && data[i-1] != '.')
 			return (0);
 		i++;
 	}
