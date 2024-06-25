@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 10:26:12 by vk                #+#    #+#             */
-/*   Updated: 2024/06/13 21:12:04 by udumas           ###   ########.fr       */
+/*   Updated: 2024/06/25 14:08:16 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ t_win *init_mlx(void)
     return (win);
 }
 
-
 int main(int ac, char **av)
 {
     int fd;
@@ -76,7 +75,7 @@ int main(int ac, char **av)
     }
     fd = open(av[1], O_RDONLY);
     if (fd == -1)
-		return (write(2, "File not found\n", 16), EXIT_FAILURE);
+        return (write(2, "File not found\n", 16), EXIT_FAILURE);
     data = init_all_data(fd);
     printf("Camera hsize = %f\n", data.camera->hsize);
     t_win *win = init_mlx();
@@ -202,15 +201,15 @@ int main(int ac, char **av)
 
 //     t_plan *ceiling = ft_plan();
 //     ceiling->matrix = translation(0, 10, 0);
-//     ceiling->material->color = ft_color(1, 0, 0);  
+//     ceiling->material->color = ft_color(1, 0, 0);
 
 //     t_cylinder *cylinder = ft_cylinder();
 //     cylinder->matrix = translation(0, 0, -5);
 
 //     t_cone *cone = ft_cone();
 //     cone->matrix = translation(-3, 3, 0);
-    
-//     cylinder->material->color = ft_color(1, 0, 0);  
+
+//     cylinder->material->color = ft_color(1, 0, 0);
 //     world->cylinder = &cylinder;
 //     cylinder->next = NULL;
 //     world->cone = &cone;
@@ -275,7 +274,7 @@ int main(int ac, char **av)
 
 //     t_world *world;
 //     world = malloc(sizeof(t_world));
-    // world->light = ft_point_light(ft_init_tuple(0, 5, -10, 1), ft_color(1, 1, 1));
+// world->light = ft_point_light(ft_init_tuple(0, 5, -10, 1), ft_color(1, 1, 1));
 //     world->light->next = ft_point_light(ft_init_tuple(-5, 5, 0, 1), ft_color(1, 1, 1));
 //     world->light->next->next = NULL;
 
@@ -300,15 +299,15 @@ int main(int ac, char **av)
 
 //     t_plan *ceiling = ft_plan();
 //     ceiling->matrix = translation(0, 10, 0);
-//     ceiling->material->color = ft_color(1, 0, 0);  
+//     ceiling->material->color = ft_color(1, 0, 0);
 
 //     t_cylinder *cylinder = ft_cylinder();
 //     cylinder->matrix = translation(0, 0, -5);
 
 //     t_cone *cone = ft_cone();
 //     cone->matrix = translation(-3, 3, 0);
-    
-//     cylinder->material->color = ft_color(1, 0, 0);  
+
+//     cylinder->material->color = ft_color(1, 0, 0);
 //     world->cylinder = &cylinder;
 //     cylinder->next = NULL;
 //     world->cone = &cone;
@@ -355,7 +354,7 @@ int main(int ac, char **av)
 //         printf("Test case %d: ", i);
 //         if (ft_equal_tuple(&calculated_normal, &expected_normal)) {
 //             printf("PASS\n");
-//         } else {
+//         } else {printf("diffuse: %f %f %f\n", diffuse.r, diffuse.g, diffuse.b);
 //             printf("FAIL\n");
 //             printf("Expected normal: (%f, %f, %f)\n", expected_normal.x, expected_normal.y, expected_normal.z);
 //             printf("Calculated normal: (%f, %f, %f)\n", calculated_normal.x, calculated_normal.y, calculated_normal.z);
@@ -385,52 +384,52 @@ int main(int ac, char **av)
 
 //     int shadowed = ft_is_shadowed(world, *point);
 
-//     printf("Shadowed in firs test = %s\n", shadowed ? "True" : "False");
+//     printf("Shadowed in firs test printf("diffuse: %f %f %f\n", diffuse.r, diffuse.g, diffuse.b);
 
-//     point = ft_init_tuple(10, -10, 10, 1);
-//     shadowed = ft_is_shadowed(world, *point);
+  //     point = ft_init_tuple(10, -10, 10, 1);
+  //     shadowed = ft_is_shadowed(world, *point);
 
-//     printf("Shadowed in second test = %s\n", shadowed ? "True" : "False");
+  //     printf("Shadowed in second test = %s\n", shadowed ? "True" : "False");
 
-//     point = ft_init_tuple(-20, 20, -20, 1);
-//     shadowed = ft_is_shadowed(world, *point);
+  //     point = ft_init_tuple(-20, 20, -20, 1);
+  //     shadowed = ft_is_shadowed(world, *point);
 
-//     printf("Shadowed in third test = %s\n", shadowed ? "True" : "False");
+  //     printf("Shadowed in third test = %s\n", shadowed ? "True" : "False");
 
-//     point = ft_init_tuple(-2, 2, -2, 1);
+  //     point = ft_init_tuple(-2, 2, -2, 1);
 
-//     shadowed = ft_is_shadowed(world, *point);
+  //     shadowed = ft_is_shadowed(world, *point);
 
-//     printf("Shadowed in fourth test = %s\n", shadowed ? "True" : "False");
-// }
+  //     printf("Shadowed in fourth test = %s\n", shadowed ? "True" : "False");
+  // }
 
-// int main(void)
-// {
-//     t_world *world = ft_default_world();
+  // int main(void)
+  // {
+  //     t_world *world = ft_default_world();
 
-//     world->light = ft_point_light(ft_init_tuple(0, 0, -10, 1), ft_color(1, 1, 1));
+  //     world->light = ft_point_light(ft_init_tuple(0, 0, -10, 1), ft_color(1, 1, 1));
 
-//     t_sphere *s1 = ft_sphere();
+  //     t_sphere *s1 = ft_sphere();
 
-//     world->sphere = &s1;
+  //     world->sphere = &s1;
 
-//     t_sphere *s2 = ft_sphere();
+  //     t_sphere *s2 = ft_sphere();
 
-//     s2->matrix = translation(0, 0, 10);
+  //     s2->matrix = translation(0, 0, 10);
 
-//     s1->next = s2;
+  //     s1->next = s2;
 
-//     t_ray r = ft_ray(*ft_init_tuple(0, 0, 5, 1), *ft_init_tuple(0, 0, 1, 0));
+  //     t_ray r = ft_ray(*ft_init_tuple(0, 0, 5, 1), *ft_init_tuple(0, 0, 1, 0));
 
-//     t_intersection i = ft_intersection(4, s2);
+  //     t_intersection i = ft_intersection(4, s2);
 
-//     t_comps comps = ft_prepare_computations(&i, r);
+  //     t_comps comps = ft_prepare_computations(&i, r);
 
-//     t_color c = ft_shade_hit(world, &comps);
+  //     t_color c = ft_shade_hit(world, &comps);
 
-//     printf("Color.r = %f\n", c.r);
-//     printf("Color.g = %f\n", c.g);
-//     printf("Color.b = %f\n", c.b);
+  //     printf("Color.r = %f\n", c.r);
+  //     printf("Color.g = %f\n", c.g);
+  //     printf("Color.b = %f\n", c.b);
 
-//     return 0;
-// }
+  //     return 0;
+  // }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   scene.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 11:41:54 by udumas            #+#    #+#             */
-/*   Updated: 2024/06/13 21:07:05 by udumas           ###   ########.fr       */
+/*   Updated: 2024/06/25 15:34:33 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,8 +188,10 @@ t_color ft_shade_hit(t_world *data, t_comps *comps)
 		tmp_color = malloc(sizeof(t_color));
 		in_shadow = ft_is_shadowed(data, comps->over_point);
 		if (comps->plan != NULL)
+		{
 			*tmp_color = ft_lighting(ft_set_pattern(comps, PLAN), *light,
 								comps->over_point, comps->eyev, comps->normalv, in_shadow);
+		}
 		else if (comps->sphere != NULL)
 			*tmp_color = ft_lighting(ft_set_pattern(comps, SPHERE), *light,
 								comps->over_point, comps->eyev, comps->normalv, in_shadow);

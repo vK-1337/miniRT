@@ -6,7 +6,7 @@
 /*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 18:04:20 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/06/15 17:03:20 by bainur           ###   ########.fr       */
+/*   Updated: 2024/06/25 15:32:30 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ t_material	*ft_material(void)
 	color->b = 1;
 	material = malloc(sizeof(t_material));
 	material->color = color;
+	material->ambiant = 0.5;
 	material->ambiant_color = malloc(sizeof(t_color));
 	(*material->ambiant_color) = ft_mult_color((t_color){1,1,1}, 0.1);
 	material->pattern = NULL;
@@ -62,8 +63,11 @@ t_color	ft_lighting(t_material *m, t_light light, t_tuple position,
 	float	light_dot_normal;
 
 	effective_color = ft_mult_color_tog(*m->color, light.colors);
+	effective_color = ft_mult_color_tog(effective_color, light.colors);
 	lightv = ft_normalization(ft_dif_tuple(light.position, position));
-	ambiant = ft_mult_color_tog(effective_color, *m->ambiant_color);
+	ambiant = ft_mult_color(effective_color, m->ambiant);
+	ambiant = ft_sum_color(ambiant, *m->ambiant_color);
+	ambiant = ft_mult_color_tog(*m->color, ambiant);
 	light_dot_normal = ft_dotproduct(lightv, normalv);
 	if (light_dot_normal < 0 || in_shadow)
 	{
@@ -84,9 +88,6 @@ t_color	ft_lighting(t_material *m, t_light light, t_tuple position,
 			specular = ft_mult_color(light.colors, m->specular);
 			specular = ft_mult_color(specular, factor);
 		}
-		printf("diffuse: %f %f %f\n", diffuse.r, diffuse.g, diffuse.b);
-		printf("specular: %f %f %f\n", specular.r, specular.g, specular.b);
-		printf("ambiant: %f %f %f\n", ambiant.r, ambiant.g, ambiant.b);
 	}
 	return (ft_sum_color(ft_sum_color(ambiant, diffuse), specular));
 }
