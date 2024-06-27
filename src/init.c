@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/06/25 16:30:18 by bainur           ###   ########.fr       */
+/*   Updated: 2024/06/27 13:47:27 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,7 @@ int	init_camera(t_world *data, char **data_split)
 	split = ft_split(data_split[2], ',');
 	if (!split)
 		return (free(camera), 0);
-	to = *ft_init_tuple(0, 0, 0, 0);
+	to = *ft_init_tuple(0, 0, 0, 1);
 	up = *ft_init_tuple(atof(split[0]), atof(split[1]), atof(split[2]), 0);
 	camera->matrix = ft_view_transform(from, to, up);
 	free_char_tab(split);
@@ -177,9 +177,9 @@ int	init_light(t_world *data, char **data_split)
 	split = ft_split(data_split[3], ',');
 	if (!split)
 		return (free(light), 0);
-	light->colors.r = ft_atoi(split[0]) / 255.0f * intensity;
-	light->colors.g = ft_atoi(split[1]) / 255.0f * intensity;
-	light->colors.b = ft_atoi(split[2]) / 255.0f * intensity;
+	light->intensity.r = ft_atoi(split[0]) / 255.0f * intensity;
+	light->intensity.g = ft_atoi(split[1]) / 255.0f * intensity;
+	light->intensity.b = ft_atoi(split[2]) / 255.0f * intensity;
 	free_char_tab(split);
 	data->light = light;
 	return (1);
@@ -233,12 +233,13 @@ int	init_plan(t_world *data, char **data_split)
 	t_plan	*plan;
 
 	plan = malloc(sizeof(t_plan));
+	printf("plan = %p\n", plan);
 	if (!plan)
 		return (0);
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return (free(plan), 0);
-	plan->normal = *ft_init_tuple(0,1,0, 0);
+	plan->normal = *ft_init_tuple(0,1,0,0);
 	plan->matrix = identity_matrix(4);
 	plan->matrix = ft_mult_mat(plan->matrix, translation(atof(split[0]),
 				atof(split[1]), atof(split[2])));

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   light.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 18:04:20 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/06/25 15:32:30 by bainur           ###   ########.fr       */
+/*   Updated: 2024/06/27 14:26:38 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,14 @@ t_color	ft_lighting(t_material *m, t_light light, t_tuple position,
 	float	reflect_dot_eye;
 	float	light_dot_normal;
 
-	effective_color = ft_mult_color_tog(*m->color, light.colors);
-	effective_color = ft_mult_color_tog(effective_color, light.colors);
+	effective_color = ft_mult_color_tog(*m->color, light.intensity);
+	// printf("effective_color: %f %f %f\n", effective_color.r, effective_color.g, effective_color.b);
+	// printf("effective_color: %f %f %f\n", effective_color.r, effective_color.g, effective_color.b);
 	lightv = ft_normalization(ft_dif_tuple(light.position, position));
+	// printf("m->ambiant: %f\n", m->ambiant);
 	ambiant = ft_mult_color(effective_color, m->ambiant);
-	ambiant = ft_sum_color(ambiant, *m->ambiant_color);
+	// printf("ambiant: %f %f %f\n", ambiant.r, ambiant.g, ambiant.b);
+	ambiant = *m->ambiant_color;
 	ambiant = ft_mult_color_tog(*m->color, ambiant);
 	light_dot_normal = ft_dotproduct(lightv, normalv);
 	if (light_dot_normal < 0 || in_shadow)
@@ -78,6 +81,7 @@ t_color	ft_lighting(t_material *m, t_light light, t_tuple position,
 	{
 		diffuse = ft_mult_color(effective_color, m->diffuse);
 		diffuse = ft_mult_color(diffuse, light_dot_normal);
+		// printf("diffuse: %f %f %f\n", diffuse.r, diffuse.g, diffuse.b);
 		reflectv = ft_reflect(ft_neg_tuple(lightv), normalv);
 		reflect_dot_eye = ft_dotproduct(reflectv, eyev);
 		if (reflect_dot_eye <= 0)
