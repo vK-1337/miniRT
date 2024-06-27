@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 10:26:12 by vk                #+#    #+#             */
-/*   Updated: 2024/06/25 14:08:16 by bainur           ###   ########.fr       */
+/*   Updated: 2024/06/27 14:49:50 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ int main(int ac, char **av)
     if (fd == -1)
         return (write(2, "File not found\n", 16), EXIT_FAILURE);
     data = init_all_data(fd);
-    printf("Camera hsize = %f\n", data.camera->hsize);
     t_win *win = init_mlx();
     render(data.camera, &data, win);
     mlx_put_image_to_window(win->mlx, win->win, win->img, 0, 0);
@@ -136,7 +135,9 @@ int main(int ac, char **av)
 //     printf("Color.g = %f\n", c.g);
 //     printf("Color.b = %f\n", c.b);
 //     return 0;
-// }int main(void) // Programme pour modeliser spheres avec scene
+
+
+// int main(void) // Programme pour modeliser spheres avec scene
 // {
 //     // t_sphere *floor = ft_sphere();
 //     // floor->matrix = scaling(10, 0.01, 10);
@@ -179,7 +180,10 @@ int main(int ac, char **av)
 
 //     t_world *world;
 //     world = malloc(sizeof(t_world));
-//     world->light = ft_point_light(ft_init_tuple(0, 5, -10, 1), ft_color(1, 1, 1));
+//     world->light = ft_point_light(ft_init_tuple(0, 9, -10, 1), ft_color(1, 1, 1));
+//     printf("light\n");
+//     printf("light->position: %f %f %f\n", world->light->position.x, world->light->position.y, world->light->position.z);
+//     printf("light->intensity: %f %f %f\n", world->light->intensity.r, world->light->intensity.g, world->light->intensity.b);
 //     world->sphere = &middle;
 //     middle->next = right;
 //     right->next = left;
@@ -202,6 +206,9 @@ int main(int ac, char **av)
 //     t_plan *ceiling = ft_plan();
 //     ceiling->matrix = translation(0, 10, 0);
 //     ceiling->material->color = ft_color(1, 0, 0);
+//     printf("ceiling\n");
+//     print_matrix(ceiling->matrix, 4);
+//     printf("\n");
 
 //     t_cylinder *cylinder = ft_cylinder();
 //     cylinder->matrix = translation(0, 0, -5);
@@ -220,9 +227,9 @@ int main(int ac, char **av)
 //     ceiling->next = left_wall;
 //     left_wall->next = right_wall;
 //     right_wall->next = NULL;
-//     t_camera camera = ft_new_camera(SIZE_X, SIZE_Y, M_PI / 2);
+//     t_camera camera = *ft_new_camera(SIZE_X, SIZE_Y, M_PI / 2);
 //     world->camera = &camera;
-//     world->camera->matrix = ft_view_transform(*ft_init_tuple(0, 7, -8, 1), *ft_init_tuple(0, 0, 0, 1), *ft_init_tuple(0, 1, 0, 0));
+//     world->camera->matrix = ft_view_transform(*ft_init_tuple(0, 5, -15, 1), *ft_init_tuple(0, 0, 0, 1), *ft_init_tuple(0, 1, 0, 0));
 
 //     t_win *win = init_mlx();
 
@@ -318,7 +325,7 @@ int main(int ac, char **av)
 //     ceiling->next = left_wall;
 //     left_wall->next = right_wall;
 //     right_wall->next = NULL;
-//     t_camera camera = ft_new_camera(SIZE_X, SIZE_Y, M_PI / 2);
+//     t_camera camera = *ft_new_camera(SIZE_X, SIZE_Y, M_PI / 2);
 //     world->camera = &camera;
 //    world->camera->matrix = ft_view_transform(*ft_init_tuple(0, 7, -50, 1), *ft_init_tuple(0, 0, 0, 1), *ft_init_tuple(0, 1, 0, 0));
 
