@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   scene.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 11:41:54 by udumas            #+#    #+#             */
-/*   Updated: 2024/06/25 15:34:33 by bainur           ###   ########.fr       */
+/*   Updated: 2024/06/27 14:52:03 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void ft_sphere_intersections(t_intersection **t_tab, t_sphere **sphere,
 
 	if (*sphere == NULL)
 		return;
+	printf("sphere\n");
 	new_ray = ray_transform(ray, ft_inversion((*sphere)->matrix, 4));
 	dis = ft_discriminant(new_ray, *sphere);
 	if (dis.result < 0)
@@ -246,6 +247,7 @@ float **ft_view_transform(t_tuple from, t_tuple to, t_tuple up)
 	orientation[2][2] = -forward.z;
 	orientation = ft_mult_mat(orientation, translation(-from.x, -from.y,
 													   -from.z));
+	print_matrix(orientation, 4);
 	return (orientation);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rays.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 09:54:05 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/06/07 21:38:57 by bainur           ###   ########.fr       */
+/*   Updated: 2024/06/27 14:51:32 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,6 @@ t_intersection	*ft_hit(t_intersection *intersections, int count)
 		return (NULL);
 	while (i < count && intersections)
 	{
-		
 		if (intersections[i].t > 0.01)
 			return (&intersections[i]);
 		i++;
