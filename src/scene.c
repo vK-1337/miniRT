@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   scene.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 11:41:54 by udumas            #+#    #+#             */
-/*   Updated: 2024/06/27 14:52:03 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/03 17:38:14 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ void ft_sphere_intersections(t_intersection **t_tab, t_sphere **sphere,
 
 	if (*sphere == NULL)
 		return;
-	printf("sphere\n");
 	new_ray = ray_transform(ray, ft_inversion((*sphere)->matrix, 4));
 	dis = ft_discriminant(new_ray, *sphere);
 	if (dis.result < 0)
@@ -65,7 +64,7 @@ void ft_sphere_intersections(t_intersection **t_tab, t_sphere **sphere,
 	*sphere = (*sphere)->next;
 }
 
-t_intersection *ft_intersect_world(t_ray ray, t_world **data)
+t_intersection * ft_intersect_world(t_ray ray, t_world **data)
 {
 	t_intersection *t_tab;
 	int count;
@@ -98,8 +97,9 @@ t_intersection *ft_intersect_world(t_ray ray, t_world **data)
 	{
 		ft_plan_intersect(&t_tab, &plan, ray, &count);
 		ft_sphere_intersections(&t_tab, &sphere, ray, &count);
-		ft_cylinder_caps_intersect(&t_tab, &cylinder, ray, &count);
+		
 		ft_cylinder_intersect(&t_tab, &cylinder, ray, &count);
+		ft_cylinder_caps_intersect(&t_tab, &cylinder, ray, &count);
 		ft_cone_intersect(&t_tab, &cone, ray, &count);
 	}
 	ft_sort_intersections(t_tab, count);
@@ -197,8 +197,10 @@ t_color ft_shade_hit(t_world *data, t_comps *comps)
 			*tmp_color = ft_lighting(ft_set_pattern(comps, SPHERE), *light,
 								comps->over_point, comps->eyev, comps->normalv, in_shadow);
 		else if (comps->cylinder != NULL)
+		{
 			*tmp_color = ft_lighting(ft_set_pattern(comps, CYLINDER), *light,
 								comps->over_point, comps->eyev, comps->normalv, in_shadow);
+		}
 		else if (comps->cone != NULL)
 			*tmp_color = ft_lighting(ft_set_pattern(comps, CONE), *light,
 								comps->over_point, comps->eyev, comps->normalv, in_shadow);
@@ -247,7 +249,6 @@ float **ft_view_transform(t_tuple from, t_tuple to, t_tuple up)
 	orientation[2][2] = -forward.z;
 	orientation = ft_mult_mat(orientation, translation(-from.x, -from.y,
 													   -from.z));
-	print_matrix(orientation, 4);
 	return (orientation);
 }
 

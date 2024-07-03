@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cylinder.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 19:02:29 by bainur            #+#    #+#             */
-/*   Updated: 2024/06/13 13:42:21 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/02 16:42:06 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,21 +22,14 @@ void ft_cylinder_intersect(t_intersection **t_tab, t_cylinder **cylinder, t_ray 
     if (*cylinder == NULL)
         return;
     new_ray = ray_transform(ray, ft_inversion((*cylinder)->matrix, 4));
-   
     tab[0] = pow(new_ray.direction.x, 2) + pow(new_ray.direction.z, 2);
     if (fabsf(tab[0]) < EPSILON)
-    {
-        *cylinder = (*cylinder)->next;
         return;
-    }
     tab[1] = 2 * new_ray.origin.x * new_ray.direction.x + 2 * new_ray.origin.z * new_ray.direction.z;
     tab[2] = pow(new_ray.origin.x, 2) + pow(new_ray.origin.z, 2) - pow((*cylinder)->radius, 2);
     tab[3] = pow(tab[1], 2) - 4 * tab[0] * tab[2];
     if (tab[3] < 0)
-    {
-        *cylinder = (*cylinder)->next;
         return;
-    }
     t.t = (-tab[1] - sqrt(tab[3])) / (2 * tab[0]);
     t.cylinder = *cylinder;
     t.plan = NULL;
@@ -54,7 +47,6 @@ void ft_cylinder_intersect(t_intersection **t_tab, t_cylinder **cylinder, t_ray 
         *count += 1;
         *t_tab = ft_add_one_t(*t_tab, t, *count);
     }
-    *cylinder = (*cylinder)->next;
 }
 
 int ft_check_caps(t_ray ray, float t, float radius)
@@ -64,7 +56,7 @@ int ft_check_caps(t_ray ray, float t, float radius)
 
     x = ray.origin.x + t * ray.direction.x;
     z = ray.origin.z + t * ray.direction.z;
-    if (fabsf(x * x + z * z) > radius)
+    if (fabsf(x * x + z * z) > radius * radius)
         return (0);
     else
         return (1);
@@ -81,7 +73,10 @@ void ft_cylinder_caps_intersect(t_intersection **t_tab, t_cylinder **cylinder, t
         return;
     new_ray = ray_transform(ray, ft_inversion((*cylinder)->matrix, 4));
     if (fabsf(new_ray.direction.y) < EPSILON)
+    {
+        *cylinder = (*cylinder)->next;
         return;
+    }
     t0 = ((*cylinder)->y_min - new_ray.origin.y) / new_ray.direction.y;
     if (ft_check_caps(new_ray, t0, (*cylinder)->radius))
     {
@@ -104,6 +99,7 @@ void ft_cylinder_caps_intersect(t_intersection **t_tab, t_cylinder **cylinder, t
         *count += 1;
         *t_tab = ft_add_one_t(*t_tab, t, *count);
     }
+    *cylinder = (*cylinder)->next;
 }
 
 t_cylinder *ft_cylinder(void)

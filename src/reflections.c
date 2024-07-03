@@ -6,7 +6,7 @@
 /*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:42:34 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/06/25 15:31:04 by bainur           ###   ########.fr       */
+/*   Updated: 2024/07/02 17:29:47 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,34 +37,34 @@ t_tuple ft_normal_at(t_comps object, t_tuple world_point)
     }
     else if (object.type == CYLINDER)
     {
-        matrix = object.cylinder->matrix;   
+        matrix = object.cylinder->matrix;
         object_point = ft_mult_matrix_tuple(ft_inversion(matrix, 4), world_point);
         float dist = object_point.x * object_point.x + object_point.z * object_point.z;
-        if (dist < 1 && (object_point.y >= (object.cylinder->y_max - EPSILON)))
+        if (dist < pow(object.cylinder->radius, 2) && (object_point.y >= (object.cylinder->y_max - EPSILON)))
             object_normal = *ft_init_tuple(0, 1, 0, 0);
-        else if (dist < 1 && (object_point.y <= (object.cylinder->y_min + EPSILON)))
+        else if (dist < pow(object.cylinder->radius, 2) && (object_point.y <= (object.cylinder->y_min + EPSILON)))
             object_normal = *ft_init_tuple(0, -1, 0, 0);
         else
             object_normal = *ft_init_tuple(object_point.x, 0, object_point.z, 0);
     }
     else if (object.type == CONE)
     {
-       matrix = object.cone->matrix;
-       object_point = ft_mult_matrix_tuple(ft_inversion(matrix, 4), world_point);
-       float dist = object_point.x * object_point.x + object_point.z * object_point.z;
-       float y = sqrt(dist);
-        if (dist < 1 && (object_point.y >= (object.cone->y_max - EPSILON)))
-              object_normal = *ft_init_tuple(0, 1, 0, 0);
-         else if (dist < 1 && (object_point.y <= (object.cone->y_min + EPSILON)))
-              object_normal = *ft_init_tuple(0, -1, 0, 0);
-         else
-         {
+        matrix = object.cone->matrix;
+        object_point = ft_mult_matrix_tuple(ft_inversion(matrix, 4), world_point);
+        float dist = object_point.x * object_point.x + object_point.z * object_point.z;
+        float y = sqrt(dist);
+        if (dist < pow(object.cone->radius, 2) && (object_point.y >= (object.cone->y_max - EPSILON)))
+            object_normal = *ft_init_tuple(0, 1, 0, 0);
+        else if (dist < pow(object.cone->radius, 2) && (object_point.y <= (object.cone->y_min + EPSILON)))
+            object_normal = *ft_init_tuple(0, -1, 0, 0);
+        else
+        {
             if (object_point.y > 0)
             {
                 object_normal.y = -y;
             }
             else
-              object_normal.y = y;
+                object_normal.y = y;
             object_normal.x = object_point.x;
             object_normal.z = object_point.z;
         }
@@ -75,7 +75,7 @@ t_tuple ft_normal_at(t_comps object, t_tuple world_point)
         matrix = identity_matrix(4);
     }
     world_normal = ft_mult_matrix_tuple(ft_transpose(ft_inversion(matrix, 4)), object_normal);
-    
+
     world_normal.w = 0;
     return (ft_normalization(world_normal));
 }

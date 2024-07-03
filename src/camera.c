@@ -3,32 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   camera.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 14:30:46 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/06/27 09:27:37 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/03 23:12:17 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
 
-void render(t_camera *camera, t_world *world, t_win *win)
+void *render(void *thread_)
 {
-    for (int y = 0; y < camera->vsize; y++)
-    {
-        for (int x = 0; x < camera->hsize; x++)
-        {
-	     t_ray ray = ray_for_pixel(camera, x, y);
-            t_color color = ft_color_at(world, ray);
-            unsigned int color_int = color_to_int(color); // Convert color to int
-            put_pixel(win, x, y, color_int);
-        }
-    }
+	t_thread *thread = thread_;
+	t_camera *camera = thread->data->camera;
+	t_win *win = thread->win;
+	t_world *data = thread->data;
+
+	for (int y = thread->start_y; y < thread->end_y; y++)
+	{
+		for (int x = thread->start_x; x < thread->end_x; x++)
+		{
+			t_ray ray = ray_for_pixel(camera, x, y);
+			t_color color = ft_color_at(data, ray);
+			unsigned int color_int = color_to_int(color); // Convert color to int
+			pthread_mutex_lock(data->pixel_put);
+			put_pixel(win, x, y, color_int);
+			pthread_mutex_unlock(data->pixel_put);
+		}
+	}
+	return (NULL);
 }
 
-t_camera	*ft_new_camera(float hsize, float vsize, double fov)
+t_camera *ft_new_camera(float hsize, float vsize, double fov)
 {
-	t_camera	*camera;
+	t_camera *camera;
 
 	camera = malloc(sizeof(t_camera));
 	camera->hsize = hsize;
@@ -39,10 +47,10 @@ t_camera	*ft_new_camera(float hsize, float vsize, double fov)
 	return (camera);
 }
 
-float	compute_pixel_size(t_camera *camera)
+float compute_pixel_size(t_camera *camera)
 {
-	double	half_view;
-	double	aspect;
+	double half_view;
+	double aspect;
 
 	half_view = tan(camera->fov / 2);
 	aspect = camera->hsize / camera->vsize;
@@ -59,17 +67,22 @@ float	compute_pixel_size(t_camera *camera)
 	return ((camera->half_width * 2) / camera->hsize);
 }
 
-t_ray	ray_for_pixel(t_camera *camera, int px, int py)
+t_ray ray_for_pixel(t_camera *camera, int px, int py)
 {
-	double	xoffset;
-	double	yoffset;
-	double	world_x;
-	double	world_y;
-	t_tuple	pixel;
-	t_tuple	origin;
-	t_tuple	direction;
-	t_tuple	*tmp_comput;
+	double xoffset;
+	double yoffset;
+	double world_x;
+	double world_y;
+	t_tuple pixel;
+	t_tuple origin;
+	t_tuple direction;
+	t_tuple *tmp_comput;
 
+	// printf("px: %d py: %d\n", px, py);
+	// printf("camera->pixel_size: %f\n", camera->pixel_size);
+	// printf("camera->half_width: %f\n", camera->half_width);
+	// printf("camera->half_height: %f\n", camera->half_height);
+	// print_matrix(camera->matrix, 4);
 	xoffset = (px + 0.5) * camera->pixel_size;
 	yoffset = (py + 0.5) * camera->pixel_size;
 	world_x = camera->half_width - xoffset;
@@ -79,5 +92,8 @@ t_ray	ray_for_pixel(t_camera *camera, int px, int py)
 	tmp_comput = ft_init_tuple(0, 0, 0, 1);
 	origin = ft_mult_mat_tuple(tmp_comput, ft_inversion(camera->matrix, 4));
 	direction = ft_normalization(ft_dif_tuple(pixel, origin));
+	// printf("origin: %f %f %f\n", origin.x, origin.y, origin.z);
+	// printf("direction: %f %f %f\n", direction.x, direction.y, direction.z);
+	// printf("\n");
 	return (ft_ray(origin, direction));
 }

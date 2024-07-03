@@ -6,7 +6,7 @@
 /*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 18:04:20 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/06/28 11:45:37 by bainur           ###   ########.fr       */
+/*   Updated: 2024/07/02 15:56:36 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,7 @@ t_color	ft_lighting(t_material *m, t_light light, t_tuple position,
 	float	light_dot_normal;
 
 	effective_color = ft_mult_color_tog(*m->color, light.intensity);
-	// printf("effective_color: %f %f %f\n", effective_color.r, effective_color.g, effective_color.b);
-	// printf("effective_color: %f %f %f\n", effective_color.r, effective_color.g, effective_color.b);
 	lightv = ft_normalization(ft_dif_tuple(light.position, position));
-	// printf("m->ambiant: %f\n", m->ambiant);
-	ambiant = ft_mult_color(effective_color, m->ambiant);
-	// printf("ambiant: %f %f %f\n", ambiant.r, ambiant.g, ambiant.b);
 	ambiant = *m->ambiant_color;
 	ambiant = ft_mult_color_tog(*m->color, ambiant);
 	light_dot_normal = ft_dotproduct(lightv, normalv);
@@ -81,7 +76,6 @@ t_color	ft_lighting(t_material *m, t_light light, t_tuple position,
 	{
 		diffuse = ft_mult_color(effective_color, m->diffuse);
 		diffuse = ft_mult_color(diffuse, light_dot_normal);
-		// printf("diffuse: %f %f %f\n", diffuse.r, diffuse.g, diffuse.b);
 		reflectv = ft_reflect(ft_neg_tuple(lightv), normalv);
 		reflect_dot_eye = ft_dotproduct(reflectv, eyev);
 		if (reflect_dot_eye <= 0)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rays.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 09:54:05 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/06/27 14:51:32 by udumas           ###   ########.fr       */
+/*   Updated: 2024/06/28 16:48:35 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,11 +114,8 @@ void	ft_sort_intersections(t_intersection *intersections, int count)
 	while (i < count)
 	{
 		j = i + 1;
-		//printf("intersection[%d].t = %f\n", i, intersections[i].t);
 		while (j < count)
 		{
-			
-			//printf("intersection[%d].t = %f\n", j, intersections[j].t);
 			if (intersections[i].t > intersections[j].t)
 			{
 				tmp = intersections[i];

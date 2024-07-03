@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shadows.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 10:43:44 by vk                #+#    #+#             */
-/*   Updated: 2024/06/27 14:50:10 by udumas           ###   ########.fr       */
+/*   Updated: 2024/06/28 15:45:50 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,15 @@ int	ft_is_shadowed(t_world *world, t_tuple point)
 	r = ft_ray(point, direction);
 	intersections = ft_intersect_world(r, &world);
 	hit = ft_hit(intersections, intersections->count);
-	if (!hit)
-	{
-		printf("hit is null\n");
-	}
-	printf("hit->t = %f\n", hit->t);
-	printf("distance = %f\n", distance);
-	if (hit && hit->t < distance)
+	// if (hit != NULL)
+	// {
+	// 	printf("hit->t: %f\n", hit->t);
+	// }
+	// else
+	// {
+	// 	printf("hit is NULL\n");
+	// }
+	if (hit && hit->t + EPSILON < distance)
 		return (1);
     else
 	    return (0);

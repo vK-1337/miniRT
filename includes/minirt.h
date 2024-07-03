@@ -6,7 +6,7 @@
 /*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/06/25 15:12:55 by bainur           ###   ########.fr       */
+/*   Updated: 2024/07/04 00:02:15 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 #endif
 #define EPSILON 0.001
 #define INFINITY 1e10
-#define SIZE_X 500
-#define SIZE_Y 500
+#define SIZE_X 700
+#define SIZE_Y 700
 #define CENTER_X SIZE_X / 2
 #define CENTER_Y SIZE_Y / 2
 #define SPHERE 0
@@ -39,14 +39,17 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <wait.h>
+#include <pthread.h>
 
 /******************************************************************************/
-/*                                                                            */
+/*                                   50:21 / 1:33:17                                         */
 /*                                                                            */
 /*                              STRUCT & ENUM                                 */
 /*                                                                            */
 /*                                                                            */
 /******************************************************************************/
+
+
 
 typedef enum e_dtype
 {
@@ -225,6 +228,7 @@ typedef struct s_world
 	t_plan **plan;
 	t_cylinder **cylinder;
 	t_cone **cone;
+	pthread_mutex_t *pixel_put;
 	int counter[6];
 } t_world;
 
@@ -238,6 +242,26 @@ typedef struct s_win
 	int line_length;
 	int endian;
 } t_win;
+
+typedef struct s_thread
+{
+	pthread_t pthread_id;
+	int start_x;
+	int start_y;
+	int end_x;
+	int end_y;
+	int index;
+	t_world *data;
+	t_win *win;
+} t_thread;
+typedef struct s_complete
+{
+	t_world *data;
+	t_win *win;
+	t_thread *thread;
+} t_complete;
+
+
 
 void print_char_tab(char **tab);
 /******************************************************************************/
@@ -447,7 +471,7 @@ unsigned int color_to_int(t_color color);
 t_camera *ft_new_camera(float hsize, float vsize, double fov);
 float compute_pixel_size(t_camera *camera);
 t_ray ray_for_pixel(t_camera *camera, int px, int py);
-void render(t_camera *camera, t_world *world, t_win *win);
+void *render(void	*world);
 
 /******************************************************************************/
 /*                                                                            */

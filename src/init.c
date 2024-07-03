@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/06/27 13:47:27 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/02 17:43:47 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,10 @@ t_world	init_all_data(int fd)
 	{
 		free(file_data);
 		file_data = get_next_line(fd, 0);
-		printf("file_data = %s\n", file_data);
 		if (file_data && file_data[0] == '\n')
 			continue ;
 		if (init_corresponding_data(file_data, &data) == 2)
 		{
-			printf("file_data = %s\n", file_data);
 			get_next_line(fd, 1);
 			free_data(&data);
 			free(file_data);
@@ -152,6 +150,16 @@ int	init_camera(t_world *data, char **data_split)
 	to = *ft_init_tuple(0, 0, 0, 1);
 	up = *ft_init_tuple(atof(split[0]), atof(split[1]), atof(split[2]), 0);
 	camera->matrix = ft_view_transform(from, to, up);
+	// printf("camera->matrix:\n");
+	// print_matrix(camera->matrix, 4);
+	// printf("\n");
+	// printf("camera->pixel_size: %f\n", camera->pixel_size);
+	// printf("camera->half_width: %f\n", camera->half_width);
+	// printf("camera->half_height: %f\n", camera->half_height);
+	// printf("camera->hsize: %f\n", camera->hsize);
+	// printf("camera->vsize: %f\n", camera->vsize);
+	// printf("camera->fov: %f\n", camera->fov);
+	// printf("vector: %f, %f, %f\n", camera->matrix[0][0], camera->matrix[0][1], camera->matrix[0][2]);
 	free_char_tab(split);
 	data->camera = camera;
 	return (1);
@@ -172,6 +180,7 @@ int	init_light(t_world *data, char **data_split)
 	light->position.x = atof(split[0]);
 	light->position.y = atof(split[1]);
 	light->position.z = atof(split[2]);
+	light->position.w = 1;
 	free_char_tab(split);
 	intensity = atof(data_split[2]);
 	split = ft_split(data_split[3], ',');
@@ -180,6 +189,8 @@ int	init_light(t_world *data, char **data_split)
 	light->intensity.r = ft_atoi(split[0]) / 255.0f * intensity;
 	light->intensity.g = ft_atoi(split[1]) / 255.0f * intensity;
 	light->intensity.b = ft_atoi(split[2]) / 255.0f * intensity;
+	printf("light->intensity.r: %f, light->intensity.g: %f, light->intensity.b: %f\n", light->intensity.r, light->intensity.g, light->intensity.b);
+	printf("light->position.x: %f, light->position.y: %f, light->position.z: %f\n", light->position.x, light->position.y, light->position.z);
 	free_char_tab(split);
 	data->light = light;
 	return (1);
@@ -233,7 +244,6 @@ int	init_plan(t_world *data, char **data_split)
 	t_plan	*plan;
 
 	plan = malloc(sizeof(t_plan));
-	printf("plan = %p\n", plan);
 	if (!plan)
 		return (0);
 	split = ft_split(data_split[1], ',');
@@ -250,7 +260,6 @@ int	init_plan(t_world *data, char **data_split)
 	plan->matrix = ft_mult_mat(plan->matrix, rotation_x(atof(split[0]) * M_PI));
 	plan->matrix = ft_mult_mat(plan->matrix, rotation_y(atof(split[1]) * M_PI));
 	plan->matrix = ft_mult_mat(plan->matrix, rotation_z(atof(split[2]) * M_PI));
-	print_matrix(plan->matrix, 4);
 	free_char_tab(split);
 	split = ft_split(data_split[3], ',');
 	if (!split)
@@ -303,8 +312,8 @@ int	init_cylinder(t_world *data, char **data_split)
 	cylinder->matrix = ft_mult_mat(cylinder->matrix, rotation_z(atoi(split[2])
 				* M_PI));
 	cylinder->radius = atof(data_split[3]) / 2;
-	cylinder->y_max = atof(data_split[4]) / 2 + cylinder->coord.y;
-	cylinder->y_min = -atof(data_split[4]) / 2 + cylinder->coord.y;
+	cylinder->y_max = atof(data_split[4]) + cylinder->coord.y;
+	cylinder->y_min = cylinder->coord.y;
 	free_char_tab(split);
 	split = ft_split(data_split[5], ',');
 	if (!split)
