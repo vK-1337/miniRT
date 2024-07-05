@@ -47,7 +47,7 @@ SRC_FUNCTIONS_F	= main color_calculation tuple_calculations tuple_calculations2 
 					matrix_calcul matrix_deter_cofac matrix_utils matrix_utils2 utils init \
 					parsing get_next_line get_next_line_utils cylinder_lst sphere_lst plan_lst \
 					reflections light tuple_init scene matrix_transformation matrix_transformation2\
-					camera shadows plan colors cylinder cone\
+					camera shadows plan colors cylinder cone cone_lst\
 
 FRACT_SRC		= $(addprefix $(SRC_DIR_F), $(addsuffix .c, $(SRC_FUNCTIONS_F)))
 FRACT_OBJ		= $(addprefix $(OBJ_DIR_F), $(addsuffix .o, $(SRC_FUNCTIONS_F)))

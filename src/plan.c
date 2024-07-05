@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 19:15:10 by udumas            #+#    #+#             */
-/*   Updated: 2024/06/27 14:51:50 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/04 16:04:32 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void ft_plan_intersect(t_intersection **t_tab, t_plan **plan, t_ray ray, int *co
     
     if (!*plan)
         return ;
-    printf("plan\n");
     new_ray = ray_transform(ray, ft_inversion((*plan)->matrix, 4));
     if (fabsf(new_ray.direction.y) < EPSILON)
     {

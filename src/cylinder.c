@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 19:02:29 by bainur            #+#    #+#             */
-/*   Updated: 2024/06/13 13:42:21 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/04 15:33:53 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void ft_cylinder_intersect(t_intersection **t_tab, t_cylinder **cylinder, t_ray 
     if (*cylinder == NULL)
         return;
     new_ray = ray_transform(ray, ft_inversion((*cylinder)->matrix, 4));
-   
     tab[0] = pow(new_ray.direction.x, 2) + pow(new_ray.direction.z, 2);
     if (fabsf(tab[0]) < EPSILON)
     {

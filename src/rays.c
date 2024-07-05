@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 09:54:05 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/06/27 14:51:32 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/04 18:51:18 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ t_discriminant	ft_discriminant(t_ray ray, t_sphere *sphere)
 	t_discriminant	dis;
 	t_tuple			sphere_to_ray;
 
+	dis = (t_discriminant){0, 0, 0, 0};
 	sphere_to_ray = ft_dif_tuple(ray.origin, sphere->center);
 	dis.a = ft_dotproduct(ray.direction, ray.direction);
 	dis.b = 2 * ft_dotproduct(ray.direction, sphere_to_ray);
@@ -152,23 +153,33 @@ t_ray	ray_transform(t_ray ray, float **matrix)
 {
 	t_ray	new_ray;
 
-	new_ray.direction = ft_mult_matrix_tuple(matrix, ray.direction);
-	new_ray.origin = ft_mult_matrix_tuple(matrix, ray.origin);
+	new_ray.direction = ft_mult_matrix_tuple(matrix, &ray.direction, 4);
+	new_ray.origin = ft_mult_matrix_tuple(matrix, &ray.origin, 4);
+	ft_free_mat(matrix, 4);
 	return (new_ray);
 }
 
-t_tuple	ft_mult_matrix_tuple(float **matrix, t_tuple tuple)
+t_tuple	ft_mult_matrix_tuple(float **matrix, t_tuple *tuple, int free_id)
 {
 	t_tuple	new_tuple;
 
-	new_tuple.x = matrix[0][0] * tuple.x + matrix[0][1] * tuple.y + matrix[0][2]
-		* tuple.z + matrix[0][3] * tuple.w;
-	new_tuple.y = matrix[1][0] * tuple.x + matrix[1][1] * tuple.y + matrix[1][2]
-		* tuple.z + matrix[1][3] * tuple.w;
-	new_tuple.z = matrix[2][0] * tuple.x + matrix[2][1] * tuple.y + matrix[2][2]
-		* tuple.z + matrix[2][3] * tuple.w;
-	new_tuple.w = matrix[3][0] * tuple.x + matrix[3][1] * tuple.y + matrix[3][2]
-		* tuple.z + matrix[3][3] * tuple.w;
+	new_tuple.x = matrix[0][0] * tuple->x + matrix[0][1] * tuple->y + matrix[0][2]
+		* tuple->z + matrix[0][3] * tuple->w;
+	new_tuple.y = matrix[1][0] * tuple->x + matrix[1][1] * tuple->y + matrix[1][2]
+		* tuple->z + matrix[1][3] * tuple->w;
+	new_tuple.z = matrix[2][0] * tuple->x + matrix[2][1] * tuple->y + matrix[2][2]
+		* tuple->z + matrix[2][3] * tuple->w;
+	new_tuple.w = matrix[3][0] * tuple->x + matrix[3][1] * tuple->y + matrix[3][2]
+		* tuple->z + matrix[3][3] * tuple->w;
+	if (free_id == FIRST)
+		ft_free_mat(matrix, 4);
+	if (free_id == SECOND)
+		free(tuple);
+	else if (free_id == ALL)
+	{
+		ft_free_mat(matrix, 4);
+		free(tuple);
+	}
 	return (new_tuple);
 }
 void	set_transform(t_sphere *sphere, float **matrix)
