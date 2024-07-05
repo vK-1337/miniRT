@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 11:41:54 by udumas            #+#    #+#             */
-/*   Updated: 2024/06/27 14:52:03 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/04 18:57:35 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ void ft_sphere_intersections(t_intersection **t_tab, t_sphere **sphere,
 
 	if (*sphere == NULL)
 		return;
-	printf("sphere\n");
 	new_ray = ray_transform(ray, ft_inversion((*sphere)->matrix, 4));
 	dis = ft_discriminant(new_ray, *sphere);
 	if (dis.result < 0)
@@ -112,15 +111,13 @@ t_comps ft_prepare_computations(t_intersection *i, t_ray ray)
 
 	if (i == NULL)
 	{
-		printf("Error: Intersection is NULL\n");
 		comps.t = 0;
 		comps.sphere = NULL;
 		comps.plan = NULL;
-		comps.point = *ft_init_tuple(0, 0, 0, 0);
-		comps.point = *ft_init_tuple(0, 0, 0, 0);
-		comps.eyev = *ft_init_tuple(0, 0, 0, 0);
-		comps.normalv = *ft_init_tuple(0, 0, 0, 0);
-		comps.over_point = *ft_init_tuple(0, 0, 0, 0);
+		comps.point = (t_tuple){0, 0, 0, 0};
+		comps.eyev = (t_tuple){0, 0, 0, 0};
+		comps.normalv = (t_tuple){0, 0, 0, 0};
+		comps.over_point = (t_tuple){0, 0, 0, 0};
 		comps.inside = 0;
 		return (comps);
 	}
@@ -178,38 +175,21 @@ t_comps ft_prepare_computations(t_intersection *i, t_ray ray)
 t_color ft_shade_hit(t_world *data, t_comps *comps)
 {
 	int in_shadow;
-	t_color *color;
-	t_color *tmp_color;
-	t_light *light;
 
-	light = data->light;
-	color = ft_color(0, 0, 0);
-	while (light != NULL)
-	{
-		tmp_color = malloc(sizeof(t_color));
-		in_shadow = ft_is_shadowed(data, comps->over_point);
-		if (comps->plan != NULL)
-		{
-			*tmp_color = ft_lighting(ft_set_pattern(comps, PLAN), *light,
-								comps->over_point, comps->eyev, comps->normalv, in_shadow);
-		}
-		else if (comps->sphere != NULL)
-			*tmp_color = ft_lighting(ft_set_pattern(comps, SPHERE), *light,
-								comps->over_point, comps->eyev, comps->normalv, in_shadow);
-		else if (comps->cylinder != NULL)
-			*tmp_color = ft_lighting(ft_set_pattern(comps, CYLINDER), *light,
-								comps->over_point, comps->eyev, comps->normalv, in_shadow);
-		else if (comps->cone != NULL)
-			*tmp_color = ft_lighting(ft_set_pattern(comps, CONE), *light,
-								comps->over_point, comps->eyev, comps->normalv, in_shadow);
-		else
-			tmp_color = ft_color(0, 0, 0);
-		*color = ft_sum_color(*color, *tmp_color);
-		free(tmp_color);
-		light = light->next;
-	}
-	return (*color);
-
+	in_shadow = ft_is_shadowed(data, comps->over_point);
+	if (comps->plan != NULL)
+		return (ft_lighting(ft_set_pattern(comps, PLAN), *data->light,
+							comps->over_point, comps->eyev, comps->normalv, in_shadow));
+	else if (comps->sphere != NULL)
+		return (ft_lighting(ft_set_pattern(comps, SPHERE), *data->light,
+							comps->over_point, comps->eyev, comps->normalv, in_shadow));
+	else if (comps->cylinder != NULL)
+		return (ft_lighting(ft_set_pattern(comps, CYLINDER), *data->light,
+							comps->over_point, comps->eyev, comps->normalv, in_shadow));
+	else if (comps->cone != NULL)
+		return (ft_lighting(ft_set_pattern(comps, CONE), *data->light,
+							comps->over_point, comps->eyev, comps->normalv, in_shadow));
+	return (*ft_color(0, 0, 0));
 }
 
 t_color ft_color_at(t_world *data, t_ray ray)
@@ -247,7 +227,6 @@ float **ft_view_transform(t_tuple from, t_tuple to, t_tuple up)
 	orientation[2][2] = -forward.z;
 	orientation = ft_mult_mat(orientation, translation(-from.x, -from.y,
 													   -from.z));
-	print_matrix(orientation, 4);
 	return (orientation);
 }
 

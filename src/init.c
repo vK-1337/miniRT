@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/06/27 13:47:27 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/04 19:06:33 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,19 +34,16 @@ t_world	init_all_data(int fd)
 	{
 		free(file_data);
 		file_data = get_next_line(fd, 0);
-		printf("file_data = %s\n", file_data);
 		if (file_data && file_data[0] == '\n')
 			continue ;
 		if (init_corresponding_data(file_data, &data) == 2)
 		{
-			printf("file_data = %s\n", file_data);
 			get_next_line(fd, 1);
 			free_data(&data);
 			free(file_data);
 			exit(EXIT_FAILURE);
 		}
 	}
-	data.cone = NULL;
 	return (data);
 }
 
@@ -106,6 +103,11 @@ int	init_data_w_line(t_world *data, t_dtype type, char **data_split)
 	else if (type == CY)
 	{
 		if (!init_cylinder(data, data_split))
+			return (free_data(data), 0);
+	}
+	else if (type == CO)
+	{
+		if (!init_cone(data, data_split))
 			return (free_data(data), 0);
 	}
 	return (1);
@@ -172,6 +174,7 @@ int	init_light(t_world *data, char **data_split)
 	light->position.x = atof(split[0]);
 	light->position.y = atof(split[1]);
 	light->position.z = atof(split[2]);
+	light->position.w = 1;
 	free_char_tab(split);
 	intensity = atof(data_split[2]);
 	split = ft_split(data_split[3], ',');
@@ -193,6 +196,7 @@ int	init_sphere(t_world *data, char **data_split)
 	sphere = malloc(sizeof(t_sphere));
 	if (!sphere)
 		return (0);
+	sphere = NULL;
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return (free(sphere), 0);
@@ -329,6 +333,57 @@ int	init_cylinder(t_world *data, char **data_split)
 	return (1);
 }
 
+int	init_cone(t_world *data, char **data_split)
+{
+	char		**split;
+	t_cone	*cone;
+
+	cone = malloc(sizeof(t_cone));
+	if (!cone)
+		return (0);
+	split = ft_split(data_split[1], ',');
+	if (!split)
+		return (free(cone), 0);
+	cone->matrix = identity_matrix(4);
+	cone->matrix = ft_mult_mat(cone->matrix, translation(atof(split[0]),
+				atof(split[1]), atof(split[2])));
+	free_char_tab(split);
+	split = ft_split(data_split[2], ',');
+	if (!split)
+		return (free(cone), 0);
+	cone->matrix = ft_mult_mat(cone->matrix, rotation_x(atoi(split[0])
+				* M_PI));
+	cone->matrix = ft_mult_mat(cone->matrix, rotation_y(atoi(split[1])
+				* M_PI));
+	cone->matrix = ft_mult_mat(cone->matrix, rotation_z(atoi(split[2])
+				* M_PI));
+	cone->radius = atof(data_split[3]) / 2;
+	cone->y_max = atof(data_split[4]) / 2 + cone->coord.y;
+	cone->y_min = -atof(data_split[4]) / 2 + cone->coord.y;
+	free_char_tab(split);
+	split = ft_split(data_split[5], ',');
+	if (!split)
+		return (free(cone), 0);
+	cone->material = ft_material();
+	cone->material->color->r = ft_atoi(split[0]) / 255.0f;
+	cone->material->color->g = ft_atoi(split[1]) / 255.0f;
+	cone->material->color->b = ft_atoi(split[2]) / 255.0f;
+	cone->next = NULL;
+	free_char_tab(split);
+	if (data->alight != NULL)
+		cone->material->ambiant_color = data->alight;
+	if (!data->cone)
+	{
+		data->cone = malloc(sizeof(t_cone *));
+		if (!data->cone)
+			return (free(cone), 0);
+		*data->cone = cone;
+	}
+	else
+		cone_lstadd_back(data->cone, cone);
+	return (1);
+}
+
 t_dtype	determine_type(char *data)
 {
 	if (strlen(data) > 2 || strlen(data) <= 0)
@@ -348,8 +403,10 @@ t_dtype	determine_type(char *data)
 			return (PL);
 		else if (data[0] == 's' && data[1] == 'p')
 			return (SP);
-		if (data[0] == 'c' && data[1] == 'y')
+		else if (data[0] == 'c' && data[1] == 'y')
 			return (CY);
+		else if (data[0] == 'c' && data[1] == 'o')
+			return (CO);
 	}
 	return (NOTYPE);
 }
@@ -364,6 +421,7 @@ void	null_data(t_world *data)
 	data->light = NULL;
 	data->plan = NULL;
 	data->sphere = NULL;
+	data->cone = NULL;
 	i = 0;
 	while (i < 6)
 	{
