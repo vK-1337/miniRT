@@ -2,7 +2,8 @@
     "files.associations": {
       "minirt.h": "c",
       "cmath": "c",
-      "stat.h": "c"
+      "stat.h": "c",
+      "wait.h": "c"
     },
     "github.copilot.editor.enableCodeActions": false
 }
