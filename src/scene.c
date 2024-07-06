@@ -6,7 +6,7 @@
 /*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 11:41:54 by udumas            #+#    #+#             */
-/*   Updated: 2024/07/03 17:38:14 by bainur           ###   ########.fr       */
+/*   Updated: 2024/07/06 18:38:36 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,15 +112,13 @@ t_comps ft_prepare_computations(t_intersection *i, t_ray ray)
 
 	if (i == NULL)
 	{
-		printf("Error: Intersection is NULL\n");
 		comps.t = 0;
 		comps.sphere = NULL;
 		comps.plan = NULL;
-		comps.point = *ft_init_tuple(0, 0, 0, 0);
-		comps.point = *ft_init_tuple(0, 0, 0, 0);
-		comps.eyev = *ft_init_tuple(0, 0, 0, 0);
-		comps.normalv = *ft_init_tuple(0, 0, 0, 0);
-		comps.over_point = *ft_init_tuple(0, 0, 0, 0);
+		comps.point = (t_tuple){0, 0, 0, 0};
+		comps.eyev = (t_tuple){0, 0, 0, 0};
+		comps.normalv = (t_tuple){0, 0, 0, 0};
+		comps.over_point = (t_tuple){0, 0, 0, 0};
 		comps.inside = 0;
 		return (comps);
 	}
@@ -189,18 +187,14 @@ t_color ft_shade_hit(t_world *data, t_comps *comps)
 		tmp_color = malloc(sizeof(t_color));
 		in_shadow = ft_is_shadowed(data, comps->over_point);
 		if (comps->plan != NULL)
-		{
 			*tmp_color = ft_lighting(ft_set_pattern(comps, PLAN), *light,
 								comps->over_point, comps->eyev, comps->normalv, in_shadow);
-		}
 		else if (comps->sphere != NULL)
 			*tmp_color = ft_lighting(ft_set_pattern(comps, SPHERE), *light,
 								comps->over_point, comps->eyev, comps->normalv, in_shadow);
 		else if (comps->cylinder != NULL)
-		{
 			*tmp_color = ft_lighting(ft_set_pattern(comps, CYLINDER), *light,
 								comps->over_point, comps->eyev, comps->normalv, in_shadow);
-		}
 		else if (comps->cone != NULL)
 			*tmp_color = ft_lighting(ft_set_pattern(comps, CONE), *light,
 								comps->over_point, comps->eyev, comps->normalv, in_shadow);

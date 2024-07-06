@@ -6,7 +6,7 @@
 /*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 10:43:44 by vk                #+#    #+#             */
-/*   Updated: 2024/06/28 15:45:50 by bainur           ###   ########.fr       */
+/*   Updated: 2024/07/06 18:38:53 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,7 @@ int	ft_is_shadowed(t_world *world, t_tuple point)
 	r = ft_ray(point, direction);
 	intersections = ft_intersect_world(r, &world);
 	hit = ft_hit(intersections, intersections->count);
-	// if (hit != NULL)
-	// {
-	// 	printf("hit->t: %f\n", hit->t);
-	// }
-	// else
-	// {
-	// 	printf("hit is NULL\n");
-	// }
-	if (hit && hit->t + EPSILON < distance)
+	if (hit && hit->t < distance)
 		return (1);
     else
 	    return (0);

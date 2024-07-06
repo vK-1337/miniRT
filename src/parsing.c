@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:52 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/06/25 15:55:46 by bainur           ###   ########.fr       */
+/*   Updated: 2024/07/04 14:13:04 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ int	verified_content(char **data, t_dtype type)
 		return (verify_sphere(data));
 	else if (type == CY)
 		return (verify_cylinder(data));
+	else if (type == CO)
+		return (verify_cone(data));
 	return (0);
 }
 
@@ -265,6 +267,21 @@ int	verify_plan(char **data)
 }
 
 int	verify_cylinder(char **data)
+{
+	if (char_tab_len(data) != 6)
+		return (0);
+	if (!verify_coord(data[1]))
+		return (0);
+	if (!verify_vect(data[2]))
+		return (0);
+	if (!is_string_float(data[3]) || !is_string_float(data[4]))
+		return (0);
+	if (!verify_colors(data[5]))
+		return (0);
+	return (1);
+}
+
+int verify_cone(char **data)
 {
 	if (char_tab_len(data) != 6)
 		return (0);

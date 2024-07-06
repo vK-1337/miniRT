@@ -6,7 +6,7 @@
 /*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 14:30:46 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/03 23:12:17 by bainur           ###   ########.fr       */
+/*   Updated: 2024/07/06 18:34:06 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,10 @@ t_ray ray_for_pixel(t_camera *camera, int px, int py)
 	world_y = camera->half_height - yoffset;
 	tmp_comput = ft_init_tuple(world_x, world_y, -1, 1);
 	pixel = ft_mult_mat_tuple(tmp_comput, ft_inversion(camera->matrix, 4));
+	free(tmp_comput);
 	tmp_comput = ft_init_tuple(0, 0, 0, 1);
 	origin = ft_mult_mat_tuple(tmp_comput, ft_inversion(camera->matrix, 4));
+	free(tmp_comput);
 	direction = ft_normalization(ft_dif_tuple(pixel, origin));
 	// printf("origin: %f %f %f\n", origin.x, origin.y, origin.z);
 	// printf("direction: %f %f %f\n", direction.x, direction.y, direction.z);

@@ -6,7 +6,7 @@
 /*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/04 00:02:15 by bainur           ###   ########.fr       */
+/*   Updated: 2024/07/06 18:33:58 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,19 @@
 #endif
 #define EPSILON 0.001
 #define INFINITY 1e10
-#define SIZE_X 700
-#define SIZE_Y 700
+#define SIZE_X 200
+#define SIZE_Y 200
 #define CENTER_X SIZE_X / 2
 #define CENTER_Y SIZE_Y / 2
 #define SPHERE 0
 #define PLAN 1
 #define CYLINDER 2
 #define CONE 3
+#define FIRST 0
+#define SECOND 1
+#define THIRD 2
+#define ALL 3
+#define NONE 4
 #include "get_next_line.h"
 #include "libft.h"
 #include "mlx.h"
@@ -49,8 +54,6 @@
 /*                                                                            */
 /******************************************************************************/
 
-
-
 typedef enum e_dtype
 {
 	NOTYPE,
@@ -59,7 +62,8 @@ typedef enum e_dtype
 	L,
 	SP,
 	PL,
-	CY
+	CY,
+	CO
 } t_dtype;
 
 typedef struct t_wall
@@ -228,7 +232,6 @@ typedef struct s_world
 	t_plan **plan;
 	t_cylinder **cylinder;
 	t_cone **cone;
-	pthread_mutex_t *pixel_put;
 	int counter[6];
 } t_world;
 
@@ -242,26 +245,6 @@ typedef struct s_win
 	int line_length;
 	int endian;
 } t_win;
-
-typedef struct s_thread
-{
-	pthread_t pthread_id;
-	int start_x;
-	int start_y;
-	int end_x;
-	int end_y;
-	int index;
-	t_world *data;
-	t_win *win;
-} t_thread;
-typedef struct s_complete
-{
-	t_world *data;
-	t_win *win;
-	t_thread *thread;
-} t_complete;
-
-
 
 void print_char_tab(char **tab);
 /******************************************************************************/
@@ -289,6 +272,7 @@ int verify_light(char **data);
 int verify_plan(char **data);
 int verify_sphere(char **data);
 int verify_cylinder(char **data);
+int verify_cone(char **data);
 int verified_content(char **data, t_dtype type);
 int verify_coord(char *data);
 int verify_vect(char *data);
@@ -304,6 +288,7 @@ int init_light(t_world *data, char **data_split);
 int init_sphere(t_world *data, char **data_split);
 int init_plan(t_world *data, char **data_split);
 int init_cylinder(t_world *data, char **data_split);
+int init_cone(t_world *data, char **data_split);
 t_dtype determine_type(char *data);
 void null_data(t_world *data);
 void print_all_data(t_world *data);
@@ -331,6 +316,11 @@ int plan_lstsize(t_plan *lst);
 void plan_lstadd_back(t_plan **lst, t_plan *new);
 void plan_lstfree(t_plan **lst);
 
+t_cone *cone_lstlast(t_cone *lst);
+int cone_lstsize(t_cone *lst);
+void cone_lstadd_back(t_cone **lst, t_cone *new);
+void cone_lstfree(t_cone **lst);
+
 void print_sphere_list(t_sphere **sphere_list);
 void print_plan_list(t_plan **plan_list);
 void print_cylinder_list(t_cylinder **cylinder_list);
@@ -347,6 +337,7 @@ void free_data(t_world *data);
 
 //										TUPLE									//
 t_tuple *ft_init_tuple(float x, float y, float z, float w);
+t_tuple ft_init_tuple_reg(float x, float y, float z, float w);
 t_tuple ft_sum_tuple(t_tuple t1, t_tuple t2);
 t_tuple ft_dif_tuple(t_tuple t1, t_tuple t2);
 t_tuple ft_neg_tuple(t_tuple t);
@@ -437,7 +428,8 @@ t_discriminant ft_discriminant(t_ray ray, t_sphere *sphere);
 t_sphere *ft_sphere(void);
 t_intersection ft_intersection(float t, t_sphere *sphere);
 t_ray ray_transform(t_ray ray, float **matrix);
-t_tuple ft_mult_matrix_tuple(float **matrix, t_tuple tuple);
+t_tuple ft_mult_matrix_tuple(float **matrix, t_tuple *tuple,
+							 int free_id);
 void set_transform(t_sphere *sphere, float **matrix);
 
 /******************************************************************************/
@@ -476,7 +468,7 @@ void *render(void	*world);
 /******************************************************************************/
 /*                                                                            */
 /*                                                                            */
-/*                                   SCENES									  */
+/*                                   SCENES										*/
 /*                                                                            */
 /*                                                                            */
 /******************************************************************************/
@@ -494,12 +486,17 @@ void put_pixel(t_win *win, int x, int y, unsigned int color);
 void ft_plan_intersect(t_intersection **t_tab, t_plan **plan,
 					   t_ray ray, int *count);
 t_plan *ft_plan(void);
-void ft_cylinder_intersect(t_intersection **t_tab, t_cylinder **cylinder, t_ray ray, int *count);
+void ft_cylinder_intersect(t_intersection **t_tab,
+						   t_cylinder **cylinder, t_ray ray, int *count);
 t_cylinder *ft_cylinder(void);
-t_intersection *ft_add_t(t_intersection *t_tab, t_intersection t[2], int count);
-t_intersection *ft_add_one_t(t_intersection *t_tab, t_intersection t, int count);
-void ft_cylinder_caps_intersect(t_intersection **t_tab, t_cylinder **cylinder, t_ray ray, int *count);
-void ft_cone_intersect(t_intersection **t_tab, t_cone **cone, t_ray ray, int *count);
+t_intersection *ft_add_t(t_intersection *t_tab, t_intersection t[2],
+						 int count);
+t_intersection *ft_add_one_t(t_intersection *t_tab, t_intersection t,
+							 int count);
+void ft_cylinder_caps_intersect(t_intersection **t_tab,
+								t_cylinder **cylinder, t_ray ray, int *count);
+void ft_cone_intersect(t_intersection **t_tab, t_cone **cone,
+					   t_ray ray, int *count);
 t_cone *ft_cone(void);
 int ft_check_caps(t_ray ray, float t, float radius);
 int ft_equal_tuple(t_tuple *t1, t_tuple *t2);
