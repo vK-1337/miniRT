@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rays.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 09:54:05 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/06/07 21:38:57 by bainur           ###   ########.fr       */
+/*   Updated: 2024/07/08 19:36:21 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ void	ft_sort_intersections(t_intersection *intersections, int count)
 		//printf("intersection[%d].t = %f\n", i, intersections[i].t);
 		while (j < count)
 		{
-			
+
 			//printf("intersection[%d].t = %f\n", j, intersections[j].t);
 			if (intersections[i].t > intersections[j].t)
 			{
@@ -137,11 +137,9 @@ t_intersection	*ft_hit(t_intersection *intersections, int count)
 	int	i;
 
 	i = 0;
-	if (intersections[0].status == 0)
-		return (NULL);
 	while (i < count && intersections)
 	{
-		
+
 		if (intersections[i].t > 0.01)
 			return (&intersections[i]);
 		i++;

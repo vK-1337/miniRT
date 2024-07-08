@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   light.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 18:04:20 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/06/07 00:51:39 by bainur           ###   ########.fr       */
+/*   Updated: 2024/07/08 18:27:53 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,9 @@ t_material	*ft_material(void)
 	return (material);
 }
 
-t_color	ft_lighting(t_material *m, t_light light, t_tuple position,
-		t_tuple eyev, t_tuple normalv, int in_shadow)
+t_color	ft_lighting(t_material *m, void *object, t_light light,
+		t_tuple position, t_tuple eyev, t_tuple normalv, int in_shadow,
+		t_objects type)
 {
 	t_color	effective_color;
 	t_tuple	lightv;
@@ -59,7 +60,10 @@ t_color	ft_lighting(t_material *m, t_light light, t_tuple position,
 	float	reflect_dot_eye;
 	float	light_dot_normal;
 
-	effective_color = ft_mult_color_tog(*m->color, light.intensity);
+	if (type != 0 && m->is_texture == 1)
+		effective_color = define_effective_color(type, position, object, light);
+	else
+		effective_color = ft_mult_color_tog(*m->color, light.intensity);
 	lightv = ft_normalization(ft_dif_tuple(light.position, position));
 	ambient = ft_mult_color(effective_color, m->ambient);
 	light_dot_normal = ft_dotproduct(lightv, normalv);
@@ -86,6 +90,57 @@ t_color	ft_lighting(t_material *m, t_light light, t_tuple position,
 	return (ft_sum_color(ft_sum_color(ambient, diffuse), specular));
 }
 
+t_color	define_effective_color(t_objects type, t_tuple position, void *object, t_light light)
+{
+	t_color	effective_color;
+
+	if (type == Sphere)
+		effective_color = ft_spherical(position, *(t_sphere *)object, light);
+	else if (type == Plan)
+		effective_color = ft_planar(position, *(t_plan *)object, light);
+	else if (type == Cylinder)
+		effective_color = ft_cylindrical(position, *(t_cylinder *)object, light);
+	else
+		effective_color = *(ft_color(1, 1, 1));
+	return (effective_color);
+}
+
+t_color	ft_spherical(t_tuple position, t_sphere sphere, t_light light)
+{
+	t_tuple	point_object;
+	t_color	texture_color;
+
+	point_object = ft_mult_mat_tuple(&position, ft_inversion(sphere.matrix,
+				4));
+	spherical_mapping(point_object.x, point_object.y, point_object.z,
+		sphere.material->texture, &texture_color);
+	return (ft_mult_color_tog(texture_color, light.intensity));
+}
+
+t_color ft_planar(t_tuple position, t_plan plan, t_light light)
+{
+    t_tuple	point_object;
+    t_color	texture_color;
+
+    point_object = ft_mult_mat_tuple(&position, ft_inversion(plan.matrix,
+                4));
+    planar_mapping(point_object.x, point_object.y, plan.material->texture,
+        &texture_color);
+    return (ft_mult_color_tog(texture_color, light.intensity));
+}
+
+t_color ft_cylindrical(t_tuple position, t_cylinder cylinder, t_light light)
+{
+    t_tuple	point_object;
+    t_color	texture_color;
+
+    point_object = ft_mult_mat_tuple(&position, ft_inversion(cylinder.matrix,
+                4));
+    cylindrical_mapping(point_object.x, point_object.y, point_object.z,
+        cylinder.material->texture, &texture_color);
+    return (ft_mult_color_tog(texture_color, light.intensity));
+}
+
 unsigned int	color_to_int(t_color color)
 {
 	int	r;
@@ -102,6 +157,23 @@ unsigned int	color_to_int(t_color color)
 	g = (unsigned int)(color.g * 255);
 	b = (unsigned int)(color.b * 255);
 	return ((r << 16) | (g << 8) | b);
+}
+int	ft_texture_color_to_int(t_color color)
+{
+	int	r;
+	int	g;
+	int	b;
+
+	r = (int)(color.r);
+	g = (int)(color.g);
+	b = (int)(color.b);
+	if (r > 255)
+		r = 255;
+	if (g > 255)
+		g = 255;
+	if (b > 255)
+		b = 255;
+	return (r << 16 | g << 8 | b);
 }
 
 void	color_black(t_color *color)

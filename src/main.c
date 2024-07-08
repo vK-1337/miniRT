@@ -3,32 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 10:26:12 by vk                #+#    #+#             */
-/*   Updated: 2024/06/08 15:38:37 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/08 19:35:53 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
 
-// int main(int ac, char **av)
-// {
-//     int fd;
-//     t_world data;
-
-//     if (ac != 2 || !scene_name_check(av[1]))
-//     {
-//         printf("Bad arguments : Usage : ./minirt scene.rt");
-//         return (EXIT_FAILURE);
-//     }
-//     fd = open(av[1], O_RDONLY);
-//     if (fd == -1)
-// 		return (write(2, "File not found\n", 16), EXIT_FAILURE);
-//     data = init_all_data(fd);
-//     (void) data;
-//     return (EXIT_SUCCESS);
-// }
 void put_pixel(t_win *win, int x, int y, unsigned int color)
 {
     char *dst;
@@ -63,272 +46,56 @@ t_win *init_mlx(void)
     return (win);
 }
 
-// int main(int ac, char **av)
-// {
-//     int fd;
-//     t_world data;
-
-//     if (ac != 2 || !scene_name_check(av[1]))
-//     {
-//         printf("Bad arguments : Usage : ./minirt scene.rt");
-//         return (EXIT_FAILURE);
-//     }
-//     fd = open(av[1], O_RDONLY);
-//     if (fd == -1)
-// 		return (write(2, "File not found\n", 16), EXIT_FAILURE);
-//     data = init_all_data(fd);
-//     // print_all_data(&data);
-//     return (EXIT_SUCCESS);
-// }
-
-t_color ft_pixel_at(t_world *world, t_camera *camera, int x, int y)
+int main(void)
 {
-    t_ray ray = ray_for_pixel(camera, x, y);
-    return (ft_color_at(world, ray));
+    t_sphere *s1 = ft_sphere();
+    t_light *light = ft_point_light(ft_init_tuple(-10, 10, -10, 1), ft_color(1, 1, 1));
+    double wall_z = 10;
+	double wall_size = 7;
+	double canvas_size = 500;
+    void *mlx;
+    void *win;
+    t_material sphere_mat;
+
+    t_tuple ray_origin = *ft_init_tuple(0, 0, -5, 1);
+    mlx = mlx_init();
+    sphere_mat = *ft_texture("/home/vda-conc/Documents/Projects/miniRT/src/461223103.xpm", mlx);
+    s1->material = &sphere_mat;
+    win = mlx_new_window(mlx, canvas_size, canvas_size, "MiniRT");
+    double pixel_size = wall_size / canvas_size;
+	double half = wall_size / 2;
+
+    t_win data;
+    data.mlx = mlx;
+    data.win = win;
+    data.img = mlx_new_image(mlx, canvas_size, canvas_size);
+    data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
+
+    int y = 0;
+
+    while (y < canvas_size)
+    {
+        double world_y = half - pixel_size * y;
+        int x = 0;
+        while (x < canvas_size)
+        {
+            double world_x = -half + pixel_size * x;
+            t_tuple *position = ft_init_tuple(world_x, world_y, wall_z, 1);
+            t_ray r = ft_ray(ray_origin, ft_normalization(ft_dif_tuple(*position, ray_origin)));
+            t_intersection *intersections = ft_intersect(r, s1);
+            t_intersection *hit = ft_hit(intersections, 2);
+            if (hit)
+            {
+                t_tuple point = ft_position(r, hit->t);
+                t_comps comps = ft_prepare_computations(hit, r);
+                t_color color = ft_lighting(s1->material, s1, *light, point, ft_neg_tuple(r.direction), ft_normal_at(comps, point), 0, Sphere);
+                int color_int = ft_texture_color_to_int(color);
+                put_pixel(&data, x, y, color_int);
+            }
+            x++;
+        }
+        y++;
+    }
+    mlx_put_image_to_window(mlx, win, data.img, 0, 0);
+    mlx_loop(mlx);
 }
-
-// int main(void) // Pour chez Urbain
-// {
-//     t_world *world = ft_default_world();
-
-//     t_camera camera = ft_new_camera(11, 11, M_PI / 3);
-
-//     t_tuple *from = ft_init_tuple(0, 0, -5, 1);
-//     t_tuple *to = ft_init_tuple(0, 0, 0, 1);
-//     t_tuple *up = ft_init_tuple(0, 1, 0, 0);
-
-//     camera.matrix = ft_view_transform(*from, *to, *up);
-//     t_win *win = init_mlx();
-//     render(&camera, world, win);
-
-//     t_color color = ft_pixel_at(world, &camera, 5, 5);
-
-//     printf("Color.r = %f\n", color.r);
-//     printf("Color.g = %f\n", color.g);
-//     printf("Color.b = %f\n", color.b);
-
-//     return (0);
-// }
-
-// int main(void)
-// {
-//     // Given
-//     t_world *w = ft_default_world();
-//     w->light = ft_point_light(ft_init_tuple(0, 0, -10, 1), ft_color(1, 1, 1));
-//     t_sphere *s1 = ft_sphere();
-//     w->sphere = &s1;
-//     t_sphere *s2 = ft_sphere();
-//     s2->matrix = translation(0, 0, 10);
-//     s1->next = s2;
-//     t_ray r = ft_ray(*(ft_init_tuple(0, 0, 5, 1)), *(ft_init_tuple(0, 0, 1, 0)));
-//     t_intersection i = ft_intersection(4, s2);
-
-//     // When
-//     t_comps comps = ft_prepare_computations(&i, r);
-//     t_color c = ft_shade_hit(w, &comps);
-
-//     // Then
-//     printf("Color.r = %f\n", c.r);
-//     printf("Color.g = %f\n", c.g);
-//     printf("Color.b = %f\n", c.b);
-//     return 0;
-// }
-
-// int main(void) // Programme pour modeliser spheres avec scene
-// {
-//     // t_sphere *floor = ft_sphere();
-//     // floor->matrix = scaling(10, 0.01, 10);
-//     // floor->material = ft_material();
-//     // floor->material->color = ft_color(1, 0.9, 0.9);
-//     // floor->material->specular = 0;
-
-//     // t_sphere *left_wall = ft_sphere();
-//     // left_wall->matrix = ft_mult_mat(translation(0, 0, 5), rotation_y(-M_PI / 4));
-//     // left_wall->matrix = ft_mult_mat(left_wall->matrix, rotation_x(M_PI / 2));
-//     // left_wall->matrix = ft_mult_mat(left_wall->matrix, scaling(10, 0.01, 10));
-//     // left_wall->material = floor->material;
-
-//     // t_sphere *right_wall = ft_sphere();
-//     // right_wall->matrix = ft_mult_mat(translation(0, 0, 5), rotation_y(M_PI / 4));
-//     // right_wall->matrix = ft_mult_mat(right_wall->matrix, rotation_x(M_PI / 2));
-//     // right_wall->matrix = ft_mult_mat(right_wall->matrix, scaling(10, 0.01, 10));
-//     // right_wall->material = floor->material;
-
-//     t_sphere *middle = ft_sphere();
-//     middle->matrix = translation(-0.5, 1, 0.5);
-//     middle->material = ft_material();
-//     middle->material->color = ft_color(0.1, 1, 0.5);
-//     middle->material->diffuse = 0.7;
-//     middle->material->specular = 0.3;
-
-//     t_sphere *right = ft_sphere();
-//     right->matrix = ft_mult_mat(translation(1.5, 0.5, -0.5), scaling(0.5, 0.5, 0.5));
-//     right->material = ft_material();
-//     right->material->color = ft_color(0.5, 1, 0.1);
-//     right->material->diffuse = 0.7;
-//     right->material->specular = 0.3;
-
-//     t_sphere *left = ft_sphere();
-//     left->matrix = ft_mult_mat(translation(-1.5, 0.33, -0.75), scaling(0.33, 0.33, 0.33));
-//     left->material = ft_material();
-//     left->material->color = ft_color(1, 0.8, 0.1);
-//     left->material->diffuse = 0.7;
-//     left->material->specular = 0.3;
-
-//     t_world *world;
-//     world = malloc(sizeof(t_world));
-//     world->light = ft_point_light(ft_init_tuple(0, 5, -10, 1), ft_color(1, 1, 1));
-//     world->sphere = &middle;
-//     middle->next = right;
-//     right->next = left;
-//     left->next = NULL;
-//     world->sphere = NULL;
-//     t_plan *plan = ft_plan();
-
-//     t_plan *wall = ft_plan();
-//     wall->matrix = ft_mult_mat(rotation_x(M_PI / 2), translation(0, 8, 0));
-//     t_plan *left_wall = ft_plan();
-//     left_wall->matrix = rotation_x(M_PI / 2);
-//     left_wall->matrix = ft_mult_mat(rotation_y(-M_PI / 2), left_wall->matrix);
-//     left_wall->matrix = ft_mult_mat(translation(5, 0, 8), left_wall->matrix);
-
-//     t_plan *right_wall = ft_plan();
-//     right_wall->matrix = ft_mult_mat(rotation_y(M_PI / 2), translation(0, 0, 0));
-//     // right_wall->coord = *ft_init_tuple(-5, 0, 0, 1);
-//     // right_wall->normal = ft_sum_tuple(right_wall->normal, *ft_init_tuple(1, 0, 0, 0));
-
-//     t_plan *ceiling = ft_plan();
-//     ceiling->matrix = translation(0, 10, 0);
-//     ceiling->material->color = ft_color(1, 0, 0);  
-
-//     t_cylinder *cylinder = ft_cylinder();
-//     cylinder->matrix = translation(0, 0, -5);
-
-//     t_cone *cone = ft_cone();
-//     cone->matrix = translation(0, 0, -5);
-    
-//     cylinder->material->color = ft_color(1, 0, 0);  
-//     world->cylinder = &cylinder;
-//     cylinder->next = NULL;
-//     world->cone = &cone;
-//     cone->next = NULL;
-//     world->plan = &plan;
-//     plan->next = wall;
-//     wall->next = ceiling;
-//     ceiling->next = left_wall;
-//     left_wall->next = right_wall;
-//     right_wall->next = NULL;
-//     t_camera camera = ft_new_camera(SIZE_X, SIZE_Y, M_PI / 2);
-//     world->camera = &camera;
-//     world->camera->matrix = ft_view_transform(*ft_init_tuple(0, 5, -7, 1), *ft_init_tuple(0, 0, 0, 1), *ft_init_tuple(0, 1, 0, 0));
-
-//     t_win *win = init_mlx();
-
-//     render(world->camera, world, win);
-//     mlx_put_image_to_window(win->mlx, win->win, win->img, 0, 0);
-//     mlx_loop(win->mlx);
-// }
-
-int main()
-{
-    t_cone *cone = ft_cone();
-    t_ray ray;
-    t_intersection  *t_tab = NULL;
-    int count;
-
-    // Test case 1
-    ray = ft_ray(*ft_init_tuple(0, 0, -5, 1), ft_normalization(*ft_init_tuple(0, 0, 1, 0)));
-    count = 0;
-    t_tab = malloc(sizeof(t_intersection) * 2);
-    ft_cone_intersect(&t_tab, &cone, ray, &count);
-    printf("count = %d\n", count);  
-    printf("t_tab[0].t = %f\n", t_tab[0].t);
-    printf("t_tab[1].t = %f\n", t_tab[1].t);
-
-    // Test case 2
-    ray = ft_ray(*ft_init_tuple(0, 0, -5, 1), ft_normalization(*ft_init_tuple(1, 1, 1, 0)));
-    count = 0;
-    cone = ft_cone();
-    ft_cone_intersect(&t_tab, &cone, ray, &count);
-    printf("count = %d\n", count);  
-    printf("t_tab[0].t = %f\n", t_tab[0].t);
-    printf("t_tab[1].t = %f\n", t_tab[1].t);
-
-    // Test case 3
-    ray = ft_ray(*ft_init_tuple(1, 1, -5, 1), ft_normalization(*ft_init_tuple(-0.5, -1, 1, 0)));
-    count = 0;
-    cone = ft_cone();
-    ft_cone_intersect(&t_tab, &cone, ray, &count);
-    printf("count = %d\n", count);  
-    printf("t_tab[0].t = %f\n", t_tab[0].t);
-    printf("t_tab[1].t = %f\n", t_tab[1].t);
-
-    free(t_tab);
-}
-// int main(void)
-// {
-//     t_tuple *eyev = ft_init_tuple(0, 0, -1, 0);
-//     t_tuple *normalv = ft_init_tuple(0, 0, -1, 0);
-//     t_light *light = ft_point_light(ft_init_tuple(0, 0, -10, 1), ft_color(1, 1, 1));
-//     int in_shadow = 1;
-
-//     t_color c = ft_lighting(ft_material(), *light, *ft_init_tuple(0, 0, 0, 1), *eyev, *normalv, in_shadow);
-
-//     printf("Color.r = %f\n", c.r);
-//     printf("Color.g = %f\n", c.g);
-//     printf("Color.b = %f\n", c.b);
-
-//     t_world *world = ft_default_world();
-//     t_tuple *point = ft_init_tuple(0, 10, 0, 1);
-
-//     int shadowed = ft_is_shadowed(world, *point);
-
-//     printf("Shadowed in firs test = %s\n", shadowed ? "True" : "False");
-
-//     point = ft_init_tuple(10, -10, 10, 1);
-//     shadowed = ft_is_shadowed(world, *point);
-
-//     printf("Shadowed in second test = %s\n", shadowed ? "True" : "False");
-
-//     point = ft_init_tuple(-20, 20, -20, 1);
-//     shadowed = ft_is_shadowed(world, *point);
-
-//     printf("Shadowed in third test = %s\n", shadowed ? "True" : "False");
-
-//     point = ft_init_tuple(-2, 2, -2, 1);
-
-//     shadowed = ft_is_shadowed(world, *point);
-
-//     printf("Shadowed in fourth test = %s\n", shadowed ? "True" : "False");
-// }
-
-// int main(void)
-// {
-//     t_world *world = ft_default_world();
-
-//     world->light = ft_point_light(ft_init_tuple(0, 0, -10, 1), ft_color(1, 1, 1));
-
-//     t_sphere *s1 = ft_sphere();
-
-//     world->sphere = &s1;
-
-//     t_sphere *s2 = ft_sphere();
-
-//     s2->matrix = translation(0, 0, 10);
-
-//     s1->next = s2;
-
-//     t_ray r = ft_ray(*ft_init_tuple(0, 0, 5, 1), *ft_init_tuple(0, 0, 1, 0));
-
-//     t_intersection i = ft_intersection(4, s2);
-
-//     t_comps comps = ft_prepare_computations(&i, r);
-
-//     t_color c = ft_shade_hit(world, &comps);
-
-//     printf("Color.r = %f\n", c.r);
-//     printf("Color.g = %f\n", c.g);
-//     printf("Color.b = %f\n", c.b);
-
-//     return 0;
-// }

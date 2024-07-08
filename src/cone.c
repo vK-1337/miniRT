@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cone.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 12:51:28 by bainur            #+#    #+#             */
-/*   Updated: 2024/06/08 15:49:23 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/08 18:33:52 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int within_cone_radius(const t_ray *ray, double t, double cone_val)
 void ft_check_cone_caps(t_intersection **t_tab, t_cone **cone, t_ray ray, int *count)
 {
     t_intersection t;
-    
+
     if (fabsf(ray.direction.y) < EPSILON)
         return ;
     t.t = (*cone)->radius - ray.origin.y / ray.direction.y;
@@ -54,7 +54,7 @@ void ft_check_cone_caps(t_intersection **t_tab, t_cone **cone, t_ray ray, int *c
 float get_cone_discriminant(t_ray ray, float abc[3], t_cone *cone)
 {
     float	discriminant;
-
+    (void) cone;
 	abc[0] = ray.direction.x * ray.direction.x - ray.direction.y * ray.direction.y \
 	+ ray.direction.z * ray.direction.z;
 	abc[1] = 2 * ray.direction.x * ray.origin.x - 2 * ray.direction.y * ray.origin.y \
@@ -76,7 +76,7 @@ void	ft_cone_intersect(t_intersection **t_tab, t_cone **cone, t_ray ray,
         return ;
     new_ray = ray_transform(ray, ft_inversion((*cone)->matrix, 4));
     ft_check_cone_caps(t_tab, cone, new_ray, count);
-    discriminant = get_cone_discriminant(new_ray, abc);
+    discriminant = get_cone_discriminant(new_ray, abc, *cone);
     printf("discriminant = %f\n", discriminant);
     if (discriminant < 0)
     {
