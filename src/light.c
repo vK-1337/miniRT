@@ -6,7 +6,7 @@
 /*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 18:04:20 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/02 15:56:36 by bainur           ###   ########.fr       */
+/*   Updated: 2024/07/06 23:39:06 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,10 @@ void	ft_point_light2(t_light *light, t_tuple position, t_color intensity)
 t_material	*ft_material(void)
 {
 	t_material	*material;
-	t_color		*color;
 
-	color = malloc(sizeof(t_color));
-	color->r = 1;
-	color->g = 1;
-	color->b = 1;
 	material = malloc(sizeof(t_material));
-	material->color = color;
+	material->color = ft_color_reg(1, 1, 1);
 	material->ambiant = 0.5;
-	material->ambiant_color = malloc(sizeof(t_color));
-	(*material->ambiant_color) = ft_mult_color((t_color){1,1,1}, 0.1);
 	material->pattern = NULL;
 	material->diffuse = 0.9;
 	material->specular = 0.9;
@@ -62,10 +55,10 @@ t_color	ft_lighting(t_material *m, t_light light, t_tuple position,
 	float	reflect_dot_eye;
 	float	light_dot_normal;
 
-	effective_color = ft_mult_color_tog(*m->color, light.intensity);
+	effective_color = ft_mult_color_tog(m->color, light.intensity);
 	lightv = ft_normalization(ft_dif_tuple(light.position, position));
 	ambiant = *m->ambiant_color;
-	ambiant = ft_mult_color_tog(*m->color, ambiant);
+	ambiant = ft_mult_color_tog(m->color, ambiant);
 	light_dot_normal = ft_dotproduct(lightv, normalv);
 	if (light_dot_normal < 0 || in_shadow)
 	{

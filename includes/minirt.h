@@ -6,7 +6,7 @@
 /*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/06 18:33:58 by bainur           ###   ########.fr       */
+/*   Updated: 2024/07/06 23:51:10 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 #endif
 #define EPSILON 0.001
 #define INFINITY 1e10
-#define SIZE_X 200
-#define SIZE_Y 200
+#define SIZE_X 20
+#define SIZE_Y 20
 #define CENTER_X SIZE_X / 2
 #define CENTER_Y SIZE_Y / 2
 #define SPHERE 0
@@ -125,7 +125,7 @@ typedef struct s_light
 
 typedef struct s_material
 {
-	t_color *color;
+	t_color color;
 	float ambiant;
 	float ambiant_intensity;
 	t_color *ambiant_color;
@@ -232,6 +232,7 @@ typedef struct s_world
 	t_plan **plan;
 	t_cylinder **cylinder;
 	t_cone **cone;
+	pthread_mutex_t *pixel_put;
 	int counter[6];
 } t_world;
 
@@ -245,6 +246,24 @@ typedef struct s_win
 	int line_length;
 	int endian;
 } t_win;
+typedef struct s_thread
+{
+	pthread_t pthread_id;
+	t_world *data;
+	t_win *win;
+	int index;
+	int start_x;
+	int start_y;
+	int end_x;
+	int end_y;
+} t_thread;
+
+typedef struct s_complete
+{
+	t_thread *thread;
+	t_win *win;
+	t_world *data;
+} t_complete;
 
 void print_char_tab(char **tab);
 /******************************************************************************/
@@ -256,7 +275,7 @@ void print_char_tab(char **tab);
 /******************************************************************************/
 
 int scene_name_check(char *av); // Convert color to int
-t_world init_all_data(int fd);
+t_world *init_all_data(int fd);
 void null_data(t_world *data);
 int init_corresponding_data(char *file_data, t_world *data);
 int init_data_w_line(t_world *data, t_dtype type,
@@ -325,7 +344,7 @@ void print_sphere_list(t_sphere **sphere_list);
 void print_plan_list(t_plan **plan_list);
 void print_cylinder_list(t_cylinder **cylinder_list);
 
-void free_data(t_world *data);
+void free_data(t_world **data);
 
 /******************************************************************************/
 /*                                                                            */
@@ -360,6 +379,7 @@ t_color *ft_color(float r, float g, float b);
 t_pattern *ft_pattern(t_color *a, t_color *b);
 t_color *ft_stripe_at(t_pattern *pattern, t_tuple point);
 t_material *ft_set_pattern(t_comps *comps, int type);
+t_color ft_color_reg(float r, float g, float b);
 
 /******************************************************************************/
 /*                                                                            */
@@ -463,7 +483,7 @@ unsigned int color_to_int(t_color color);
 t_camera *ft_new_camera(float hsize, float vsize, double fov);
 float compute_pixel_size(t_camera *camera);
 t_ray ray_for_pixel(t_camera *camera, int px, int py);
-void *render(void	*world);
+void *render(void *world);
 
 /******************************************************************************/
 /*                                                                            */
@@ -500,4 +520,5 @@ void ft_cone_intersect(t_intersection **t_tab, t_cone **cone,
 t_cone *ft_cone(void);
 int ft_check_caps(t_ray ray, float t, float radius);
 int ft_equal_tuple(t_tuple *t1, t_tuple *t2);
+
 #endif

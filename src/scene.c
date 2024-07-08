@@ -6,7 +6,7 @@
 /*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 11:41:54 by udumas            #+#    #+#             */
-/*   Updated: 2024/07/06 18:38:36 by bainur           ###   ########.fr       */
+/*   Updated: 2024/07/06 23:55:03 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,29 +244,4 @@ float **ft_view_transform(t_tuple from, t_tuple to, t_tuple up)
 	orientation = ft_mult_mat(orientation, translation(-from.x, -from.y,
 													   -from.z));
 	return (orientation);
-}
-
-t_world *ft_default_world(void)
-{
-	t_world *data;
-	t_sphere *s1;
-	t_sphere *s2;
-
-	data = malloc(sizeof(t_world));
-	data->light = ft_point_light(ft_init_tuple(-10, 10, -10, 1), ft_color(1, 1,
-																		  1));
-	data->sphere = malloc(sizeof(t_sphere *));
-	s1 = ft_sphere();
-	s2 = ft_sphere();
-	s2->material = ft_material();
-	s1->material = ft_material();
-	s1->material->color = ft_color(0.8, 1.0, 0.6);
-	s1->material->diffuse = 0.7;
-	s1->material->specular = 0.2;
-	s2->matrix = ft_mult_mat(scaling(0.25, 0.25, 0.25), s2->matrix);
-	*(data->sphere) = s1;
-	s1->next = NULL;
-	s2->next = NULL;
-	sphere_lstadd_back(data->sphere, s2);
-	return (data);
 }

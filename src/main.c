@@ -6,7 +6,7 @@
 /*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 10:26:12 by vk                #+#    #+#             */
-/*   Updated: 2024/07/04 00:02:16 by bainur           ###   ########.fr       */
+/*   Updated: 2024/07/06 23:51:25 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,21 @@ void put_pixel(t_win *win, int x, int y, unsigned int color)
     *(unsigned int *)dst = color;
 }
 
-int exit_window(t_win *win)
+void ft_free_all(t_complete **complete)
 {
-    // mlx_destroy_image(fractal->mlx, fractal->img);
+    free_data(&(*complete)->data);
+}
+
+int exit_window(t_complete *complete)
+{
+    t_win *win = complete->win;
+    mlx_destroy_image(win->mlx, win->img);
     mlx_destroy_window(win->mlx, win->win);
     mlx_destroy_display(win->mlx);
     free(win->mlx);
     free(win);
-    exit(1);
+    ft_free_all(&complete);
+    exit(0);
     return (0);
 }
 
@@ -57,7 +64,6 @@ t_win *init_mlx(void)
     win = malloc(sizeof(t_win));
     win->mlx = mlx_init();
     win->img = mlx_new_image(win->mlx, SIZE_X, SIZE_Y);
-    printf("size_x: %d\n", SIZE_X);
     win->win = mlx_new_window(win->mlx, SIZE_X, SIZE_Y, "MiniRT");
     win->addr = mlx_get_data_addr(win->img, &win->bits_per_pixel,
                                   &win->line_length, &win->endian);
@@ -117,10 +123,13 @@ void start_threads(t_complete *complete)
     }
 }
 
+
+
+
 int main(int ac, char **av)
 {
     int fd;
-    t_world data;
+    t_world *data;
 
     if (ac != 2 || !scene_name_check(av[1]))
     {
@@ -133,11 +142,12 @@ int main(int ac, char **av)
     data = init_all_data(fd);
     t_win *win = init_mlx();
     t_complete *complete = malloc(sizeof(t_complete));
-    complete->data = &data;
+    complete->data = data;
     complete->win = win;
     start_threads(complete);
     // render(data.camera, &data, win);
     mlx_put_image_to_window(win->mlx, win->win, win->img, 0, 0);
+    mlx_hook(win->win, 17, 0, exit_window, complete);
     mlx_loop(win->mlx);
     return (EXIT_SUCCESS);
 }
