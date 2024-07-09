@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 09:54:05 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/04 18:51:18 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/09 11:52:00 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ t_discriminant	ft_discriminant(t_ray ray, t_sphere *sphere)
 	t_discriminant	dis;
 	t_tuple			sphere_to_ray;
 
-	dis = (t_discriminant){0, 0, 0, 0};
 	sphere_to_ray = ft_dif_tuple(ray.origin, sphere->center);
 	dis.a = ft_dotproduct(ray.direction, ray.direction);
 	dis.b = 2 * ft_dotproduct(ray.direction, sphere_to_ray);
@@ -115,11 +114,8 @@ void	ft_sort_intersections(t_intersection *intersections, int count)
 	while (i < count)
 	{
 		j = i + 1;
-		//printf("intersection[%d].t = %f\n", i, intersections[i].t);
 		while (j < count)
 		{
-			
-			//printf("intersection[%d].t = %f\n", j, intersections[j].t);
 			if (intersections[i].t > intersections[j].t)
 			{
 				tmp = intersections[i];
