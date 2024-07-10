@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 12:56:18 by udumas            #+#    #+#             */
-/*   Updated: 2024/07/09 11:43:51 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/10 16:15:39 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ float **translation(float x, float y, float z)
     float **mat;
 
     mat = identity_matrix(4);
+    printf("matrice adresse = %p\n", mat);
     mat[0][3] = x;
     mat[1][3] = y;
     mat[2][3] = z;

@@ -6,13 +6,13 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 11:41:54 by udumas            #+#    #+#             */
-/*   Updated: 2024/07/09 11:52:39 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/10 15:56:54 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
 
-t_intersection *ft_add_t(t_intersection *t_tab, t_intersection t[2], int count)
+t_intersection *ft_add_t(t_intersection **t_tab, t_intersection t[2], int count)
 {
 	t_intersection *new_t_tab;
 	int i;
@@ -21,7 +21,7 @@ t_intersection *ft_add_t(t_intersection *t_tab, t_intersection t[2], int count)
 	new_t_tab = malloc(sizeof(t_intersection) * (count));
 	while (i < count - 2)
 	{
-		new_t_tab[i] = t_tab[i];
+		new_t_tab[i] = *t_tab[i];
 		new_t_tab[i].status = 1;
 		i++;
 	}
@@ -29,7 +29,7 @@ t_intersection *ft_add_t(t_intersection *t_tab, t_intersection t[2], int count)
 	new_t_tab[i].status = 1;
 	new_t_tab[i + 1] = t[1];
 	new_t_tab[i + 1].status = 1;
-	free(t_tab);
+	free(*t_tab);
 	return (new_t_tab);
 }
 
@@ -60,11 +60,11 @@ void ft_sphere_intersections(t_intersection **t_tab, t_sphere **sphere,
 	t[1].cylinder = NULL;
 	t[1].cone = NULL;
 	*count += 2;
-	*t_tab = ft_add_t(*t_tab, t, *count);
+	*t_tab = ft_add_t(t_tab, t, *count);
 	*sphere = (*sphere)->next;
 }
 
-t_intersection * ft_intersect_world(t_ray ray, t_world **data)
+t_intersection *ft_intersect_world(t_ray ray, t_world **data)
 {
 	t_intersection *t_tab;
 	int count;
@@ -97,7 +97,6 @@ t_intersection * ft_intersect_world(t_ray ray, t_world **data)
 	{
 		ft_plan_intersect(&t_tab, &plan, ray, &count);
 		ft_sphere_intersections(&t_tab, &sphere, ray, &count);
-		
 		ft_cylinder_intersect(&t_tab, &cylinder, ray, &count);
 		ft_cylinder_caps_intersect(&t_tab, &cylinder, ray, &count);
 		ft_cone_intersect(&t_tab, &cone, ray, &count);
@@ -176,12 +175,12 @@ t_comps ft_prepare_computations(t_intersection *i, t_ray ray)
 t_color ft_shade_hit(t_world *data, t_comps *comps)
 {
 	int in_shadow;
-	t_color *color;
+	t_color color;
 	t_color *tmp_color;
 	t_light *light;
 
 	light = data->light;
-	color = ft_color(0, 0, 0);
+	color = ft_color_reg(0, 0, 0);
 	while (light != NULL)
 	{
 		tmp_color = malloc(sizeof(t_color));
@@ -200,11 +199,11 @@ t_color ft_shade_hit(t_world *data, t_comps *comps)
 								comps->over_point, comps->eyev, comps->normalv, in_shadow);
 		else
 			tmp_color = ft_color(0, 0, 0);
-		*color = ft_sum_color(*color, *tmp_color);
+		color = ft_sum_color(color, *tmp_color);
 		free(tmp_color);
 		light = light->next;
 	}
-	return (*color);
+	return (color);
 
 }
 
@@ -214,8 +213,9 @@ t_color ft_color_at(t_world *data, t_ray ray)
 	t_comps comps;
 	xs = ft_intersect_world(ray, &data);
 	if (ft_hit(xs, xs[0].count) == NULL)
-		return (*ft_color(0, 0, 0));
+		return (ft_color_reg(0, 0, 0));
 	comps = ft_prepare_computations(ft_hit(xs, xs[0].count), ray);
+	free(xs);
 	return (ft_shade_hit(data, &comps));
 }
 
@@ -242,6 +242,6 @@ float **ft_view_transform(t_tuple from, t_tuple to, t_tuple up)
 	orientation[2][1] = -forward.y;
 	orientation[2][2] = -forward.z;
 	orientation = ft_mult_mat(orientation, translation(-from.x, -from.y,
-													   -from.z));
+													   -from.z), ALL);
 	return (orientation);
 }

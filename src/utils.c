@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 21:45:44 by vk                #+#    #+#             */
-/*   Updated: 2024/07/09 11:53:19 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/10 16:37:21 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void free_plan(t_plan **plan)
 	{
 		tmp = (*plan)->next;
 		free_material((*plan)->material);
+		ft_free_mat((*plan)->matrix, 4);
 		free(*plan);
 		*plan = tmp;
 	}
@@ -80,10 +81,41 @@ void free_sphere(t_sphere **sphere)
 	{
 		tmp = (*sphere)->next;
 		free_material((*sphere)->material);
-		free((*sphere)->material);
-		free((*sphere)->matrix);
+		ft_free_mat((*sphere)->matrix, 4);
 		free(*sphere);
 		*sphere = tmp;
+	}
+	return ;
+}
+
+void free_cylinder(t_cylinder **cylinder)
+{
+	t_cylinder	*tmp;
+
+	tmp = *cylinder;
+	while (*cylinder)
+	{
+		tmp = (*cylinder)->next;
+		free_material((*cylinder)->material);
+		ft_free_mat((*cylinder)->matrix, 4);
+		free(*cylinder);
+		*cylinder = tmp;
+	}
+	return ;
+}
+
+void free_cone(t_cone **cone)
+{
+	t_cone	*tmp;
+
+	tmp = *cone;
+	while (*cone)
+	{
+		tmp = (*cone)->next;
+		free_material((*cone)->material);
+		ft_free_mat((*cone)->matrix, 4);
+		free(*cone);
+		*cone = tmp;
 	}
 	return ;
 }
@@ -100,12 +132,25 @@ void	free_data(t_world **data)
 	if ((*data)->light)
 		free_light((*data)->light);
 	if ((*data)->plan)
+	{
 		free_plan((*data)->plan);
+		free((*data)->plan);
+	}
 	if ((*data)->sphere)
 	{
-		sphere_lstfree((*data)->sphere);
+		free_sphere((*data)->sphere);
+		free((*data)->sphere);
 	}
 	if ((*data)->cylinder)
-		cylinder_lstfree((*data)->cylinder);
+	{
+		free_cylinder((*data)->cylinder);
+		free((*data)->cylinder);
+	}
+	if ((*data)->cone)
+	{
+		free_cone((*data)->cone);
+		free((*data)->cone);
+	}
+	free(*data);
 	return ;
 }

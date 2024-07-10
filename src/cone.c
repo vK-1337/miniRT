@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 12:51:28 by bainur            #+#    #+#             */
-/*   Updated: 2024/06/13 13:42:59 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/10 18:14:53 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void ft_check_cone_caps(t_intersection **t_tab, t_cone **cone, t_ray ray, int *c
         t.plan = NULL;
         t.cylinder = NULL;
         *count += 1;
-        *t_tab = ft_add_one_t(*t_tab, t, *count);
+        *t_tab = ft_add_one_t(t_tab, t, *count);
     }
     t.t = ((*cone)->y_min - ray.origin.y) / ray.direction.y;
     if (within_cone_radius(&ray, t.t, (*cone)->y_min) == 1)
@@ -49,7 +49,7 @@ void ft_check_cone_caps(t_intersection **t_tab, t_cone **cone, t_ray ray, int *c
         t.plan = NULL;
         t.cylinder = NULL;
         *count += 1;
-        *t_tab = ft_add_one_t(*t_tab, t, *count);
+        *t_tab = ft_add_one_t(t_tab, t, *count);
     }
 }
 
@@ -95,7 +95,7 @@ void	ft_cone_intersect(t_intersection **t_tab, t_cone **cone, t_ray ray,
         t.plan = NULL;
         t.cylinder = NULL;
         *count += 1; 
-        *t_tab = ft_add_one_t(*t_tab, t, *count);
+        *t_tab = ft_add_one_t(t_tab, t, *count);
         *cone = (*cone)->next;
         return ;
     }
@@ -109,14 +109,14 @@ void	ft_cone_intersect(t_intersection **t_tab, t_cone **cone, t_ray ray,
     if (y0 < (*cone)->y_max && y0 > (*cone)->y_min)
     {
         *count += 1;
-        *t_tab = ft_add_one_t(*t_tab, t, *count);
+        *t_tab = ft_add_one_t(t_tab, t, *count);
     }
     t.t = (-abc[1] + discriminant) / (2*abc[0]);
     y0 = new_ray.origin.y + t.t * new_ray.direction.y;
     if (y0 < (*cone)->y_max && y0 > (*cone)->y_min)
     {
         *count += 1;
-        *t_tab = ft_add_one_t(*t_tab, t, *count);
+        *t_tab = ft_add_one_t(t_tab, t, *count);
     }
     *cone = (*cone)->next;
 }

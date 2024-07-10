@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:55 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/09 11:43:41 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/10 18:07:46 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ int exit_window(t_complete *complete)
     free(win->mlx);
     free(win);
     ft_free_all(&complete);
+    free(complete);
     exit(0);
     return (0);
 }
@@ -63,6 +64,8 @@ t_win *init_mlx(void)
 
     win = malloc(sizeof(t_win));
     win->mlx = mlx_init();
+    if (!win->mlx)
+        return (NULL);
     win->img = mlx_new_image(win->mlx, SIZE_X, SIZE_Y);
     win->win = mlx_new_window(win->mlx, SIZE_X, SIZE_Y, "MiniRT");
     win->addr = mlx_get_data_addr(win->img, &win->bits_per_pixel,
@@ -116,11 +119,14 @@ void start_threads(t_complete *complete)
         i++;
     }
     i--;
-    while (i > 0)
+    while (i >= 0)
     {
         pthread_join(complete->thread[i].pthread_id, NULL);
         i--;
     }
+    free(complete->thread);
+    pthread_mutex_destroy(complete->data->pixel_put);
+    free(complete->data->pixel_put);
 }
 
 
@@ -141,11 +147,12 @@ int main(int ac, char **av)
         return (write(2, "File not found\n", 16), EXIT_FAILURE);
     data = init_all_data(fd);
     t_win *win = init_mlx();
+    if (!win)
+        return (free_data(&data), EXIT_FAILURE);
     t_complete *complete = malloc(sizeof(t_complete));
     complete->data = data;
     complete->win = win;
     start_threads(complete);
-    // render(data.camera, &data, win);
     mlx_put_image_to_window(win->mlx, win->win, win->img, 0, 0);
     mlx_hook(win->win, 17, 0, exit_window, complete);
     mlx_loop(win->mlx);

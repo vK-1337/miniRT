@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/09 11:58:39 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/10 18:20:57 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 #endif
 #define EPSILON 0.001
 #define INFINITY 1e10
-#define SIZE_X 20
-#define SIZE_Y 20
+#define SIZE_X 50
+#define SIZE_Y 50
 #define CENTER_X SIZE_X / 2
 #define CENTER_Y SIZE_Y / 2
 #define SPHERE 0
@@ -153,7 +153,6 @@ typedef struct s_cylinder
 	float y_max;
 	float y_min;
 	t_material *material;
-	t_color colors;
 	float **matrix;
 	struct s_cylinder *next;
 } t_cylinder;
@@ -391,8 +390,8 @@ t_color ft_color_reg(float r, float g, float b);
 
 //										CALCUL								//
 
-float **ft_mult_mat(float **mat1, float **mat2);
-t_tuple ft_mult_mat_tuple(t_tuple *tuple, float **mat);
+float **ft_mult_mat(float **mat1, float **mat2, int free_data);
+t_tuple ft_mult_mat_tuple(t_tuple *tuple, float **mat, int free_data);
 float **ft_transpose(float **mat);
 int ft_comp_mat(float **mat1, float **mat2, int row_col);
 float **ft_inversion(float **matrice, int row_col);
@@ -495,8 +494,8 @@ void *render(void *world);
 
 //										CALCUL								//
 
-float					**ft_mult_mat(float **mat1, float **mat2);
-t_tuple					ft_mult_mat_tuple(t_tuple *tuple, float **mat);
+float					**ft_mult_mat(float **mat1, float **mat2, int free_data);
+t_tuple					ft_mult_mat_tuple(t_tuple *tuple, float **mat, int free_data);
 float					**ft_transpose(float **mat);
 int						ft_comp_mat(float **mat1, float **mat2, int row_col);
 float					**ft_inversion(float **matrice, int row_col);
@@ -519,9 +518,9 @@ t_plan *ft_plan(void);
 void ft_cylinder_intersect(t_intersection **t_tab,
 						   t_cylinder **cylinder, t_ray ray, int *count);
 t_cylinder *ft_cylinder(void);
-t_intersection *ft_add_t(t_intersection *t_tab, t_intersection t[2],
+t_intersection *ft_add_t(t_intersection **t_tab, t_intersection t[2],
 						 int count);
-t_intersection *ft_add_one_t(t_intersection *t_tab, t_intersection t,
+t_intersection *ft_add_one_t(t_intersection **t_tab, t_intersection t,
 							 int count);
 void ft_cylinder_caps_intersect(t_intersection **t_tab,
 								t_cylinder **cylinder, t_ray ray, int *count);

@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 10:43:44 by vk                #+#    #+#             */
-/*   Updated: 2024/07/09 11:52:45 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/10 15:59:37 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,13 @@ int	ft_is_shadowed(t_world *world, t_tuple point)
 	intersections = ft_intersect_world(r, &world);
 	hit = ft_hit(intersections, intersections->count);
 	if (hit && hit->t < distance)
+	{
+		free(intersections);
 		return (1);
+	}
     else
+	{
+		free(intersections);
 	    return (0);
+	}
 }
