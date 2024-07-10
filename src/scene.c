@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   scene.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 11:41:54 by udumas            #+#    #+#             */
-/*   Updated: 2024/07/09 11:52:39 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/09 17:18:39 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ t_intersection * ft_intersect_world(t_ray ray, t_world **data)
 	{
 		ft_plan_intersect(&t_tab, &plan, ray, &count);
 		ft_sphere_intersections(&t_tab, &sphere, ray, &count);
-		
+
 		ft_cylinder_intersect(&t_tab, &cylinder, ray, &count);
 		ft_cylinder_caps_intersect(&t_tab, &cylinder, ray, &count);
 		ft_cone_intersect(&t_tab, &cone, ray, &count);
@@ -132,7 +132,7 @@ t_comps ft_prepare_computations(t_intersection *i, t_ray ray)
 		comps.cylinder = NULL;
 		comps.cone = NULL;
 		comps.type = SPHERE;
-		
+
 	}
 	else if (i[0].plan != NULL)
 	{
@@ -188,16 +188,16 @@ t_color ft_shade_hit(t_world *data, t_comps *comps)
 		in_shadow = ft_is_shadowed(data, comps->over_point);
 		if (comps->plan != NULL)
 			*tmp_color = ft_lighting(ft_set_pattern(comps, PLAN), *light,
-								comps->over_point, comps->eyev, comps->normalv, in_shadow);
+								comps->over_point, comps->eyev, comps->normalv, in_shadow, NULL, Notype);
 		else if (comps->sphere != NULL)
 			*tmp_color = ft_lighting(ft_set_pattern(comps, SPHERE), *light,
-								comps->over_point, comps->eyev, comps->normalv, in_shadow);
+								comps->over_point, comps->eyev, comps->normalv, in_shadow, NULL, Notype);
 		else if (comps->cylinder != NULL)
 			*tmp_color = ft_lighting(ft_set_pattern(comps, CYLINDER), *light,
-								comps->over_point, comps->eyev, comps->normalv, in_shadow);
+								comps->over_point, comps->eyev, comps->normalv, in_shadow, NULL, Notype);
 		else if (comps->cone != NULL)
 			*tmp_color = ft_lighting(ft_set_pattern(comps, CONE), *light,
-								comps->over_point, comps->eyev, comps->normalv, in_shadow);
+								comps->over_point, comps->eyev, comps->normalv, in_shadow, NULL, Notype);
 		else
 			tmp_color = ft_color(0, 0, 0);
 		*color = ft_sum_color(*color, *tmp_color);

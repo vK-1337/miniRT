@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   light.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 18:04:20 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/09 11:43:00 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/09 17:07:39 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,14 @@ t_material	*ft_material(void)
 	material->diffuse = 0.9;
 	material->specular = 0.9;
 	material->shininess = 200;
+    material->is_texture = 0;
+    material->pattern = NULL;
+    material->texture = NULL;
 	return (material);
 }
 
 t_color	ft_lighting(t_material *m, t_light light, t_tuple position,
-		t_tuple eyev, t_tuple normalv, int in_shadow)
+		t_tuple eyev, t_tuple normalv, int in_shadow, void *object, t_objects type)
 {
 	t_color	effective_color;
 	t_tuple	lightv;
@@ -55,10 +58,17 @@ t_color	ft_lighting(t_material *m, t_light light, t_tuple position,
 	float	reflect_dot_eye;
 	float	light_dot_normal;
 
-	effective_color = ft_mult_color_tog(m->color, light.intensity);
+    if ( type && type != 0 && m->is_texture)
+    {
+        effective_color = define_effective_color(type, position, object, light);
+        printf("effective_color: %f %f %f\n", effective_color.r, effective_color.g, effective_color.b);
+    }
+    else
+	    effective_color = ft_mult_color_tog(m->color, light.intensity);
 	lightv = ft_normalization(ft_dif_tuple(light.position, position));
-	ambiant = *m->ambiant_color;
-	ambiant = ft_mult_color_tog(m->color, ambiant);
+	// ambiant = *m->ambiant_color;
+	// ambiant = ft_mult_color_tog(m->color, ambiant);
+    ambiant = ft_mult_color(effective_color, m->ambiant);
 	light_dot_normal = ft_dotproduct(lightv, normalv);
 	if (light_dot_normal < 0 || in_shadow)
 	{
@@ -83,6 +93,21 @@ t_color	ft_lighting(t_material *m, t_light light, t_tuple position,
 	return (ft_sum_color(ft_sum_color(ambiant, diffuse), specular));
 }
 
+t_color	define_effective_color(t_objects type, t_tuple position, void *object, t_light light)
+{
+	t_color	effective_color;
+
+	if (type == Sphere)
+		effective_color = ft_spherical(position, *(t_sphere *)object, light);
+	else if (type == Plan)
+		effective_color = ft_planar(position, *(t_plan *)object, light);
+	else if (type == Cylinder || type == Cone)
+		effective_color = ft_cylindrical(position, *(t_cylinder *)object, light);
+	else
+		effective_color = *(ft_color(1, 1, 1));
+	return (effective_color);
+}
+
 unsigned int	color_to_int(t_color color)
 {
 	int	r;
@@ -99,6 +124,24 @@ unsigned int	color_to_int(t_color color)
 	g = (unsigned int)(color.g * 255);
 	b = (unsigned int)(color.b * 255);
 	return ((r << 16) | (g << 8) | b);
+}
+
+int	ft_texture_color_to_int(t_color color)
+{
+	int	r;
+	int	g;
+	int	b;
+
+	r = (int)(color.r);
+	g = (int)(color.g);
+	b = (int)(color.b);
+	if (r > 255)
+		r = 255;
+	if (g > 255)
+		g = 255;
+	if (b > 255)
+		b = 255;
+	return (r << 16 | g << 8 | b);
 }
 
 void	color_black(t_color *color)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:55 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/09 11:43:41 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/09 17:36:57 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,10 @@ void put_pixel(t_win *win, int x, int y, unsigned int color)
     char *dst;
 
     if ((x > SIZE_X || x < 0) || (y > SIZE_Y || y < 0))
+    {
+        printf("x: %d, y: %d\n", x, y);
         return;
+    }
     dst = win->addr + (y * win->line_length + x * (win->bits_per_pixel / 8));
     *(unsigned int *)dst = color;
 }
@@ -77,7 +80,7 @@ void start_threads(t_complete *complete)
     int start_y;
     int end_x;
     int end_y;
-    
+
     start_x = 0;
     start_y = 0;
     end_x = SIZE_X / 10;
@@ -126,31 +129,85 @@ void start_threads(t_complete *complete)
 
 
 
-int main(int ac, char **av)
-{
-    int fd;
-    t_world *data;
+// int main(int ac, char **av)
+// {
+//     int fd;
+//     t_world *data;
 
-    if (ac != 2 || !scene_name_check(av[1]))
-    {
-        printf("Bad arguments : Usage : ./minirt scene.rt");
-        return (EXIT_FAILURE);
-    }
-    fd = open(av[1], O_RDONLY);
-    if (fd == -1)
-        return (write(2, "File not found\n", 16), EXIT_FAILURE);
-    data = init_all_data(fd);
-    t_win *win = init_mlx();
-    t_complete *complete = malloc(sizeof(t_complete));
-    complete->data = data;
-    complete->win = win;
-    start_threads(complete);
-    // render(data.camera, &data, win);
-    mlx_put_image_to_window(win->mlx, win->win, win->img, 0, 0);
-    mlx_hook(win->win, 17, 0, exit_window, complete);
-    mlx_loop(win->mlx);
-    return (EXIT_SUCCESS);
-}
+//     if (ac != 2 || !scene_name_check(av[1]))
+//     {
+//         printf("Bad arguments : Usage : ./minirt scene.rt");
+//         return (EXIT_FAILURE);
+//     }
+//     fd = open(av[1], O_RDONLY);
+//     if (fd == -1)
+//         return (write(2, "File not found\n", 16), EXIT_FAILURE);
+//     data = init_all_data(fd);
+//     t_win *win = init_mlx();
+//     t_complete *complete = malloc(sizeof(t_complete));
+//     complete->data = data;
+//     complete->win = win;
+//     start_threads(complete);
+//     // render(data.camera, &data, win);
+//     mlx_put_image_to_window(win->mlx, win->win, win->img, 0, 0);
+//     mlx_hook(win->win, 17, 0, exit_window, complete);
+//     mlx_loop(win->mlx);
+//     return (EXIT_SUCCESS);
+// }
+
+// int main(void)
+// {
+//     t_sphere *s1 = ft_sphere();
+//     t_light *light = ft_point_light(ft_init_tuple(-10, 10, -10, 1), ft_color(1, 1, 1));
+//     double wall_z = 10;
+// 	double wall_size = 7;
+// 	double canvas_size = 500;
+//     void *mlx;
+//     void *win;
+//     t_material sphere_mat;
+
+//     t_tuple ray_origin = *ft_init_tuple(0, 0, -5, 1);
+//     mlx = mlx_init();
+//     sphere_mat = *ft_texture("textures/461223103.xpm", mlx);
+//     s1->material = &sphere_mat;
+//     win = mlx_new_window(mlx, canvas_size, canvas_size, "MiniRT");
+//     double pixel_size = wall_size / canvas_size;
+// 	double half = wall_size / 2;
+
+//     t_win data;
+//     data.mlx = mlx;
+//     data.win = win;
+//     data.img = mlx_new_image(mlx, canvas_size, canvas_size);
+//     data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
+
+//     int y = 0;
+
+//     while (y < canvas_size)
+//     {
+//         double world_y = half - pixel_size * y;
+//         int x = 0;
+//         while (x < canvas_size)
+//         {
+//             double world_x = -half + pixel_size * x;
+//             t_tuple *position = ft_init_tuple(world_x, world_y, wall_z, 1);
+//             t_ray r = ft_ray(ray_origin, ft_normalization(ft_dif_tuple(*position, ray_origin)));
+//             t_intersection *intersections = ft_intersect(r, s1);
+//             t_intersection *hit = ft_hit(intersections, 2);
+//             if (hit)
+//             {
+//                 t_tuple point = ft_position(r, hit->t);
+//                 t_comps comps = ft_prepare_computations(hit, r);
+//                 t_color color = ft_lighting(s1->material, *light, point, ft_neg_tuple(r.direction), ft_normal_at(comps, point), 0, s1, Sphere);
+//                 int color_int = ft_texture_color_to_int(color);
+//                 put_pixel(&data, x, y, color_int);
+//             }
+//             x++;
+//         }
+//         y++;
+//     }
+//     mlx_put_image_to_window(mlx, win, data.img, 0, 0);
+//     mlx_loop(mlx);
+// }
 
 
 // int main(void)
@@ -228,7 +285,7 @@ int main(int ac, char **av)
 //     right_wall->matrix = rotation_x(M_PI / 2);
 //     right_wall->matrix = ft_mult_mat(rotation_y(M_PI / 2), right_wall->matrix);
 //     right_wall->matrix = ft_mult_mat(translation(-5, 0, 0), right_wall->matrix);
-    
+
 //     // right_wall->coord = *ft_init_tuple(-5, 0, 0, 1);
 //     // right_wall->normal = ft_sum_tuple(right_wall->normal, *ft_init_tuple(1, 0, 0, 0));
 
