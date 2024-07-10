@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:52 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/04 14:13:04 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/10 19:42:41 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int	verify_alight(char **data)
 	float	float_data;
 
 	i = 1;
+    printf("Verifying alight\n");
 	if (char_tab_len(data) != 3)
 		return (0);
 	while (data[i])
@@ -90,6 +91,7 @@ void	print_char_tab(char **tab)
 
 int	verify_camera(char **data)
 {
+    printf("Verifying camera\n");
 	if (char_tab_len(data) != 4)
 		return (0);
 	if (!verify_coord(data[1]))
@@ -105,6 +107,7 @@ int	verify_fov(char *data)
 {
 	int	fov;
 
+    printf("Verifying fov\n");
 	if (!data || !check_fov_syntax(data))
 		return (0);
 	fov = ft_atoi(data);
@@ -135,6 +138,7 @@ int	verify_vect(char *data)
 	char	**vect_split;
 	float	vect;
 
+    printf("Verifying vect\n");
 	if (!check_vect_syntax(data))
 		return (0);
 	vect_split = ft_split(data, ',');
@@ -174,7 +178,8 @@ int	check_vect_syntax(char *data) // ! OK
 		else if (!ft_isdigit(data[i]) && data[i] != '.' && data[i] != '-'
 			&& data[i] != ',')
 			return (0);
-		else if (ft_isdigit(data[i]) && data[i] != '1' && data[i] != '0' && data[i-1] != '.')
+		else if (ft_isdigit(data[i]) && data[i] != '1' && data[i] != '0'
+			&& data[i - 1] != '.')
 			return (0);
 		i++;
 	}
@@ -225,6 +230,7 @@ int	verify_light(char **data)
 {
 	float	float_data;
 
+    printf("Verifying light\n");
 	if (char_tab_len(data) != 4)
 		return (0);
 	if (!verify_coord(data[1]))
@@ -239,10 +245,60 @@ int	verify_light(char **data)
 	return (1);
 }
 
+int	verify_texture_and_pattern(char *data)
+{
+	char	**data_split;
+    printf("Verifying texture and pattern\n");
+    printf("data = %s\n", data);
+	data_split = ft_split(data, ':');
+	if (!data_split)
+		return (0);
+	if (char_tab_len(data_split) != 2)
+		return (free_char_tab(data_split), 0);
+	if (ft_strncmp(data_split[0], "texture", 7) == 0)
+		return (verify_texture(data_split[1]));
+	else if (ft_strncmp(data_split[0], "pattern", 7) == 0)
+		return (verify_pattern(data_split[1]));
+	return (free_char_tab(data_split), 0);
+}
+
+int	verify_pattern(char *pattern)
+{
+	char	**data_split;
+
+	data_split = ft_split(pattern, ';');
+	if (!data_split)
+		return (0);
+	if (char_tab_len(data_split) != 2)
+		return (free_char_tab(data_split), 0);
+	if (!verify_colors(data_split[0]) || !verify_colors(data_split[1]))
+		return (free_char_tab(data_split), 0);
+	return (free_char_tab(data_split), 1);
+}
+
+int	verify_texture(char *texture)
+{
+	int	i;
+
+	i = 0;
+    printf("Texture = %s\n", texture);
+	while (texture[i])
+		i++;
+	if (i < 6)
+		return (0);
+    printf("texture[i] = %c\n", texture[i - 2]);
+	if (texture[i - 2] != 'm' && texture[i - 3] != 'p' && texture[i - 4] != 'x')
+		return (0);
+	if (texture[i - 5] != '.')
+		return (0);
+	return (1);
+}
+
 int	verify_sphere(char **data)
 {
+    printf("Verifying sphere\n");
 	print_char_tab(data);
-	if (char_tab_len(data) != 4)
+	if (char_tab_len(data) != 4 && char_tab_len(data) != 5)
 		return (0);
 	if (!verify_coord(data[1]))
 		return (0);
@@ -250,12 +306,15 @@ int	verify_sphere(char **data)
 		return (0);
 	if (!verify_colors(data[3]))
 		return (0);
+	if (data[4] && !verify_texture_and_pattern(data[4]))
+		return (0);
 	return (1);
 }
 
 int	verify_plan(char **data)
 {
-	if (char_tab_len(data) != 4)
+    printf("Verifying plan\n");
+	if (char_tab_len(data) != 4 && char_tab_len(data) != 5)
 		return (0);
 	if (!verify_coord(data[1]))
 		return (0);
@@ -263,12 +322,15 @@ int	verify_plan(char **data)
 		return (0);
 	if (!verify_colors(data[3]))
 		return (0);
+	if (data[4] && !verify_texture_and_pattern(data[4]))
+		return (0);
 	return (1);
 }
 
 int	verify_cylinder(char **data)
 {
-	if (char_tab_len(data) != 6)
+    printf("Verifying cylinder\n");
+	if (char_tab_len(data) != 6 && char_tab_len(data) != 7)
 		return (0);
 	if (!verify_coord(data[1]))
 		return (0);
@@ -277,13 +339,16 @@ int	verify_cylinder(char **data)
 	if (!is_string_float(data[3]) || !is_string_float(data[4]))
 		return (0);
 	if (!verify_colors(data[5]))
+		return (0);
+	if (data[6] && !verify_texture_and_pattern(data[6]))
 		return (0);
 	return (1);
 }
 
-int verify_cone(char **data)
+int	verify_cone(char **data)
 {
-	if (char_tab_len(data) != 6)
+    printf("Verifying cone\n");
+	if (char_tab_len(data) != 6 && char_tab_len(data) != 7)
 		return (0);
 	if (!verify_coord(data[1]))
 		return (0);
@@ -292,6 +357,8 @@ int verify_cone(char **data)
 	if (!is_string_float(data[3]) || !is_string_float(data[4]))
 		return (0);
 	if (!verify_colors(data[5]))
+		return (0);
+	if (data[6] && !verify_texture_and_pattern(data[6]))
 		return (0);
 	return (1);
 }

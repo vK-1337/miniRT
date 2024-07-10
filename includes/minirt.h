@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/09 11:58:39 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/10 19:47:15 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 #endif
 #define EPSILON 0.001
 #define INFINITY 1e10
-#define SIZE_X 20
-#define SIZE_Y 20
+#define SIZE_X 1000
+#define SIZE_Y 1000
 #define CENTER_X SIZE_X / 2
 #define CENTER_Y SIZE_Y / 2
 #define SPHERE 0
@@ -133,6 +133,8 @@ typedef struct s_material
 	float specular;
 	float shininess;
 	t_pattern *pattern;
+    int					is_texture;
+	Image				*texture;
 } t_material;
 
 typedef struct s_sphere
@@ -274,6 +276,7 @@ void print_char_tab(char **tab);
 /*                                                                            */
 /******************************************************************************/
 
+double ft_atof(char *str);
 int scene_name_check(char *av); // Convert color to int
 t_world *init_all_data(int fd);
 void null_data(t_world *data);
@@ -297,6 +300,9 @@ int verify_coord(char *data);
 int verify_vect(char *data);
 int verify_fov(char *data);
 int verify_colors_syntax(char *data);
+int verify_texture_and_pattern(char *data);
+int verify_pattern(char *pattern);
+int verify_texture(char *texture);
 int check_fov_syntax(char *data);
 int check_vect_syntax(char *data);
 int check_coord_syntax(char *data);
@@ -352,7 +358,7 @@ void free_data(t_world **data);
 /*                                   TUPLE_CALCULATION                        */
 /*                                                                            */
 /*                                                                            */
-/*************************************************************	printf("Hit\n");*****************/
+/******************************************************************************/
 
 //										TUPLE									//
 t_tuple *ft_init_tuple(float x, float y, float z, float w);

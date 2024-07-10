@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:55 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/09 11:43:41 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/10 19:18:47 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void start_threads(t_complete *complete)
     int start_y;
     int end_x;
     int end_y;
-    
+
     start_x = 0;
     start_y = 0;
     end_x = SIZE_X / 10;
@@ -228,7 +228,7 @@ int main(int ac, char **av)
 //     right_wall->matrix = rotation_x(M_PI / 2);
 //     right_wall->matrix = ft_mult_mat(rotation_y(M_PI / 2), right_wall->matrix);
 //     right_wall->matrix = ft_mult_mat(translation(-5, 0, 0), right_wall->matrix);
-    
+
 //     // right_wall->coord = *ft_init_tuple(-5, 0, 0, 1);
 //     // right_wall->normal = ft_sum_tuple(right_wall->normal, *ft_init_tuple(1, 0, 0, 0));
 
