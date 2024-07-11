@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/10 18:18:08 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/11 17:50:39 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,12 +211,13 @@ int	init_sphere(t_world *data, char **data_split)
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return (free(sphere), 0);
-	sphere->matrix = translation(atof(split[0]), atof(split[1]),
+	sphere->radius = atof(data_split[2]) / 2;
+	sphere->matrix = translation(atof(split[0]) , atof(split[1]),
 			atof(split[2]));
 	sphere->center = ft_init_tuple_reg(atof(split[0]), atof(split[1]),
 			atof(split[2]), 1);
 	free_char_tab(split);
-	sphere->radius = atof(data_split[2]) / 2;
+	
 	split = ft_split(data_split[3], ',');
 	if (!split)
 		return (free(sphere), 0);
@@ -301,6 +302,7 @@ int	init_cylinder(t_world *data, char **data_split)
 {
 	char		**split;
 	t_cylinder	*cylinder;
+	int y;
 
 	cylinder = malloc(sizeof(t_cylinder));
 	if (!cylinder)
@@ -310,6 +312,7 @@ int	init_cylinder(t_world *data, char **data_split)
 		return (free(cylinder), 0);
 	cylinder->matrix = translation(atof(split[0]), atof(split[1]),
 			atof(split[2]));
+	y = atof(split[1]);
 	free_char_tab(split);
 	split = ft_split(data_split[2], ',');
 	if (!split)
@@ -321,8 +324,10 @@ int	init_cylinder(t_world *data, char **data_split)
 	cylinder->matrix = ft_mult_mat(cylinder->matrix, rotation_z(atoi(split[2])
 				* M_PI), ALL);
 	cylinder->radius = atof(data_split[3]) / 2;
-	cylinder->y_max = atof(data_split[4]) + cylinder->coord.y;
-	cylinder->y_min = cylinder->coord.y;
+	cylinder->y_max = y  + atof(data_split[4]) / 2;
+	cylinder->y_min = y - atof(data_split[4]) / 2;
+	printf("cylinder->y_max = %f\n", cylinder->y_max);
+	printf("cylinder->y_min = %f\n", cylinder->y_min);
 	free_char_tab(split);
 	split = ft_split(data_split[5], ',');
 	if (!split)

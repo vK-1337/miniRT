@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   light.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 18:04:20 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/09 11:43:00 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/11 17:53:48 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,8 @@ t_color	ft_lighting(t_material *m, t_light light, t_tuple position,
 
 	effective_color = ft_mult_color_tog(m->color, light.intensity);
 	lightv = ft_normalization(ft_dif_tuple(light.position, position));
-	ambiant = *m->ambiant_color;
-	ambiant = ft_mult_color_tog(m->color, ambiant);
+	ambiant = ft_mult_color(effective_color,m->ambiant);
+	
 	light_dot_normal = ft_dotproduct(lightv, normalv);
 	if (light_dot_normal < 0 || in_shadow)
 	{
@@ -76,11 +76,13 @@ t_color	ft_lighting(t_material *m, t_light light, t_tuple position,
 		else
 		{
 			factor = pow(reflect_dot_eye, m->shininess);
-			specular = ft_mult_color(light.colors, m->specular);
+			specular = ft_mult_color(light.intensity, m->specular);
 			specular = ft_mult_color(specular, factor);
+			printf("specular: %f %f %f\n", specular.r, specular.g, specular.b);
 		}
 	}
-	return (ft_sum_color(ft_sum_color(ambiant, diffuse), specular));
+
+	return (ft_sum_color(ft_sum_color(ft_sum_color(ambiant, diffuse), specular), *m->ambiant_color));
 }
 
 unsigned int	color_to_int(t_color color)

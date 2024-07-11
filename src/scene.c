@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   scene.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 11:41:54 by udumas            #+#    #+#             */
-/*   Updated: 2024/07/10 15:56:54 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/11 16:46:08 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,8 +189,10 @@ t_color ft_shade_hit(t_world *data, t_comps *comps)
 			*tmp_color = ft_lighting(ft_set_pattern(comps, PLAN), *light,
 								comps->over_point, comps->eyev, comps->normalv, in_shadow);
 		else if (comps->sphere != NULL)
+		{
 			*tmp_color = ft_lighting(ft_set_pattern(comps, SPHERE), *light,
 								comps->over_point, comps->eyev, comps->normalv, in_shadow);
+		}
 		else if (comps->cylinder != NULL)
 			*tmp_color = ft_lighting(ft_set_pattern(comps, CYLINDER), *light,
 								comps->over_point, comps->eyev, comps->normalv, in_shadow);

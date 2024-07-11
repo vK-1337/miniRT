@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/10 18:20:57 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/11 13:08:58 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 #endif
 #define EPSILON 0.001
 #define INFINITY 1e10
-#define SIZE_X 50
-#define SIZE_Y 50
+#define SIZE_X 500
+#define SIZE_Y 500
 #define CENTER_X SIZE_X / 2
 #define CENTER_Y SIZE_Y / 2
 #define SPHERE 0
@@ -147,7 +147,6 @@ typedef struct s_sphere
 
 typedef struct s_cylinder
 {
-	t_tuple coord;
 	t_tuple n_vector;
 	float radius;
 	float y_max;

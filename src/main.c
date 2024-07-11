@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:55 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/10 18:07:46 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/11 17:06:59 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,8 +129,19 @@ void start_threads(t_complete *complete)
     free(complete->data->pixel_put);
 }
 
+int key_hook(int keycode, t_complete *complete)
+{
+    if (keycode == XK_Escape)
+        exit_window(complete);
+    return (0);
+}
 
 
+void setup_hooks(t_win *win, t_complete *complete)
+{
+    mlx_key_hook(win->win, key_hook, complete);
+    mlx_hook(win->win, 17, 0, exit_window, complete);
+}
 
 int main(int ac, char **av)
 {
@@ -154,7 +165,7 @@ int main(int ac, char **av)
     complete->win = win;
     start_threads(complete);
     mlx_put_image_to_window(win->mlx, win->win, win->img, 0, 0);
-    mlx_hook(win->win, 17, 0, exit_window, complete);
+    setup_hooks(win, complete);
     mlx_loop(win->mlx);
     return (EXIT_SUCCESS);
 }
