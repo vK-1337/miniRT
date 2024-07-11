@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/10 19:01:22 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/11 15:14:28 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_world	init_all_data(int fd, void *mlx)
 		write(STDERR_FILENO, "The file is empty\n", 19);
 		exit(EXIT_FAILURE);
 	}
-	if (init_corresponding_data(file_data, &data, mlx) == 2)
+	if (init_corresponding_data(file_data, data, mlx) == 2)
 	{
 		free_data(&data);
 		free(file_data);
@@ -42,7 +42,7 @@ t_world	init_all_data(int fd, void *mlx)
 		file_data = get_next_line(fd, 0);
 		if (file_data && file_data[0] == '\n')
 			continue ;
-		if (init_corresponding_data(file_data, &data, mlx) == 2)
+		if (init_corresponding_data(file_data, data, mlx) == 2)
 		{
 			get_next_line(fd, 1);
 			free_data(&data);
@@ -50,7 +50,7 @@ t_world	init_all_data(int fd, void *mlx)
 			exit(EXIT_FAILURE);
 		}
 	}
-	return (data);
+	return (*data);
 }
 
 int	init_corresponding_data(char *file_data, t_world *data, void *mlx)
@@ -123,7 +123,7 @@ int init_alight(t_world *data, char **data_split)
 {
 	char **color_split;
 	float intensity;
-	data->alight_intensity = ft_atof(data_split[1]);
+	data->alight_intensity = atof(data_split[1]);
 	intensity = data->alight_intensity;
 	color_split = ft_split(data_split[2], ',');
 	if (!color_split)
@@ -151,21 +151,21 @@ int init_camera(t_world *data, char **data_split)
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return (free(camera) , 0);
+	from = ft_init_tuple_reg(atof(split[0]), atof(split[1]), atof(split[2]), 1);
 	free_char_tab(split);
 	split = ft_split(data_split[2], ',');
 	if (!split)
 		return (free(camera) , 0);
-	camera->vector.x = ft_atof(split[0]);
-	camera->vector.y = ft_atof(split[1]);
-	camera->vector.z = ft_atof(split[2]);
+	camera->vector.x = atof(split[0]);
+	camera->vector.y = atof(split[1]);
+	camera->vector.z = atof(split[2]);
 	camera->fov = ft_atoi(data_split[3]);
-	from = ft_init_tuple_reg(ft_atof(split[0]), ft_atof(split[1]), ft_atof(split[2]), 1);
 	free_char_tab(split);
 	split = ft_split(data_split[2], ',');
 	if (!split)
 		return (free(camera), 0);
 	to = ft_init_tuple_reg(0, 0, 0, 1);
-	up = ft_init_tuple_reg(atof(split[0]), ft_atof(split[1]), ft_atof(split[2]), 0);
+	up = ft_init_tuple_reg(atof(split[0]), atof(split[1]), atof(split[2]), 0);
 	camera->matrix = ft_view_transform(from, to, up);
 	free_char_tab(split);
 	data->camera = camera;
@@ -188,12 +188,12 @@ int init_light(t_world *data, char **data_split)
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return (free(light), 0);
-	light->position.x = ft_atof(split[0]);
-	light->position.y = ft_atof(split[1]);
-	light->position.z = ft_atof(split[2]);
+	light->position.x = atof(split[0]);
+	light->position.y = atof(split[1]);
+	light->position.z = atof(split[2]);
 	light->position.w = 1;
 	free_char_tab(split);
-	intensity = ft_atof(data_split[2]);
+	intensity = atof(data_split[2]);
 	split = ft_split(data_split[3], ',');
 	if (!split)
 		return (free(light), 0);
@@ -221,27 +221,28 @@ int	init_sphere(t_world *data, char **data_split, void *mlx)
     split = ft_split(data_split[1], ',');
     if (!split)
         return (free(sphere) , 0);
-    sphere->center.x = ft_atof(split[0]);
-    sphere->center.y = ft_atof(split[1]);
-    sphere->center.z = ft_atof(split[2]);
+    sphere->center.x = atof(split[0]);
+    sphere->center.y = atof(split[1]);
+    sphere->center.z = atof(split[2]);
     free_char_tab(split);
-    sphere->radius = ft_atof(data_split[2]) / 2;
+    sphere->radius = atof(data_split[2]) / 2;
     split = ft_split(data_split[3], ',');
     if (!split)
         return (free(sphere) , 0);
-    sphere->colors.r = ft_atoi(split[0]);
-    sphere->colors.g = ft_atoi(split[1]);
-    sphere->colors.b = ft_atoi(split[2]);
+    sphere->material = ft_material();
+    sphere->material->color.r = ft_atoi(split[0]);
+    sphere->material->color.g = ft_atoi(split[1]);
+    sphere->material->color.b = ft_atoi(split[2]);
     free_char_tab(split);
     if (data_split[4])
     {
         split = ft_split(data_split[4], ':');
         if (!split)
             return (free(sphere), 0);
-        if (ft_strmcmp(split[0], "texture") == 0)
+        if (ft_strncmp(split[0], "texture", 8) == 0)
         {
-            sphere->material->texture = ft_texture(split[1], mlx);
-            if (!sphere->material->texture)
+            sphere->material = ft_texture(split[1], mlx);
+            if (!sphere->material)
                 return (free(sphere), free_char_tab(split), 0);
         }
         else if (ft_strncmp(split[0], "pattern", 8) == 0)
@@ -282,6 +283,8 @@ int init_plan(t_world *data, char **data_split, void *mlx)
 	t_plan	*plan;
     t_color *p_color_1;
     t_color *p_color_2;
+    float **matrix;
+
 	plan = malloc(sizeof(t_plan));
 	printf("plan = %p\n", plan);
 	if (!plan)
@@ -289,9 +292,9 @@ int init_plan(t_world *data, char **data_split, void *mlx)
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return (free(plan), 0);
-	plan->coord.x = ft_atof(split[0]);
-	plan->coord.y = ft_atof(split[1]);
-	plan->coord.z = ft_atof(split[2]);
+	plan->coord.x = atof(split[0]);
+	plan->coord.y = atof(split[1]);
+	plan->coord.z = atof(split[2]);
 	plan->normal = ft_init_tuple_reg(0, 1, 0, 0);
 	matrix = translation(atof(split[0]), atof(split[1]), atof(split[2]));
 	plan->matrix = identity_matrix(4);
@@ -300,9 +303,9 @@ int init_plan(t_world *data, char **data_split, void *mlx)
 	split = ft_split(data_split[2], ',');
 	if (!split)
 		return (free(plan), 0);
-	plan->vector.x = ft_atof(split[0]);
-	plan->vector.y = ft_atof(split[1]);
-	plan->vector.z = ft_atof(split[2]);
+	plan->vector.x = atof(split[0]);
+	plan->vector.y = atof(split[1]);
+	plan->vector.z = atof(split[2]);
 	matrix = rotation_x(atof(split[0]) * M_PI);
 	plan->matrix = ft_mult_mat(plan->matrix, matrix);
 	ft_free_mat(matrix, 4);
@@ -332,10 +335,10 @@ int init_plan(t_world *data, char **data_split, void *mlx)
         split = ft_split(data_split[4], ':');
         if (!split)
             return (free(plan), 0);
-        if (ft_strmcmp(split[0], "texture") == 0)
+        if (ft_strncmp(split[0], "texture", 8) == 0)
         {
-            plan->material->texture = ft_texture(split[1], mlx);
-            if (!plan->material->texture)
+            plan->material = ft_texture(split[1], mlx);
+            if (!plan->material)
                 return (free(plan), free_char_tab(split), 0);
         }
         else if (ft_strncmp(split[0], "pattern", 8) == 0)
@@ -380,9 +383,9 @@ int	init_cylinder(t_world *data, char **data_split, void *mlx)
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return (free(cylinder), 0);
-	cylinder->coord.x = ft_atof(split[0]);
-	cylinder->coord.y = ft_atof(split[1]);
-	cylinder->coord.z = ft_atof(split[2]);
+	cylinder->coord.x = atof(split[0]);
+	cylinder->coord.y = atof(split[1]);
+	cylinder->coord.z = atof(split[2]);
 	cylinder->matrix = identity_matrix(4);
 	cylinder->matrix = ft_mult_mat(cylinder->matrix, translation(atof(split[0]),
 																 atof(split[1]), atof(split[2])));
@@ -390,9 +393,9 @@ int	init_cylinder(t_world *data, char **data_split, void *mlx)
 	split = ft_split(data_split[2], ',');
 	if (!split)
 		return (free(cylinder), 0);
-	cylinder->n_vector.x = ft_atof(split[0]);
-	cylinder->n_vector.y = ft_atof(split[1]);
-	cylinder->n_vector.z = ft_atof(split[2]);
+	cylinder->n_vector.x = atof(split[0]);
+	cylinder->n_vector.y = atof(split[1]);
+	cylinder->n_vector.z = atof(split[2]);
 	cylinder->matrix = ft_mult_mat(cylinder->matrix, rotation_x(atoi(split[0]) * M_PI));
 	cylinder->matrix = ft_mult_mat(cylinder->matrix, rotation_y(atoi(split[1]) * M_PI));
 	cylinder->matrix = ft_mult_mat(cylinder->matrix, rotation_z(atoi(split[2]) * M_PI));
@@ -416,10 +419,10 @@ int	init_cylinder(t_world *data, char **data_split, void *mlx)
         split = ft_split(data_split[6], ':');
         if (!split)
             return (free(cylinder), 0);
-        if (ft_strmcmp(split[0], "texture") == 0)
+        if (ft_strncmp(split[0], "texture", 8) == 0)
         {
-            cylinder->material->texture = ft_texture(split[1], mlx);
-            if (!cylinder->material->texture)
+            cylinder->material = ft_texture(split[1], mlx);
+            if (!cylinder->material)
                 return (free(cylinder), free_char_tab(split), 0);
         }
         else if (ft_strncmp(split[0], "pattern", 8) == 0)
@@ -451,10 +454,11 @@ int	init_cylinder(t_world *data, char **data_split, void *mlx)
 return (1);
 }
 
-int init_cone(t_world *data, char **data_split)
+int init_cone(t_world *data, char **data_split, void *mlx)
 {
 	char **split;
 	t_cone *cone;
+    (void) mlx;
 
 	cone = malloc(sizeof(t_cone));
 	if (!cone)

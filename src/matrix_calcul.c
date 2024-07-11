@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   matrix_calcul.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 12:08:49 by udumas            #+#    #+#             */
-/*   Updated: 2024/06/27 09:26:38 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/11 14:54:15 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ float	**ft_mult_mat(float **mat1, float **mat2)
 t_tuple	ft_mult_mat_tuple(t_tuple *tuple, float **mat)
 {
 	t_tuple 	new;
-
+    
 	new.x = mat[0][0] *  tuple->x + mat[0][1] * tuple->y + mat[0][2] * tuple->z + mat[0][3] * tuple->w;
 	new.y = mat[1][0] *  tuple->x + mat[1][1] * tuple->y + mat[1][2] * tuple->z + mat[1][3] * tuple->w;
 	new.z = mat[2][0] *  tuple->x + mat[2][1] * tuple->y + mat[2][2] * tuple->z + mat[2][3] * tuple->w;

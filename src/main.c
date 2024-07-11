@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 10:26:12 by vk                #+#    #+#             */
-/*   Updated: 2024/07/09 14:21:51 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/11 12:08:50 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,31 +112,32 @@ void start_threads(t_complete *complete)
 
 
 
-// int main(int ac, char **av)
-// {
-//     int fd;
-//     t_world *data;
+int main(int ac, char **av)
+{
+    int fd;
+    t_world data;
 
-//     if (ac != 2 || !scene_name_check(av[1]))
-//     {
-//         printf("Bad arguments : Usage : ./minirt scene.rt");
-//         return (EXIT_FAILURE);
-//     }
-//     fd = open(av[1], O_RDONLY);
-//     if (fd == -1)
-//         return (write(2, "File not found\n", 16), EXIT_FAILURE);
-//     data = init_all_data(fd);
-//     t_win *win = init_mlx();
-//     t_complete *complete = malloc(sizeof(t_complete));
-//     complete->data = data;
-//     complete->win = win;
-//     start_threads(complete);
-//     // render(data.camera, &data, win);
-//     mlx_put_image_to_window(win->mlx, win->win, win->img, 0, 0);
-//     mlx_hook(win->win, 17, 0, exit_window, complete);
-//     mlx_loop(win->mlx);
-//     return (EXIT_SUCCESS);
-// }
+    if (ac != 2 || !scene_name_check(av[1]))
+    {
+        printf("Bad arguments : Usage : ./minirt scene.rt");
+        return (EXIT_FAILURE);
+    }
+    fd = open(av[1], O_RDONLY);
+    if (fd == -1)
+        return (write(2, "File not found\n", 16), EXIT_FAILURE);
+    t_win *win = init_mlx();
+    printf("win->mlx: %p\n", win->mlx);
+    data = init_all_data(fd, win->mlx);
+    t_complete *complete = malloc(sizeof(t_complete));
+    complete->data = &data;
+    complete->win = win;
+    start_threads(complete);
+    // render(data.camera, &data, win);
+    mlx_put_image_to_window(win->mlx, win->win, win->img, 0, 0);
+    mlx_hook(win->win, 17, 0, exit_window, complete);
+    mlx_loop(win->mlx);
+    return (EXIT_SUCCESS);
+}
 
 // int main(void)
 // {

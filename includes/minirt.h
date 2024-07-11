@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/08 19:35:46 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/11 14:04:11 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,10 @@
 # include <wait.h>
 
 /******************************************************************************/
-/*                                   50:21
-	/ 1:33:17                                         */
+/*                                                                            */
 /*                                                                            */
 /*                              STRUCT & ENUM                                 */
+/*                                                                            */
 /*                                                                            */
 /*                                                                            */
 /******************************************************************************/
@@ -299,12 +299,12 @@ void					print_char_tab(char **tab);
 /******************************************************************************/
 
 int	scene_name_check(char *av); // Convert color to int
-
-t_world					*init_all_data(int fd);
+t_world					init_all_data(int fd, void *mlx);
 void					null_data(t_world *data);
-int						init_corresponding_data(char *file_data, t_world *data);
+int						init_corresponding_data(char *file_data, t_world *data,
+							void *mlx);
 int						init_data_w_line(t_world *data, t_dtype type,
-							char **data_split);
+							char **data_split, void *mlx);
 t_dtype					determine_type(char *data);
 int						char_tab_len(char **tab);
 void					free_char_tab(char **tab);
@@ -322,17 +322,21 @@ int						verify_coord(char *data);
 int						verify_vect(char *data);
 int						verify_fov(char *data);
 int						verify_colors_syntax(char *data);
+int						verify_texture(char *texture);
+int						verify_texture_and_pattern(char *data);
+int						verify_pattern(char *pattern);
 int						check_fov_syntax(char *data);
 int						check_vect_syntax(char *data);
 int						check_coord_syntax(char *data);
-
 int						init_alight(t_world *data, char **data_split);
 int						init_camera(t_world *data, char **data_split);
 int						init_light(t_world *data, char **data_split);
-int						init_sphere(t_world *data, char **data_split);
-int						init_plan(t_world *data, char **data_split);
-int						init_cylinder(t_world *data, char **data_split);
-int						init_cone(t_world *data, char **data_split);
+int						init_sphere(t_world *data, char **data_split,
+							void *mlx);
+int						init_plan(t_world *data, char **data_split, void *mlx);
+int						init_cylinder(t_world *data, char **data_split,
+							void *mlx);
+int						init_cone(t_world *data, char **data_split, void *mlx);
 t_dtype					determine_type(char *data);
 void					null_data(t_world *data);
 void					print_all_data(t_world *data);
@@ -377,7 +381,7 @@ void					free_data(t_world **data);
 /*                                   TUPLE_CALCULATION                        */
 /*                                                                            */
 /*                                                                            */
-/*************************************************************	printf("Hit\n");*****************/
+/******************************************************************************/
 
 //										TUPLE									//
 t_tuple					*ft_init_tuple(float x, float y, float z, float w);
