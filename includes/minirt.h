@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/09 17:35:47 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/08 19:35:46 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ typedef enum e_dtype
 	CO
 }						t_dtype;
 
-typedef struct t_wall
+typedef struct s_wall
 {
 	float				x;
 	float				y;
@@ -117,7 +117,7 @@ typedef struct s_pattern
 	float				**transform;
 }						t_pattern;
 
-typedef struct t_discriminant
+typedef struct s_discriminant
 {
 	float				a;
 	float				b;
@@ -269,6 +269,7 @@ typedef struct s_win
 	int					line_length;
 	int					endian;
 }						t_win;
+
 typedef struct s_thread
 {
 	pthread_t			pthread_id;
@@ -298,6 +299,7 @@ void					print_char_tab(char **tab);
 /******************************************************************************/
 
 int	scene_name_check(char *av); // Convert color to int
+
 t_world					*init_all_data(int fd);
 void					null_data(t_world *data);
 int						init_corresponding_data(char *file_data, t_world *data);
@@ -488,6 +490,7 @@ t_material				*ft_material(void);
 t_light					*ft_point_light(t_tuple *position, t_color *intensity);
 void					ft_point_light2(t_light *light, t_tuple position,
 							t_color intensity);
+
 t_color					ft_lighting(t_material *m, t_light light,
 							t_tuple position, t_tuple eyev, t_tuple normalv,
 							int in_shadow, void *object, t_objects type);
@@ -551,34 +554,36 @@ void					ft_cylinder_caps_intersect(t_intersection **t_tab,
 void					ft_cone_intersect(t_intersection **t_tab, t_cone **cone,
 							t_ray ray, int *count);
 t_cone					*ft_cone(void);
-int						ft_check_caps(t_ray ray, float t, float radius);
-int						ft_equal_tuple(t_tuple *t1, t_tuple *t2);
 
 /******************************************************************************/
 /*                                                                            */
 /*                                                                            */
-/*                                   TEXTURES                                 */
+/*                                   TEXTURES									*/
 /*                                                                            */
 /*                                                                            */
 /******************************************************************************/
 
+t_material				*ft_texture(char *path, void *mlx);
+int						ft_texture_color_to_int(t_color color);
+void					cylindrical_mapping(float x, float y, float z,
+							Image *image, t_color *color);
+void					planar_mapping(float x, float y, Image *image,
+							t_color *color);
+void					spherical_mapping(float x, float y, float z,
+							Image *image, t_color *color);
+void					get_interpolated_color(float u, float v, Image *image,
+							t_color *color);
+uint8_t					*get_pixel(Image *image, int x, int y);
+Image					*load_xpm_image(void *mlx_ptr, const char *file_path);
+t_color					define_effective_color(t_objects type, t_tuple position,
+							void *object, t_light light);
 t_color					ft_spherical(t_tuple position, t_sphere sphere,
 							t_light light);
 t_color					ft_planar(t_tuple position, t_plan plan, t_light light);
 t_color					ft_cylindrical(t_tuple position, t_cylinder cylinder,
 							t_light light);
-t_material				*ft_texture(char *path, void *mlx);
-int						ft_texture_color_to_int(t_color color);
-void					spherical_mapping(float x, float y, float z,
-							Image *image, t_color *color);
-void					planar_mapping(float x, float y, Image *image,
-							t_color *color);
-void					cylindrical_mapping(float x, float y, float z,
-							Image *image, t_color *color);
-void					get_interpolated_color(float u, float v, Image *image,
-							t_color *color);
-Image					*load_xpm_image(void *mlx_ptr, const char *file_path);
-uint8_t					*get_pixel(Image *image, int x, int y);
-t_color					define_effective_color(t_objects type, t_tuple position,
-							void *object, t_light light);
+
+int						ft_check_caps(t_ray ray, float t, float radius);
+int						ft_equal_tuple(t_tuple *t1, t_tuple *t2);
+
 #endif

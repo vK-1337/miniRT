@@ -5,30 +5,13 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/19 17:09:55 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/09 17:36:57 by vda-conc         ###   ########.fr       */
+/*   Created: 2024/05/31 10:26:12 by vk                #+#    #+#             */
+/*   Updated: 2024/07/09 14:21:51 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
 
-// int main(int ac, char **av)
-// {
-//     int fd;
-//     t_world data;
-
-//     if (ac != 2 || !scene_name_check(av[1]))
-//     {
-//         printf("Bad arguments : Usage : ./minirt scene.rt");
-//         return (EXIT_FAILURE);
-//     }
-//     fd = open(av[1], O_RDONLY);
-//     if (fd == -1)
-// 		return (write(2, "File not found\n", 16), EXIT_FAILURE);
-//     data = init_all_data(fd);
-//     (void) data;
-//     return (EXIT_SUCCESS);
-// }
 void put_pixel(t_win *win, int x, int y, unsigned int color)
 {
     char *dst;

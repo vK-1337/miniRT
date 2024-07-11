@@ -6,16 +6,16 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 11:41:54 by udumas            #+#    #+#             */
-/*   Updated: 2024/07/09 17:18:39 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/08 18:33:01 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
 
-t_intersection *ft_add_t(t_intersection *t_tab, t_intersection t[2], int count)
+t_intersection	*ft_add_t(t_intersection *t_tab, t_intersection t[2], int count)
 {
-	t_intersection *new_t_tab;
-	int i;
+	t_intersection	*new_t_tab;
+	int				i;
 
 	i = 0;
 	new_t_tab = malloc(sizeof(t_intersection) * (count));
@@ -33,21 +33,21 @@ t_intersection *ft_add_t(t_intersection *t_tab, t_intersection t[2], int count)
 	return (new_t_tab);
 }
 
-void ft_sphere_intersections(t_intersection **t_tab, t_sphere **sphere,
-							 t_ray ray, int *count)
+void	ft_sphere_intersections(t_intersection **t_tab, t_sphere **sphere,
+		t_ray ray, int *count)
 {
-	t_discriminant dis;
-	t_intersection t[2];
-	t_ray new_ray;
+	t_discriminant	dis;
+	t_intersection	t[2];
+	t_ray			new_ray;
 
 	if (*sphere == NULL)
-		return;
+		return ;
 	new_ray = ray_transform(ray, ft_inversion((*sphere)->matrix, 4));
 	dis = ft_discriminant(new_ray, *sphere);
 	if (dis.result < 0)
 	{
 		*sphere = (*sphere)->next;
-		return;
+		return ;
 	}
 	t[0].t = (-dis.b - sqrt(dis.result)) / (2 * dis.a);
 	t[0].sphere = *sphere;
@@ -64,14 +64,15 @@ void ft_sphere_intersections(t_intersection **t_tab, t_sphere **sphere,
 	*sphere = (*sphere)->next;
 }
 
-t_intersection * ft_intersect_world(t_ray ray, t_world **data)
+t_intersection	*ft_intersect_world(t_ray ray, t_world **data)
 {
-	t_intersection *t_tab;
-	int count;
-	t_sphere *sphere;
-	t_plan *plan;
-	t_cylinder *cylinder;
-	t_cone *cone;
+	t_intersection	*t_tab;
+	int				count;
+	t_sphere		*sphere;
+	t_plan			*plan;
+	t_cylinder		*cylinder;
+	t_cone			*cone;
+
 	count = 0;
 	if (*data == NULL)
 		return (NULL);
@@ -106,9 +107,9 @@ t_intersection * ft_intersect_world(t_ray ray, t_world **data)
 	return (t_tab);
 }
 
-t_comps ft_prepare_computations(t_intersection *i, t_ray ray)
+t_comps	ft_prepare_computations(t_intersection *i, t_ray ray)
 {
-	t_comps comps;
+	t_comps	comps;
 
 	if (i == NULL)
 	{
@@ -132,7 +133,6 @@ t_comps ft_prepare_computations(t_intersection *i, t_ray ray)
 		comps.cylinder = NULL;
 		comps.cone = NULL;
 		comps.type = SPHERE;
-
 	}
 	else if (i[0].plan != NULL)
 	{
@@ -169,11 +169,11 @@ t_comps ft_prepare_computations(t_intersection *i, t_ray ray)
 		comps.inside = 0;
 	}
 	comps.over_point = ft_sum_tuple(comps.point, ft_mult_vector(comps.normalv,
-																EPSILON));
+				EPSILON));
 	return (comps);
 }
 
-t_color ft_shade_hit(t_world *data, t_comps *comps)
+t_color	ft_shade_hit(t_world *data, t_comps *comps)
 {
 	int in_shadow;
 	t_color *color;
@@ -205,13 +205,13 @@ t_color ft_shade_hit(t_world *data, t_comps *comps)
 		light = light->next;
 	}
 	return (*color);
-
 }
 
-t_color ft_color_at(t_world *data, t_ray ray)
+t_color	ft_color_at(t_world *data, t_ray ray)
 {
-	t_intersection *xs;
-	t_comps comps;
+	t_intersection	*xs;
+	t_comps			comps;
+
 	xs = ft_intersect_world(ray, &data);
 	if (ft_hit(xs, xs[0].count) == NULL)
 		return (*ft_color(0, 0, 0));
@@ -219,13 +219,13 @@ t_color ft_color_at(t_world *data, t_ray ray)
 	return (ft_shade_hit(data, &comps));
 }
 
-float **ft_view_transform(t_tuple from, t_tuple to, t_tuple up)
+float	**ft_view_transform(t_tuple from, t_tuple to, t_tuple up)
 {
-	t_tuple forward;
-	t_tuple upm;
-	t_tuple left;
-	t_tuple true_up;
-	float **orientation;
+	t_tuple	forward;
+	t_tuple	upm;
+	t_tuple	left;
+	t_tuple	true_up;
+	float	**orientation;
 
 	forward = ft_normalization(ft_dif_tuple(to, from));
 	upm = ft_normalization(up);
@@ -242,6 +242,6 @@ float **ft_view_transform(t_tuple from, t_tuple to, t_tuple up)
 	orientation[2][1] = -forward.y;
 	orientation[2][2] = -forward.z;
 	orientation = ft_mult_mat(orientation, translation(-from.x, -from.y,
-													   -from.z));
+				-from.z));
 	return (orientation);
 }

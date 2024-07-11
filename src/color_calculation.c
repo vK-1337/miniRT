@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   color_calculation.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 16:30:27 by udumas            #+#    #+#             */
-/*   Updated: 2024/07/09 11:40:52 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/10 18:46:09 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ t_color *ft_color(float r, float g, float b)
     t_color *new;
 
     new = malloc(sizeof(t_color));
+    if (!new)
+        return (NULL);
     new->r = r;
     new->g = g;
     new->b = b;
