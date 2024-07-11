@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 09:54:05 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/08 19:36:21 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/08 19:41:17 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,11 +114,9 @@ void	ft_sort_intersections(t_intersection *intersections, int count)
 	while (i < count)
 	{
 		j = i + 1;
-		//printf("intersection[%d].t = %f\n", i, intersections[i].t);
 		while (j < count)
 		{
 
-			//printf("intersection[%d].t = %f\n", j, intersections[j].t);
 			if (intersections[i].t > intersections[j].t)
 			{
 				tmp = intersections[i];

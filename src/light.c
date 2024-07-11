@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 18:04:20 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/08 18:27:53 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/09 10:25:32 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ t_color	define_effective_color(t_objects type, t_tuple position, void *object, t
 		effective_color = ft_spherical(position, *(t_sphere *)object, light);
 	else if (type == Plan)
 		effective_color = ft_planar(position, *(t_plan *)object, light);
-	else if (type == Cylinder)
+	else if (type == Cylinder || type == Cone)
 		effective_color = ft_cylindrical(position, *(t_cylinder *)object, light);
 	else
 		effective_color = *(ft_color(1, 1, 1));

@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 10:26:12 by vk                #+#    #+#             */
-/*   Updated: 2024/07/08 19:35:53 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/09 14:21:51 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,9 @@ int main(void)
 
     t_tuple ray_origin = *ft_init_tuple(0, 0, -5, 1);
     mlx = mlx_init();
-    sphere_mat = *ft_texture("/home/vda-conc/Documents/Projects/miniRT/src/461223103.xpm", mlx);
+    sphere_mat = *ft_texture("src/461223103.xpm", mlx);
     s1->material = &sphere_mat;
-    win = mlx_new_window(mlx, canvas_size, canvas_size, "MiniRT");
+    win = mlx_new_window(mlx, canvas_size, canvas_size, " ");
     double pixel_size = wall_size / canvas_size;
 	double half = wall_size / 2;
 
