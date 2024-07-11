@@ -98,8 +98,9 @@ t_intersection	*ft_intersect_world(t_ray ray, t_world **data)
 	{
 		ft_plan_intersect(&t_tab, &plan, ray, &count);
 		ft_sphere_intersections(&t_tab, &sphere, ray, &count);
-		ft_cylinder_caps_intersect(&t_tab, &cylinder, ray, &count);
+
 		ft_cylinder_intersect(&t_tab, &cylinder, ray, &count);
+		ft_cylinder_caps_intersect(&t_tab, &cylinder, ray, &count);
 		ft_cone_intersect(&t_tab, &cone, ray, &count);
 	}
 	ft_sort_intersections(t_tab, count);
@@ -115,11 +116,10 @@ t_comps	ft_prepare_computations(t_intersection *i, t_ray ray)
 		comps.t = 0;
 		comps.sphere = NULL;
 		comps.plan = NULL;
-		comps.point = *ft_init_tuple(0, 0, 0, 0);
-		comps.point = *ft_init_tuple(0, 0, 0, 0);
-		comps.eyev = *ft_init_tuple(0, 0, 0, 0);
-		comps.normalv = *ft_init_tuple(0, 0, 0, 0);
-		comps.over_point = *ft_init_tuple(0, 0, 0, 0);
+		comps.point = (t_tuple){0, 0, 0, 0};
+		comps.eyev = (t_tuple){0, 0, 0, 0};
+		comps.normalv = (t_tuple){0, 0, 0, 0};
+		comps.over_point = (t_tuple){0, 0, 0, 0};
 		comps.inside = 0;
 		return (comps);
 	}
@@ -175,26 +175,36 @@ t_comps	ft_prepare_computations(t_intersection *i, t_ray ray)
 
 t_color	ft_shade_hit(t_world *data, t_comps *comps)
 {
-	int	in_shadow;
+	int in_shadow;
+	t_color *color;
+	t_color *tmp_color;
+	t_light *light;
 
-	in_shadow = ft_is_shadowed(data, comps->over_point);
-	if (comps->plan != NULL)
-		return (ft_lighting(ft_set_pattern(comps, PLAN), NULL, *data->light,
-				comps->over_point, comps->eyev, comps->normalv, in_shadow,
-				Notype));
-	else if (comps->sphere != NULL)
-		return (ft_lighting(ft_set_pattern(comps, SPHERE), NULL, *data->light,
-				comps->over_point, comps->eyev, comps->normalv, in_shadow,
-				Notype));
-	else if (comps->cylinder != NULL)
-		return (ft_lighting(ft_set_pattern(comps, CYLINDER), NULL, *data->light,
-				comps->over_point, comps->eyev, comps->normalv, in_shadow,
-				Notype));
-	else if (comps->cone != NULL)
-		return (ft_lighting(ft_set_pattern(comps, CONE), NULL, *data->light,
-				comps->over_point, comps->eyev, comps->normalv, in_shadow,
-				Notype));
-	return (*ft_color(0, 0, 0));
+	light = data->light;
+	color = ft_color(0, 0, 0);
+	while (light != NULL)
+	{
+		tmp_color = malloc(sizeof(t_color));
+		in_shadow = ft_is_shadowed(data, comps->over_point);
+		if (comps->plan != NULL)
+			*tmp_color = ft_lighting(ft_set_pattern(comps, PLAN), *light,
+								comps->over_point, comps->eyev, comps->normalv, in_shadow, NULL, Notype);
+		else if (comps->sphere != NULL)
+			*tmp_color = ft_lighting(ft_set_pattern(comps, SPHERE), *light,
+								comps->over_point, comps->eyev, comps->normalv, in_shadow, NULL, Notype);
+		else if (comps->cylinder != NULL)
+			*tmp_color = ft_lighting(ft_set_pattern(comps, CYLINDER), *light,
+								comps->over_point, comps->eyev, comps->normalv, in_shadow, NULL, Notype);
+		else if (comps->cone != NULL)
+			*tmp_color = ft_lighting(ft_set_pattern(comps, CONE), *light,
+								comps->over_point, comps->eyev, comps->normalv, in_shadow, NULL, Notype);
+		else
+			tmp_color = ft_color(0, 0, 0);
+		*color = ft_sum_color(*color, *tmp_color);
+		free(tmp_color);
+		light = light->next;
+	}
+	return (*color);
 }
 
 t_color	ft_color_at(t_world *data, t_ray ray)
@@ -234,29 +244,4 @@ float	**ft_view_transform(t_tuple from, t_tuple to, t_tuple up)
 	orientation = ft_mult_mat(orientation, translation(-from.x, -from.y,
 				-from.z));
 	return (orientation);
-}
-
-t_world	*ft_default_world(void)
-{
-	t_world		*data;
-	t_sphere	*s1;
-	t_sphere	*s2;
-
-	data = malloc(sizeof(t_world));
-	data->light = ft_point_light(ft_init_tuple(-10, 10, -10, 1), ft_color(1, 1,
-				1));
-	data->sphere = malloc(sizeof(t_sphere *));
-	s1 = ft_sphere();
-	s2 = ft_sphere();
-	s2->material = ft_material();
-	s1->material = ft_material();
-	s1->material->color = ft_color(0.8, 1.0, 0.6);
-	s1->material->diffuse = 0.7;
-	s1->material->specular = 0.2;
-	s2->matrix = ft_mult_mat(scaling(0.25, 0.25, 0.25), s2->matrix);
-	*(data->sphere) = s1;
-	s1->next = NULL;
-	s2->next = NULL;
-	sphere_lstadd_back(data->sphere, s2);
-	return (data);
 }

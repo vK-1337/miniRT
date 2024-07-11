@@ -26,11 +26,12 @@ int within_cone_radius(const t_ray *ray, double t, double cone_val)
 void ft_check_cone_caps(t_intersection **t_tab, t_cone **cone, t_ray ray, int *count)
 {
     t_intersection t;
-
+    if (!*cone)
+        return ;
     if (fabsf(ray.direction.y) < EPSILON)
         return ;
-    t.t = (*cone)->radius - ray.origin.y / ray.direction.y;
-    if (within_cone_radius(&ray, t.t, (*cone)->radius))
+    t.t = ((*cone)->y_max - ray.origin.y) / ray.direction.y;
+    if (within_cone_radius(&ray, t.t, (*cone)->y_max) == 1)
     {
         t.cone = *cone;
         t.sphere = NULL;
@@ -39,8 +40,8 @@ void ft_check_cone_caps(t_intersection **t_tab, t_cone **cone, t_ray ray, int *c
         *count += 1;
         *t_tab = ft_add_one_t(*t_tab, t, *count);
     }
-    t.t = -(*cone)->radius - ray.origin.y / ray.direction.y;
-    if (within_cone_radius(&ray, t.t, (*cone)->radius))
+    t.t = ((*cone)->y_min - ray.origin.y) / ray.direction.y;
+    if (within_cone_radius(&ray, t.t, (*cone)->y_min) == 1)
     {
         t.cone = *cone;
         t.sphere = NULL;
@@ -51,7 +52,7 @@ void ft_check_cone_caps(t_intersection **t_tab, t_cone **cone, t_ray ray, int *c
     }
 }
 
-float get_cone_discriminant(t_ray ray, float abc[3], t_cone *cone)
+float get_cone_discriminant(t_ray ray, float abc[3])
 {
     float	discriminant;
     (void) cone;
@@ -71,13 +72,15 @@ void	ft_cone_intersect(t_intersection **t_tab, t_cone **cone, t_ray ray,
     float discriminant;
     t_intersection t;
     t_ray new_ray;
-
+   float y0;
+    
     if (*cone == NULL)
         return ;
     new_ray = ray_transform(ray, ft_inversion((*cone)->matrix, 4));
     ft_check_cone_caps(t_tab, cone, new_ray, count);
-    discriminant = get_cone_discriminant(new_ray, abc, *cone);
-    printf("discriminant = %f\n", discriminant);
+    discriminant = get_cone_discriminant(new_ray, abc);
+    if(discriminant < EPSILON && discriminant > -EPSILON)
+        discriminant = 0;
     if (discriminant < 0)
     {
         *cone = (*cone)->next;
@@ -90,7 +93,7 @@ void	ft_cone_intersect(t_intersection **t_tab, t_cone **cone, t_ray ray,
         t.sphere = NULL;
         t.plan = NULL;
         t.cylinder = NULL;
-        *count += 1;
+        *count += 1; 
         *t_tab = ft_add_one_t(*t_tab, t, *count);
         *cone = (*cone)->next;
         return ;
@@ -101,11 +104,19 @@ void	ft_cone_intersect(t_intersection **t_tab, t_cone **cone, t_ray ray,
     t.sphere = NULL;
     t.plan = NULL;
     t.cylinder = NULL;
-    *count += 1;
-    *t_tab = ft_add_one_t(*t_tab, t, *count);
+    y0 = new_ray.origin.y + t.t * new_ray.direction.y;
+    if (y0 < (*cone)->y_max && y0 > (*cone)->y_min)
+    {
+        *count += 1;
+        *t_tab = ft_add_one_t(*t_tab, t, *count);
+    }
     t.t = (-abc[1] + discriminant) / (2*abc[0]);
-    *count += 1;
-    *t_tab = ft_add_one_t(*t_tab, t, *count);
+    y0 = new_ray.origin.y + t.t * new_ray.direction.y;
+    if (y0 < (*cone)->y_max && y0 > (*cone)->y_min)
+    {
+        *count += 1;
+        *t_tab = ft_add_one_t(*t_tab, t, *count);
+    }
     *cone = (*cone)->next;
 }
 
@@ -117,6 +128,8 @@ t_cone	*ft_cone(void)
 	if (!cone)
 		return (NULL);
 	cone->radius = 1;
+    cone->y_max = 1;
+    cone->y_min = 0;
 	cone->matrix = identity_matrix(4);
 	cone->material = ft_material();
 	cone->next = NULL;

@@ -57,8 +57,6 @@ void	spherical_mapping(float x, float y, float z, Image *image,
 {
 	float theta = atan2f(z, x); // Angle autour de l'axe Y
 	float phi = acosf(y);       // Angle du pôle Nord
-	printf("x = %f, y = %f, z = %f\n", x, y, z);
-	printf("phi = %f, theta = %f\n", phi, theta);
 	float u = (theta + M_PI) / (2 * M_PI); // Remap from [-π, π] to [0, 1]
 	float v = phi / M_PI;                  // Remap from [0, π] to [0, 1]
 	get_interpolated_color(u, v, image, color);

@@ -26,12 +26,18 @@
 # define PLAN 1
 # define CYLINDER 2
 # define CONE 3
+# define FIRST 0
+# define SECOND 1
+# define THIRD 2
+# define ALL 3
+# define NONE 4
 # include "get_next_line.h"
 # include "libft.h"
 # include "mlx.h"
 # include <X11/keysym.h>
 # include <fcntl.h>
 # include <math.h>
+# include <pthread.h>
 # include <stdarg.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -41,7 +47,8 @@
 # include <wait.h>
 
 /******************************************************************************/
-/*                                                                            */
+/*                                   50:21
+	/ 1:33:17                                         */
 /*                                                                            */
 /*                              STRUCT & ENUM                                 */
 /*                                                                            */
@@ -65,7 +72,7 @@ typedef enum e_objects
 	Sphere,
 	Plan,
 	Cylinder,
-	Cone,
+	Cone
 }						t_objects;
 
 typedef enum e_dtype
@@ -76,7 +83,8 @@ typedef enum e_dtype
 	L,
 	SP,
 	PL,
-	CY
+	CY,
+	CO
 }						t_dtype;
 
 typedef struct s_wall
@@ -125,14 +133,12 @@ typedef struct s_ray
 
 typedef struct s_alight
 {
-	float				alight;
 	t_color				colors;
 }						t_alight;
 
 typedef struct s_light
 {
 	t_tuple				position;
-	float				light_ratio;
 	t_color				colors;
 	t_color				intensity;
 	struct s_light		*next;
@@ -140,8 +146,10 @@ typedef struct s_light
 
 typedef struct s_material
 {
-	t_color				*color;
-	float				ambient;
+	t_color				color;
+	float				ambiant;
+	float				ambiant_intensity;
+	t_color				*ambiant_color;
 	float				diffuse;
 	float				specular;
 	float				shininess;
@@ -171,7 +179,6 @@ typedef struct s_cylinder
 	t_color				colors;
 	float				**matrix;
 	struct s_cylinder	*next;
-	int					closed;
 }						t_cylinder;
 
 typedef struct s_cone
@@ -186,7 +193,6 @@ typedef struct s_cone
 	t_color				colors;
 	float				**matrix;
 	struct s_cone		*next;
-	int					closed;
 }						t_cone;
 
 typedef struct s_plan
@@ -241,13 +247,15 @@ typedef struct s_intersection
 
 typedef struct s_world
 {
-	t_alight			*alight;
+	t_color				*alight;
+	float				alight_intensity;
 	t_camera			*camera;
 	t_light				*light;
 	t_sphere			**sphere;
 	t_plan				**plan;
 	t_cylinder			**cylinder;
 	t_cone				**cone;
+	pthread_mutex_t		*pixel_put;
 	int					counter[6];
 }						t_world;
 
@@ -262,6 +270,25 @@ typedef struct s_win
 	int					endian;
 }						t_win;
 
+typedef struct s_thread
+{
+	pthread_t			pthread_id;
+	t_world				*data;
+	t_win				*win;
+	int					index;
+	int					start_x;
+	int					start_y;
+	int					end_x;
+	int					end_y;
+}						t_thread;
+
+typedef struct s_complete
+{
+	t_thread			*thread;
+	t_win				*win;
+	t_world				*data;
+}						t_complete;
+
 void					print_char_tab(char **tab);
 /******************************************************************************/
 /*                                                                            */
@@ -272,7 +299,8 @@ void					print_char_tab(char **tab);
 /******************************************************************************/
 
 int	scene_name_check(char *av); // Convert color to int
-t_world					init_all_data(int fd);
+
+t_world					*init_all_data(int fd);
 void					null_data(t_world *data);
 int						init_corresponding_data(char *file_data, t_world *data);
 int						init_data_w_line(t_world *data, t_dtype type,
@@ -288,6 +316,7 @@ int						verify_light(char **data);
 int						verify_plan(char **data);
 int						verify_sphere(char **data);
 int						verify_cylinder(char **data);
+int						verify_cone(char **data);
 int						verified_content(char **data, t_dtype type);
 int						verify_coord(char *data);
 int						verify_vect(char *data);
@@ -303,6 +332,7 @@ int						init_light(t_world *data, char **data_split);
 int						init_sphere(t_world *data, char **data_split);
 int						init_plan(t_world *data, char **data_split);
 int						init_cylinder(t_world *data, char **data_split);
+int						init_cone(t_world *data, char **data_split);
 t_dtype					determine_type(char *data);
 void					null_data(t_world *data);
 void					print_all_data(t_world *data);
@@ -330,11 +360,16 @@ int						plan_lstsize(t_plan *lst);
 void					plan_lstadd_back(t_plan **lst, t_plan *new);
 void					plan_lstfree(t_plan **lst);
 
+t_cone					*cone_lstlast(t_cone *lst);
+int						cone_lstsize(t_cone *lst);
+void					cone_lstadd_back(t_cone **lst, t_cone *new);
+void					cone_lstfree(t_cone **lst);
+
 void					print_sphere_list(t_sphere **sphere_list);
 void					print_plan_list(t_plan **plan_list);
 void					print_cylinder_list(t_cylinder **cylinder_list);
 
-void					free_data(t_world *data);
+void					free_data(t_world **data);
 
 /******************************************************************************/
 /*                                                                            */
@@ -346,6 +381,7 @@ void					free_data(t_world *data);
 
 //										TUPLE									//
 t_tuple					*ft_init_tuple(float x, float y, float z, float w);
+t_tuple					ft_init_tuple_reg(float x, float y, float z, float w);
 t_tuple					ft_sum_tuple(t_tuple t1, t_tuple t2);
 t_tuple					ft_dif_tuple(t_tuple t1, t_tuple t2);
 t_tuple					ft_neg_tuple(t_tuple t);
@@ -368,6 +404,7 @@ t_color					*ft_color(float r, float g, float b);
 t_pattern				*ft_pattern(t_color *a, t_color *b);
 t_color					*ft_stripe_at(t_pattern *pattern, t_tuple point);
 t_material				*ft_set_pattern(t_comps *comps, int type);
+t_color					ft_color_reg(float r, float g, float b);
 
 /******************************************************************************/
 /*                                                                            */
@@ -436,7 +473,8 @@ t_discriminant			ft_discriminant(t_ray ray, t_sphere *sphere);
 t_sphere				*ft_sphere(void);
 t_intersection			ft_intersection(float t, t_sphere *sphere);
 t_ray					ray_transform(t_ray ray, float **matrix);
-t_tuple					ft_mult_matrix_tuple(float **matrix, t_tuple tuple);
+t_tuple					ft_mult_matrix_tuple(float **matrix, t_tuple *tuple,
+							int free_id);
 void					set_transform(t_sphere *sphere, float **matrix);
 
 /******************************************************************************/
@@ -452,9 +490,10 @@ t_material				*ft_material(void);
 t_light					*ft_point_light(t_tuple *position, t_color *intensity);
 void					ft_point_light2(t_light *light, t_tuple position,
 							t_color intensity);
-t_color					ft_lighting(t_material *m, void *object, t_light light,
+
+t_color					ft_lighting(t_material *m, t_light light,
 							t_tuple position, t_tuple eyev, t_tuple normalv,
-							int in_shadow, t_objects type);
+							int in_shadow, void *object, t_objects type);
 void					color_black(t_color *color);
 t_tuple					ft_normal_at(t_comps comps, t_tuple world_point);
 unsigned int			color_to_int(t_color color);
@@ -467,10 +506,10 @@ unsigned int			color_to_int(t_color color);
 /*                                                                            */
 /******************************************************************************/
 
-t_camera				ft_new_camera(float hsize, float vsize, double fov);
+t_camera				*ft_new_camera(float hsize, float vsize, double fov);
 float					compute_pixel_size(t_camera *camera);
 t_ray					ray_for_pixel(t_camera *camera, int px, int py);
-void					render(t_camera *camera, t_world *world, t_win *win);
+void					*render(void *world);
 
 /******************************************************************************/
 /*                                                                            */
@@ -479,6 +518,16 @@ void					render(t_camera *camera, t_world *world, t_win *win);
 /*                                                                            */
 /*                                                                            */
 /******************************************************************************/
+
+//										CALCUL								//
+
+float					**ft_mult_mat(float **mat1, float **mat2);
+t_tuple					ft_mult_mat_tuple(t_tuple *tuple, float **mat);
+float					**ft_transpose(float **mat);
+int						ft_comp_mat(float **mat1, float **mat2, int row_col);
+float					**ft_inversion(float **matrice, int row_col);
+
+//										UTILS								//
 
 t_world					*ft_default_world(void);
 t_comps					ft_prepare_computations(t_intersection *i, t_ray ray);
@@ -533,5 +582,8 @@ t_color					ft_spherical(t_tuple position, t_sphere sphere,
 t_color					ft_planar(t_tuple position, t_plan plan, t_light light);
 t_color					ft_cylindrical(t_tuple position, t_cylinder cylinder,
 							t_light light);
+
+int						ft_check_caps(t_ray ray, float t, float radius);
+int						ft_equal_tuple(t_tuple *t1, t_tuple *t2);
 
 #endif

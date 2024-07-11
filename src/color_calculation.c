@@ -52,6 +52,16 @@ t_color ft_mult_color_tog(t_color c1, t_color c2)
     return (new);
 }
 
+t_color ft_color_reg(float r, float g, float b)
+{
+    t_color new;
+
+    new.r = r;
+    new.g = g;
+    new.b = b;
+    return (new);
+}
+
 t_color *ft_color(float r, float g, float b)
 {
     t_color *new;

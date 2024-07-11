@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 14:07:22 by udumas            #+#    #+#             */
-/*   Updated: 2024/05/22 20:19:07 by udumas           ###   ########.fr       */
+/*   Updated: 2024/06/27 10:06:05 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ t_tuple	ft_normalization(t_tuple v)
 	t_tuple	new;
 
 	magnitude = ft_magnitude(v);
+	if (magnitude == 0)
+		return (v);
 	new.x = v.x / magnitude;
 	new.y = v.y / magnitude;
 	new.z = v.z / magnitude;
