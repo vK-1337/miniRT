@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 16:30:27 by udumas            #+#    #+#             */
-/*   Updated: 2024/07/09 16:08:01 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/14 17:59:31 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ t_color *ft_color(float r, float g, float b)
     t_color *new;
 
     new = malloc(sizeof(t_color));
+    if (!new)
+        return (NULL);
     new->r = r;
     new->g = g;
     new->b = b;

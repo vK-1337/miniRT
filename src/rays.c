@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 09:54:05 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/09 16:22:08 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/14 18:21:03 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,8 +134,8 @@ t_intersection	*ft_hit(t_intersection *intersections, int count)
 	int	i;
 
 	i = 0;
-	if (intersections[0].status == 0)
-		return (NULL);
+	// if (intersections[0].status == 0)
+	// 	return (NULL);
 	while (i < count && intersections)
 	{
 		if (intersections[i].t > 0.01)

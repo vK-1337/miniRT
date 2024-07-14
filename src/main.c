@@ -6,35 +6,21 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:55 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/10 18:07:46 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/14 18:20:46 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
 
-// int main(int ac, char **av)
-// {
-//     int fd;
-//     t_world data;
-
-//     if (ac != 2 || !scene_name_check(av[1]))
-//     {
-//         printf("Bad arguments : Usage : ./minirt scene.rt");
-//         return (EXIT_FAILURE);
-//     }
-//     fd = open(av[1], O_RDONLY);
-//     if (fd == -1)
-// 		return (write(2, "File not found\n", 16), EXIT_FAILURE);
-//     data = init_all_data(fd);
-//     (void) data;
-//     return (EXIT_SUCCESS);
-// }
 void put_pixel(t_win *win, int x, int y, unsigned int color)
 {
     char *dst;
 
     if ((x > SIZE_X || x < 0) || (y > SIZE_Y || y < 0))
+    {
+        printf("x: %d, y: %d\n", x, y);
         return;
+    }
     dst = win->addr + (y * win->line_length + x * (win->bits_per_pixel / 8));
     *(unsigned int *)dst = color;
 }
@@ -80,7 +66,7 @@ void start_threads(t_complete *complete)
     int start_y;
     int end_x;
     int end_y;
-    
+
     start_x = 0;
     start_y = 0;
     end_x = SIZE_X / 10;
@@ -136,7 +122,6 @@ int main(int ac, char **av)
 {
     int fd;
     t_world *data;
-
     if (ac != 2 || !scene_name_check(av[1]))
     {
         printf("Bad arguments : Usage : ./minirt scene.rt");
@@ -235,7 +220,7 @@ int main(int ac, char **av)
 //     right_wall->matrix = rotation_x(M_PI / 2);
 //     right_wall->matrix = ft_mult_mat(rotation_y(M_PI / 2), right_wall->matrix);
 //     right_wall->matrix = ft_mult_mat(translation(-5, 0, 0), right_wall->matrix);
-    
+
 //     // right_wall->coord = *ft_init_tuple(-5, 0, 0, 1);
 //     // right_wall->normal = ft_sum_tuple(right_wall->normal, *ft_init_tuple(1, 0, 0, 0));
 
