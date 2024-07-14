@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/14 17:59:24 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/14 18:28:42 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -299,11 +299,11 @@ void					print_char_tab(char **tab);
 
 int	scene_name_check(char *av); // Convert color to int
 
-t_world					*init_all_data(int fd);
+t_world					*init_all_data(int fd, t_win *mlx);
 void					null_data(t_world *data);
-int						init_corresponding_data(char *file_data, t_world *data);
+int						init_corresponding_data(char *file_data, t_world *data, t_win *mlx);
 int						init_data_w_line(t_world *data, t_dtype type,
-							char **data_split);
+							char **data_split, t_win *mlx);
 t_dtype					determine_type(char *data);
 int						char_tab_len(char **tab);
 void					free_char_tab(char **tab);
@@ -328,10 +328,10 @@ int						check_coord_syntax(char *data);
 int						init_alight(t_world *data, char **data_split);
 int						init_camera(t_world *data, char **data_split);
 int						init_light(t_world *data, char **data_split);
-int						init_sphere(t_world *data, char **data_split);
-int						init_plan(t_world *data, char **data_split);
-int						init_cylinder(t_world *data, char **data_split);
-int						init_cone(t_world *data, char **data_split);
+int						init_sphere(t_world *data, char **data_split, t_win *mlx);
+int						init_plan(t_world *data, char **data_split, t_win *mlx);
+int						init_cylinder(t_world *data, char **data_split, t_win *mlx);
+int						init_cone(t_world *data, char **data_split, t_win *mlx);
 t_dtype					determine_type(char *data);
 void					null_data(t_world *data);
 void					print_all_data(t_world *data);

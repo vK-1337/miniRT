@@ -6,13 +6,13 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/14 18:14:12 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/14 18:43:28 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
 
-t_world	*init_all_data(int fd)
+t_world	*init_all_data(int fd, t_win *mlx)
 {
 	t_world	*data;
 	char	*file_data;
@@ -30,7 +30,7 @@ t_world	*init_all_data(int fd)
 		write(STDERR_FILENO, "The file is empty\n", 19);
 		exit(EXIT_FAILURE);
 	}
-	if (init_corresponding_data(file_data, &data, mlx) == 2)
+	if (init_corresponding_data(file_data, data, mlx) == 2)
 	{
 		free_data(&data);
 		free(file_data);
@@ -42,7 +42,7 @@ t_world	*init_all_data(int fd)
 		file_data = get_next_line(fd, 0);
 		if (file_data && file_data[0] == '\n')
 			continue ;
-		if (init_corresponding_data(file_data, data) == 2)
+		if (init_corresponding_data(file_data, data, mlx) == 2)
 		{
 			get_next_line(fd, 1);
 			free_data(&data);
@@ -53,7 +53,7 @@ t_world	*init_all_data(int fd)
 	return (data);
 }
 
-int	init_corresponding_data(char *file_data, t_world *data)
+int	init_corresponding_data(char *file_data, t_world *data, t_win *mlx)
 {
 	char	**data_split;
 	t_dtype	type;
@@ -79,7 +79,7 @@ int	init_corresponding_data(char *file_data, t_world *data)
 	return (EXIT_SUCCESS);
 }
 
-int	init_data_w_line(t_world *data, t_dtype type, char **data_split, void *mlx)
+int	init_data_w_line(t_world *data, t_dtype type, char **data_split, t_win *mlx)
 {
 	if (type == A)
 	{
@@ -157,18 +157,18 @@ int	init_camera(t_world *data, char **data_split)
 	split = ft_split(data_split[2], ',');
 	if (!split)
 		return (free(camera), 0);
-	camera->vector.x = ft_atof(split[0]);
-	camera->vector.y = ft_atof(split[1]);
-	camera->vector.z = ft_atof(split[2]);
+	camera->vector.x = atof(split[0]);
+	camera->vector.y = atof(split[1]);
+	camera->vector.z = atof(split[2]);
 	camera->fov = ft_atoi(data_split[3]);
-	from = ft_init_tuple_reg(ft_atof(split[0]), ft_atof(split[1]),
-			ft_atof(split[2]), 1);
+	from = ft_init_tuple_reg(atof(split[0]), atof(split[1]),
+			atof(split[2]), 1);
 	free_char_tab(split);
 	split = ft_split(data_split[2], ',');
 	if (!split)
 		return (free(camera), 0);
 	to = ft_init_tuple_reg(0, 0, 0, 1);
-	up = ft_init_tuple_reg(atof(split[0]), ft_atof(split[1]), ft_atof(split[2]),
+	up = ft_init_tuple_reg(atof(split[0]), atof(split[1]), atof(split[2]),
 			0);
 	camera->matrix = ft_view_transform(from, to, up);
 	free_char_tab(split);
@@ -192,12 +192,12 @@ int	init_light(t_world *data, char **data_split)
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return (free(light), 0);
-	light->position.x = ft_atof(split[0]);
-	light->position.y = ft_atof(split[1]);
-	light->position.z = ft_atof(split[2]);
+	light->position.x = atof(split[0]);
+	light->position.y = atof(split[1]);
+	light->position.z = atof(split[2]);
 	light->position.w = 1;
 	free_char_tab(split);
-	intensity = ft_atof(data_split[2]);
+	intensity = atof(data_split[2]);
 	split = ft_split(data_split[3], ',');
 	if (!split)
 		return (free(light), 0);
@@ -211,7 +211,7 @@ int	init_light(t_world *data, char **data_split)
 	return (1);
 }
 
-int	init_sphere(t_world *data, char **data_split, void *mlx)
+int	init_sphere(t_world *data, char **data_split, t_win *mlx)
 {
 	char		**split;
 	t_sphere	*sphere;
@@ -249,9 +249,9 @@ int	init_sphere(t_world *data, char **data_split, void *mlx)
 		split = ft_split(data_split[4], ':');
 		if (!split)
 			return (free(sphere), 0);
-		if (ft_strmcmp(split[0], "texture") == 0)
+		if (ft_strncmp(split[0], "texture", 8) == 0)
 		{
-			sphere->material->texture = ft_texture(split[1], mlx);
+			sphere->material = ft_texture(split[1], mlx);
 			if (!sphere->material->texture)
 				return (free(sphere), free_char_tab(split), 0);
 		}
@@ -289,7 +289,7 @@ int	init_sphere(t_world *data, char **data_split, void *mlx)
 	return (1);
 }
 
-int	init_plan(t_world *data, char **data_split, void *mlx)
+int	init_plan(t_world *data, char **data_split, t_win *mlx)
 {
 	char	**split;
 	float	**matrix;
@@ -304,9 +304,9 @@ int	init_plan(t_world *data, char **data_split, void *mlx)
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return (free(plan), 0);
-	plan->coord.x = ft_atof(split[0]);
-	plan->coord.y = ft_atof(split[1]);
-	plan->coord.z = ft_atof(split[2]);
+	plan->coord.x = atof(split[0]);
+	plan->coord.y = atof(split[1]);
+	plan->coord.z = atof(split[2]);
 	plan->normal = ft_init_tuple_reg(0, 1, 0, 0);
 	matrix = translation(atof(split[0]), atof(split[1]), atof(split[2]));
 	plan->matrix = identity_matrix(4);
@@ -341,9 +341,9 @@ int	init_plan(t_world *data, char **data_split, void *mlx)
 		split = ft_split(data_split[4], ':');
 		if (!split)
 			return (free(plan), 0);
-		if (ft_strmcmp(split[0], "texture") == 0)
+		if (ft_strncmp(split[0], "texture", 8) == 0)
 		{
-			plan->material->texture = ft_texture(split[1], mlx);
+			plan->material = ft_texture(split[1], mlx);
 			if (!plan->material->texture)
 				return (free(plan), free_char_tab(split), 0);
 		}
@@ -380,7 +380,7 @@ int	init_plan(t_world *data, char **data_split, void *mlx)
 	return (1);
 }
 
-int	init_cylinder(t_world *data, char **data_split, void *mlx)
+int	init_cylinder(t_world *data, char **data_split, t_win *mlx)
 {
 	char		**split;
 	t_cylinder	*cylinder;
@@ -426,9 +426,9 @@ int	init_cylinder(t_world *data, char **data_split, void *mlx)
 		split = ft_split(data_split[6], ':');
 		if (!split)
 			return (free(cylinder), 0);
-		if (ft_strmcmp(split[0], "texture") == 0)
+		if (ft_strncmp(split[0], "texture", 8) == 0)
 		{
-			cylinder->material->texture = ft_texture(split[1], mlx);
+			cylinder->material = ft_texture(split[1], mlx);
 			if (!cylinder->material->texture)
 				return (free(cylinder), free_char_tab(split), 0);
 		}
@@ -465,7 +465,7 @@ int	init_cylinder(t_world *data, char **data_split, void *mlx)
 	return (1);
 }
 
-int	init_cone(t_world *data, char **data_split)
+int	init_cone(t_world *data, char **data_split, t_win *mlx)
 {
 	char	**split;
 	t_cone	*cone;
