@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/11 17:50:39 by bainur           ###   ########.fr       */
+/*   Updated: 2024/07/14 14:50:15 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,7 +217,6 @@ int	init_sphere(t_world *data, char **data_split)
 	sphere->center = ft_init_tuple_reg(atof(split[0]), atof(split[1]),
 			atof(split[2]), 1);
 	free_char_tab(split);
-	
 	split = ft_split(data_split[3], ',');
 	if (!split)
 		return (free(sphere), 0);
@@ -326,8 +325,6 @@ int	init_cylinder(t_world *data, char **data_split)
 	cylinder->radius = atof(data_split[3]) / 2;
 	cylinder->y_max = y  + atof(data_split[4]) / 2;
 	cylinder->y_min = y - atof(data_split[4]) / 2;
-	printf("cylinder->y_max = %f\n", cylinder->y_max);
-	printf("cylinder->y_min = %f\n", cylinder->y_min);
 	free_char_tab(split);
 	split = ft_split(data_split[5], ',');
 	if (!split)
@@ -339,7 +336,10 @@ int	init_cylinder(t_world *data, char **data_split)
 	cylinder->next = NULL;
 	free_char_tab(split);
 	if (data->alight != NULL)
+	{
 		cylinder->material->ambiant_color = data->alight;
+		cylinder->material->ambiant = data->alight_intensity;
+	}
 	if (!data->cylinder)
 	{
 		data->cylinder = malloc(sizeof(t_cylinder *));
@@ -354,27 +354,32 @@ int	init_cylinder(t_world *data, char **data_split)
 
 int	init_cone(t_world *data, char **data_split)
 {
-	char	**split;
+	char		**split;
 	t_cone	*cone;
+	int y;
 
 	cone = malloc(sizeof(t_cone));
 	if (!cone)
 		return (0);
-	cone = NULL;
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return (free(cone), 0);
-	cone->matrix = translation(atof(split[0]), atof(split[1]), atof(split[2]));
+	cone->matrix = translation(atof(split[0]), atof(split[1]),
+			atof(split[2]));
+	y = atof(split[1]);
 	free_char_tab(split);
 	split = ft_split(data_split[2], ',');
 	if (!split)
 		return (free(cone), 0);
-	cone->matrix = ft_mult_mat(cone->matrix, rotation_x(atoi(split[0]) * M_PI), ALL);
-	cone->matrix = ft_mult_mat(cone->matrix, rotation_y(atoi(split[1]) * M_PI), ALL);
-	cone->matrix = ft_mult_mat(cone->matrix, rotation_z(atoi(split[2]) * M_PI), ALL);
+	cone->matrix = ft_mult_mat(cone->matrix, rotation_x(atoi(split[0])
+				* M_PI), ALL);
+	cone->matrix = ft_mult_mat(cone->matrix, rotation_y(atoi(split[1])
+				* M_PI), ALL);
+	cone->matrix = ft_mult_mat(cone->matrix, rotation_z(atoi(split[2])
+				* M_PI), ALL);
 	cone->radius = atof(data_split[3]) / 2;
-	cone->y_max = atof(data_split[4]) / 2 + cone->coord.y;
-	cone->y_min = -atof(data_split[4]) / 2 + cone->coord.y;
+	cone->y_max = y  + atof(data_split[4]) / 2;
+	cone->y_min = y - atof(data_split[4]) / 2;
 	free_char_tab(split);
 	split = ft_split(data_split[5], ',');
 	if (!split)
@@ -386,7 +391,10 @@ int	init_cone(t_world *data, char **data_split)
 	cone->next = NULL;
 	free_char_tab(split);
 	if (data->alight != NULL)
+	{
 		cone->material->ambiant_color = data->alight;
+		cone->material->ambiant = data->alight_intensity;
+	}
 	if (!data->cone)
 	{
 		data->cone = malloc(sizeof(t_cone *));

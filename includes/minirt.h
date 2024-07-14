@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/11 13:08:58 by bainur           ###   ########.fr       */
+/*   Updated: 2024/07/14 17:55:15 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
-#define EPSILON 0.001
+#define EPSILON 0.0001
 #define INFINITY 1e10
-#define SIZE_X 500
-#define SIZE_Y 500
+#define SIZE_X 50
+#define SIZE_Y 50
 #define CENTER_X SIZE_X / 2
 #define CENTER_Y SIZE_Y / 2
 #define SPHERE 0
@@ -525,6 +525,7 @@ void ft_cylinder_caps_intersect(t_intersection **t_tab,
 								t_cylinder **cylinder, t_ray ray, int *count);
 void ft_cone_intersect(t_intersection **t_tab, t_cone **cone,
 					   t_ray ray, int *count);
+void ft_check_cone_caps(t_intersection **t_tab, t_cone **cone, t_ray ray, int *count);
 t_cone *ft_cone(void);
 int ft_check_caps(t_ray ray, float t, float radius);
 int ft_equal_tuple(t_tuple *t1, t_tuple *t2);

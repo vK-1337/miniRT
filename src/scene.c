@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   scene.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 11:41:54 by udumas            #+#    #+#             */
-/*   Updated: 2024/07/11 16:46:08 by bainur           ###   ########.fr       */
+/*   Updated: 2024/07/14 16:17:47 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ t_intersection *ft_intersect_world(t_ray ray, t_world **data)
 		ft_cylinder_intersect(&t_tab, &cylinder, ray, &count);
 		ft_cylinder_caps_intersect(&t_tab, &cylinder, ray, &count);
 		ft_cone_intersect(&t_tab, &cone, ray, &count);
+		ft_check_cone_caps(&t_tab, &cone, ray, &count);
 	}
 	ft_sort_intersections(t_tab, count);
 	return (t_tab);
@@ -189,10 +190,8 @@ t_color ft_shade_hit(t_world *data, t_comps *comps)
 			*tmp_color = ft_lighting(ft_set_pattern(comps, PLAN), *light,
 								comps->over_point, comps->eyev, comps->normalv, in_shadow);
 		else if (comps->sphere != NULL)
-		{
 			*tmp_color = ft_lighting(ft_set_pattern(comps, SPHERE), *light,
 								comps->over_point, comps->eyev, comps->normalv, in_shadow);
-		}
 		else if (comps->cylinder != NULL)
 			*tmp_color = ft_lighting(ft_set_pattern(comps, CYLINDER), *light,
 								comps->over_point, comps->eyev, comps->normalv, in_shadow);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   light.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 18:04:20 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/11 17:53:48 by bainur           ###   ########.fr       */
+/*   Updated: 2024/07/12 11:14:36 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,8 @@ t_color	ft_lighting(t_material *m, t_light light, t_tuple position,
 			factor = pow(reflect_dot_eye, m->shininess);
 			specular = ft_mult_color(light.intensity, m->specular);
 			specular = ft_mult_color(specular, factor);
-			printf("specular: %f %f %f\n", specular.r, specular.g, specular.b);
 		}
 	}
-
 	return (ft_sum_color(ft_sum_color(ft_sum_color(ambiant, diffuse), specular), *m->ambiant_color));
 }
 
