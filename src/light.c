@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 18:04:20 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/11 15:12:19 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/15 16:10:39 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,16 +59,12 @@ t_color	ft_lighting(t_material *m, t_light light, t_tuple position,
 	float	light_dot_normal;
 
     if ( type && type != 0 && m->is_texture)
-    {
         effective_color = define_effective_color(type, position, object, light);
-        printf("effective_color: %f %f %f\n", effective_color.r, effective_color.g, effective_color.b);
-    }
     else
 	    effective_color = ft_mult_color_tog(m->color, light.intensity);
 	lightv = ft_normalization(ft_dif_tuple(light.position, position));
-	// ambiant = *m->ambiant_color;
-	// ambiant = ft_mult_color_tog(m->color, ambiant);
-    ambiant = ft_mult_color(effective_color, m->ambiant);
+	ambiant = *m->ambiant_color;
+	ambiant = ft_mult_color_tog(m->color, ambiant);
 	light_dot_normal = ft_dotproduct(lightv, normalv);
 	if (light_dot_normal < 0 || in_shadow)
 	{
@@ -113,9 +109,13 @@ t_color	ft_spherical(t_tuple position, t_sphere sphere, t_light light)
 	t_tuple	point_object;
 	t_color	texture_color;
 
+    printf("Spherical mapping\n");
+    print_matrix(sphere.matrix, 4);
+    printf("x = %f, y = %f, z = %f\n", position.x, position.y, position.z);
 	point_object = ft_mult_mat_tuple(&position, ft_inversion(sphere.matrix,
 				4));
-	spherical_mapping(point_object.x, point_object.y, point_object.z,
+    printf("x = %f, y = %f, z = %f\n", point_object.x, point_object.y, point_object.z);
+	spherical_mapping(position.x, position.y, position.z,
 		sphere.material->texture, &texture_color);
 	return (ft_mult_color_tog(texture_color, light.intensity));
 }

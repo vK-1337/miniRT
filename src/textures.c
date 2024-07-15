@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:01:11 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/11 12:08:52 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/15 15:04:44 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,7 @@ Image	*load_xpm_image(void *mlx_ptr, const char *file_path)
 
 	image = malloc(sizeof(Image));
 	printf("file_path = %s\n", file_path);
-	image->img_ptr = mlx_xpm_file_to_image(mlx_ptr, (char *)file_path,
-			&image->width, &image->height);
+	image->img_ptr = mlx_xpm_file_to_image(mlx_ptr, (char *)ft_strtrim(file_path, "\n"), &image->width, &image->height);
 	if (image->img_ptr == NULL)
 	{
 		printf("Error loading image\n");
@@ -55,10 +54,16 @@ void	get_interpolated_color(float u, float v, Image *image, t_color *color)
 void	spherical_mapping(float x, float y, float z, Image *image,
 		t_color *color)
 {
-	float theta = atan2f(z, x);            // Angle autour de l'axe Y
-	float phi = acosf(y);                  // Angle du pôle Nord
-	float u = (theta + M_PI) / (2 * M_PI); // Remap from [-π, π] to [0, 1]
-	float v = phi / M_PI;                  // Remap from [0, π] to [0, 1]
+    printf("point object y = %f\n", y);
+    float phi;
+	float theta;
+
+    theta = atan2f(z, x);
+    phi = acosf(y);        // Angle du pôle Nord
+	printf("theta = %f, phi = %f\n", theta, phi);
+    float u = (theta + M_PI) / (2 * M_PI); // Remap from [-π, π] to [0, 1]
+	float v = phi / M_PI;              // Remap from [0, π] to [0, 1]
+    printf("u = %f, v = %f\n", u, v);
 	get_interpolated_color(u, v, image, color);
 }
 

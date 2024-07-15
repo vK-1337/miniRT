@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 10:26:12 by vk                #+#    #+#             */
-/*   Updated: 2024/07/11 12:08:50 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/15 16:52:01 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,9 +109,6 @@ void start_threads(t_complete *complete)
     }
 }
 
-
-
-
 int main(int ac, char **av)
 {
     int fd;
@@ -193,7 +190,7 @@ int main(int ac, char **av)
 //     mlx_loop(mlx);
 // }
 
-
+ 
 // int main(void)
 // {
 //     // t_sphere *floor = ft_sphere();

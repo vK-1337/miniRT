@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:52 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/11 13:54:13 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/15 10:35:52 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	verify_alight(char **data)
 		{
 			if (!is_string_float(data[i]))
 				return (0);
-			float_data = atof(data[i]);
+			float_data = ft_atof(data[i]);
 			if (float_data < 0.0 || float_data > 1.0)
 				return (0);
 		}
@@ -149,7 +149,7 @@ int	verify_vect(char *data)
 	i = 0;
 	while (vect_split[i])
 	{
-		vect = atof(vect_split[i]);
+		vect = ft_atof(vect_split[i]);
 		if (vect > 1.0 || vect < -1.0)
 			return (free_char_tab(vect_split), 0);
 		i++;
@@ -237,7 +237,7 @@ int	verify_light(char **data)
 		return (0);
 	if (!is_string_float(data[2]))
 		return (0);
-	float_data = atof(data[2]);
+	float_data = ft_atof(data[2]);
 	if (float_data < 0.0 || float_data > 1.0)
 		return (0);
 	if (!verify_colors(data[3]))

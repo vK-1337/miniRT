@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/11 14:04:11 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/15 17:14:30 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -297,7 +297,8 @@ void					print_char_tab(char **tab);
 /*                                                                            */
 /*                                                                            */
 /******************************************************************************/
-
+void ft_print_intersections(t_intersection *t_tab, int count);
+double					ft_atof(char *str);
 int	scene_name_check(char *av); // Convert color to int
 t_world					init_all_data(int fd, void *mlx);
 void					null_data(t_world *data);

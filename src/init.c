@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/11 15:14:28 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/15 11:56:25 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ int init_alight(t_world *data, char **data_split)
 {
 	char **color_split;
 	float intensity;
-	data->alight_intensity = atof(data_split[1]);
+	data->alight_intensity = ft_atof(data_split[1]);
 	intensity = data->alight_intensity;
 	color_split = ft_split(data_split[2], ',');
 	if (!color_split)
@@ -151,21 +151,21 @@ int init_camera(t_world *data, char **data_split)
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return (free(camera) , 0);
-	from = ft_init_tuple_reg(atof(split[0]), atof(split[1]), atof(split[2]), 1);
+	from = ft_init_tuple_reg(ft_atof(split[0]), ft_atof(split[1]), ft_atof(split[2]), 1);
 	free_char_tab(split);
 	split = ft_split(data_split[2], ',');
 	if (!split)
 		return (free(camera) , 0);
-	camera->vector.x = atof(split[0]);
-	camera->vector.y = atof(split[1]);
-	camera->vector.z = atof(split[2]);
+	camera->vector.x = ft_atof(split[0]);
+	camera->vector.y = ft_atof(split[1]);
+	camera->vector.z = ft_atof(split[2]);
 	camera->fov = ft_atoi(data_split[3]);
 	free_char_tab(split);
 	split = ft_split(data_split[2], ',');
 	if (!split)
 		return (free(camera), 0);
 	to = ft_init_tuple_reg(0, 0, 0, 1);
-	up = ft_init_tuple_reg(atof(split[0]), atof(split[1]), atof(split[2]), 0);
+	up = ft_init_tuple_reg(ft_atof(split[0]), ft_atof(split[1]), ft_atof(split[2]), 0);
 	camera->matrix = ft_view_transform(from, to, up);
 	free_char_tab(split);
 	data->camera = camera;
@@ -188,12 +188,12 @@ int init_light(t_world *data, char **data_split)
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return (free(light), 0);
-	light->position.x = atof(split[0]);
-	light->position.y = atof(split[1]);
-	light->position.z = atof(split[2]);
+	light->position.x = ft_atof(split[0]);
+	light->position.y = ft_atof(split[1]);
+	light->position.z = ft_atof(split[2]);
 	light->position.w = 1;
 	free_char_tab(split);
-	intensity = atof(data_split[2]);
+	intensity = ft_atof(data_split[2]);
 	split = ft_split(data_split[3], ',');
 	if (!split)
 		return (free(light), 0);
@@ -221,11 +221,11 @@ int	init_sphere(t_world *data, char **data_split, void *mlx)
     split = ft_split(data_split[1], ',');
     if (!split)
         return (free(sphere) , 0);
-    sphere->center.x = atof(split[0]);
-    sphere->center.y = atof(split[1]);
-    sphere->center.z = atof(split[2]);
+    sphere->center.x = ft_atof(split[0]);
+    sphere->center.y = ft_atof(split[1]);
+    sphere->center.z = ft_atof(split[2]);
     free_char_tab(split);
-    sphere->radius = atof(data_split[2]) / 2;
+    sphere->radius = ft_atof(data_split[2]) / 2;
     split = ft_split(data_split[3], ',');
     if (!split)
         return (free(sphere) , 0);
@@ -262,6 +262,11 @@ int	init_sphere(t_world *data, char **data_split, void *mlx)
         }
         free_char_tab(split);
     }
+    if (data->alight != NULL)
+	{
+		sphere->material->ambiant_color = data->alight;
+		sphere->material->ambiant = data->alight_intensity;
+	}
     sphere->matrix = identity_matrix(4);
     sphere->next = NULL;
     if (!data->sphere)
@@ -292,44 +297,39 @@ int init_plan(t_world *data, char **data_split, void *mlx)
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return (free(plan), 0);
-	plan->coord.x = atof(split[0]);
-	plan->coord.y = atof(split[1]);
-	plan->coord.z = atof(split[2]);
+	plan->coord.x = ft_atof(split[0]);
+	plan->coord.y = ft_atof(split[1]);
+	plan->coord.z = ft_atof(split[2]);
 	plan->normal = ft_init_tuple_reg(0, 1, 0, 0);
-	matrix = translation(atof(split[0]), atof(split[1]), atof(split[2]));
+	matrix = translation(ft_atof(split[0]), ft_atof(split[1]), ft_atof(split[2]));
 	plan->matrix = identity_matrix(4);
 	plan->matrix = ft_mult_mat(plan->matrix, matrix);
 	free_char_tab(split);
 	split = ft_split(data_split[2], ',');
 	if (!split)
 		return (free(plan), 0);
-	plan->vector.x = atof(split[0]);
-	plan->vector.y = atof(split[1]);
-	plan->vector.z = atof(split[2]);
-	matrix = rotation_x(atof(split[0]) * M_PI);
+	plan->vector.x = ft_atof(split[0]);
+	plan->vector.y = ft_atof(split[1]);
+	plan->vector.z = ft_atof(split[2]);
+	matrix = rotation_x(ft_atof(split[0]) * M_PI);
 	plan->matrix = ft_mult_mat(plan->matrix, matrix);
 	ft_free_mat(matrix, 4);
-	matrix = rotation_y(atof(split[1]) * M_PI);
+	matrix = rotation_y(ft_atof(split[1]) * M_PI);
 	plan->matrix = ft_mult_mat(plan->matrix, matrix);
 	ft_free_mat(matrix, 4);
-	matrix = rotation_z(atof(split[2]) * M_PI);
+	matrix = rotation_z(ft_atof(split[2]) * M_PI);
 	plan->matrix = ft_mult_mat(plan->matrix, matrix);
 	ft_free_mat(matrix, 4);
 	free_char_tab(split);
 	split = ft_split(data_split[3], ',');
 	if (!split)
 		return (free(plan), 0);
-  plan->material = ft_material();
+    plan->material = ft_material();
 	plan->colors.r = ft_atoi(split[0]);
 	plan->colors.g = ft_atoi(split[1]);
 	plan->colors.b = ft_atoi(split[2]);
     plan->next = NULL;
     free_char_tab(split);
-  if (data->alight != NULL)
-	{
-		plan->material->ambiant_color = data->alight;
-		plan->material->ambiant = data->alight_intensity;
-	}
     if (data_split[4])
     {
         split = ft_split(data_split[4], ':');
@@ -358,6 +358,11 @@ int init_plan(t_world *data, char **data_split, void *mlx)
         }
         free_char_tab(split);
     }
+    if (data->alight != NULL)
+	{
+		plan->material->ambiant_color = data->alight;
+		plan->material->ambiant = data->alight_intensity;
+	}
     if (!data->plan)
     {
         data->plan = malloc(sizeof(t_plan*));
@@ -383,37 +388,35 @@ int	init_cylinder(t_world *data, char **data_split, void *mlx)
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return (free(cylinder), 0);
-	cylinder->coord.x = atof(split[0]);
-	cylinder->coord.y = atof(split[1]);
-	cylinder->coord.z = atof(split[2]);
+	cylinder->coord.x = ft_atof(split[0]);
+	cylinder->coord.y = ft_atof(split[1]);
+	cylinder->coord.z = ft_atof(split[2]);
 	cylinder->matrix = identity_matrix(4);
-	cylinder->matrix = ft_mult_mat(cylinder->matrix, translation(atof(split[0]),
-																 atof(split[1]), atof(split[2])));
+	cylinder->matrix = ft_mult_mat(cylinder->matrix, translation(ft_atof(split[0]),
+																 ft_atof(split[1]), ft_atof(split[2])));
 	free_char_tab(split);
 	split = ft_split(data_split[2], ',');
 	if (!split)
 		return (free(cylinder), 0);
-	cylinder->n_vector.x = atof(split[0]);
-	cylinder->n_vector.y = atof(split[1]);
-	cylinder->n_vector.z = atof(split[2]);
-	cylinder->matrix = ft_mult_mat(cylinder->matrix, rotation_x(atoi(split[0]) * M_PI));
-	cylinder->matrix = ft_mult_mat(cylinder->matrix, rotation_y(atoi(split[1]) * M_PI));
-	cylinder->matrix = ft_mult_mat(cylinder->matrix, rotation_z(atoi(split[2]) * M_PI));
-	cylinder->radius = atof(data_split[3]) / 2;
-	cylinder->y_max = atof(data_split[4]) + cylinder->coord.y;
+	cylinder->n_vector.x = ft_atof(split[0]);
+	cylinder->n_vector.y = ft_atof(split[1]);
+	cylinder->n_vector.z = ft_atof(split[2]);
+	cylinder->matrix = ft_mult_mat(cylinder->matrix, rotation_x(ft_atoi(split[0]) * M_PI));
+	cylinder->matrix = ft_mult_mat(cylinder->matrix, rotation_y(ft_atoi(split[1]) * M_PI));
+	cylinder->matrix = ft_mult_mat(cylinder->matrix, rotation_z(ft_atoi(split[2]) * M_PI));
+	cylinder->radius = ft_atof(data_split[3]) / 2;
+	cylinder->y_max = ft_atof(data_split[4]) + cylinder->coord.y;
 	cylinder->y_min = cylinder->coord.y;
 	free_char_tab(split);
 	split = ft_split(data_split[5], ',');
 	if (!split)
 		return (free(cylinder), 0);
-  cylinder->material = ft_material();
+    cylinder->material = ft_material();
 	cylinder->colors.r = ft_atoi(split[0]);
 	cylinder->colors.g = ft_atoi(split[1]);
 	cylinder->colors.b = ft_atoi(split[2]);
     cylinder->next = NULL;
     free_char_tab(split);
-  	if (data->alight != NULL)
-		cylinder->material->ambiant_color = data->alight;
     if (data_split[6])
     {
         split = ft_split(data_split[6], ':');
@@ -442,6 +445,8 @@ int	init_cylinder(t_world *data, char **data_split, void *mlx)
         }
         free_char_tab(split);
     }
+  	if (data->alight != NULL)
+		cylinder->material->ambiant_color = data->alight;
     if (!data->cylinder)
     {
         data->cylinder = malloc(sizeof(t_cylinder*));
@@ -468,18 +473,18 @@ int init_cone(t_world *data, char **data_split, void *mlx)
 	if (!split)
 		return (free(cone), 0);
 	cone->matrix = identity_matrix(4);
-	cone->matrix = ft_mult_mat(cone->matrix, translation(atof(split[0]),
-														 atof(split[1]), atof(split[2])));
+	cone->matrix = ft_mult_mat(cone->matrix, translation(ft_atof(split[0]),
+														 ft_atof(split[1]), ft_atof(split[2])));
 	free_char_tab(split);
 	split = ft_split(data_split[2], ',');
 	if (!split)
 		return (free(cone), 0);
-	cone->matrix = ft_mult_mat(cone->matrix, rotation_x(atoi(split[0]) * M_PI));
-	cone->matrix = ft_mult_mat(cone->matrix, rotation_y(atoi(split[1]) * M_PI));
-	cone->matrix = ft_mult_mat(cone->matrix, rotation_z(atoi(split[2]) * M_PI));
-	cone->radius = atof(data_split[3]) / 2;
-	cone->y_max = atof(data_split[4]) / 2 + cone->coord.y;
-	cone->y_min = -atof(data_split[4]) / 2 + cone->coord.y;
+	cone->matrix = ft_mult_mat(cone->matrix, rotation_x(ft_atoi(split[0]) * M_PI));
+	cone->matrix = ft_mult_mat(cone->matrix, rotation_y(ft_atoi(split[1]) * M_PI));
+	cone->matrix = ft_mult_mat(cone->matrix, rotation_z(ft_atoi(split[2]) * M_PI));
+	cone->radius = ft_atof(data_split[3]) / 2;
+	cone->y_max = ft_atof(data_split[4]) / 2 + cone->coord.y;
+	cone->y_min = -ft_atof(data_split[4]) / 2 + cone->coord.y;
 	free_char_tab(split);
 	split = ft_split(data_split[5], ',');
 	if (!split)
@@ -506,9 +511,9 @@ int init_cone(t_world *data, char **data_split, void *mlx)
 
 t_dtype determine_type(char *data)
 {
-	if (strlen(data) > 2 || strlen(data) <= 0)
+	if (ft_strlen(data) > 2 || ft_strlen(data) <= 0)
 		return (NOTYPE);
-	if (strlen(data) == 1)
+	if (ft_strlen(data) == 1)
 	{
 		if (data[0] == 'A')
 			return (A);
