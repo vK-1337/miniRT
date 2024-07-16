@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/16 16:59:19 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/16 17:02:19 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,7 @@ int	init_alight(t_world *data, char **data_split)
 	return (1);
 }
 
+
 int	init_camera(t_world *data, char **data_split)
 {
 	char		**split;
@@ -146,32 +147,20 @@ int	init_camera(t_world *data, char **data_split)
 	t_tuple		to;
 	t_tuple		up;
 
-	camera = ft_new_camera(SIZE_X, SIZE_Y, ft_atoi(data_split[3]) * (M_PI
-				/ 180));
+	camera = ft_new_camera(SIZE_X, SIZE_Y, atoi(data_split[3]) * (M_PI / 180));
 	if (!camera)
 		return (0);
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return (free(camera), 0);
-	free_char_tab(split);
-	split = ft_split(data_split[2], ',');
-	if (!split)
-		return (free(camera), 0);
-	camera->vector.x = atof(split[0]);
-	camera->vector.y = atof(split[1]);
-	camera->vector.z = atof(split[2]);
-	camera->fov = ft_atoi(data_split[3]);
-	from = ft_init_tuple_reg(atof(split[0]), atof(split[1]),
-			atof(split[2]), 1);
+	from = ft_init_tuple_reg(atof(split[0]), atof(split[1]), atof(split[2]), 1);
 	free_char_tab(split);
 	split = ft_split(data_split[2], ',');
 	if (!split)
 		return (free(camera), 0);
 	to = ft_init_tuple_reg(0, 0, 0, 1);
-	up = ft_init_tuple_reg(atof(split[0]), atof(split[1]), atof(split[2]),
-			0);
+	up = ft_init_tuple_reg(atof(split[0]), atof(split[1]), atof(split[2]), 0);
 	camera->matrix = ft_view_transform(from, to, up);
-	print_matrix(camera->matrix, 4);
 	free_char_tab(split);
 	data->camera = camera;
 	return (1);
