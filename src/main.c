@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 10:26:12 by vk                #+#    #+#             */
-/*   Updated: 2024/07/15 16:52:01 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/16 16:11:58 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,9 +176,8 @@ int main(int ac, char **av)
 //             t_intersection *hit = ft_hit(intersections, 2);
 //             if (hit)
 //             {
-//                 t_tuple point = ft_position(r, hit->t);
 //                 t_comps comps = ft_prepare_computations(hit, r);
-//                 t_color color = ft_lighting(s1->material, *light, point, ft_neg_tuple(r.direction), ft_normal_at(comps, point), 0, s1, Sphere);
+//                 t_color color = ft_lighting(s1->material, *light, comps.point, ft_neg_tuple(r.direction), ft_normal_at(comps, comps.point), 0, s1, Sphere);
 //                 int color_int = ft_texture_color_to_int(color);
 //                 put_pixel(&data, x, y, color_int);
 //             }
@@ -190,7 +189,7 @@ int main(int ac, char **av)
 //     mlx_loop(mlx);
 // }
 
- 
+
 // int main(void)
 // {
 //     // t_sphere *floor = ft_sphere();

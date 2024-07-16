@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 11:41:54 by udumas            #+#    #+#             */
-/*   Updated: 2024/07/15 17:20:06 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/16 16:10:40 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,6 @@ t_intersection	*ft_intersect_world(t_ray ray, t_world **data)
 		ft_cone_intersect(&t_tab, &cone, ray, &count);
 	}
 	ft_sort_intersections(t_tab, count);
-    ft_print_intersections(t_tab, count);
 	return (t_tab);
 }
 
@@ -196,7 +195,6 @@ t_color	ft_shade_hit(t_world *data, t_comps *comps)
 	color = ft_color(0, 0, 0);
 	while (light != NULL)
 	{
-        printf("Comps->point.x %f Comps->point.y %f Comps->point.z %f\n", (float)comps->point.x, (float)comps->point.y, (float)comps->point.z);
 		tmp_color = malloc(sizeof(t_color));
 		in_shadow = ft_is_shadowed(data, comps->over_point);
 		if (comps->plan != NULL)
