@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 12:08:49 by udumas            #+#    #+#             */
-/*   Updated: 2024/07/16 16:54:24 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/16 17:00:32 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ float	**ft_inversion(float **matrice, int row_col)
 	det = ft_determinant4_4(matrice);
 	if (det == 0)
 	{
-		printf("Determinant is null\n");
+		// printf("Determinant is null\n");
 		return (identity_matrix(4));
 	}
 	mat = ft_create_mat_null(4);

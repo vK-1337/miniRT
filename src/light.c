@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 18:04:20 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/16 16:53:31 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/16 16:55:43 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,56 +91,6 @@ t_color	ft_lighting(t_material *m, t_light light, t_tuple position,
 	return (ft_sum_color(ft_sum_color(ft_sum_color(ambiant, diffuse), specular), *m->ambiant_color));
 }
 
-t_color	define_effective_color(t_objects type, t_tuple position, void *object, t_light light)
-{
-	t_color	effective_color;
-
-	if (type == Sphere)
-		effective_color = ft_spherical(position, *(t_sphere *)object, light);
-	else if (type == Plan)
-		effective_color = ft_planar(position, *(t_plan *)object, light);
-	else if (type == Cylinder || type == Cone)
-		effective_color = ft_cylindrical(position, *(t_cylinder *)object, light);
-	else
-		effective_color = *(ft_color(1, 1, 1));
-	return (effective_color);
-}
-
-t_color	ft_spherical(t_tuple position, t_sphere sphere, t_light light)
-{
-	t_tuple	point_object;
-	t_color	texture_color;
-
-	point_object = ft_mult_mat_tuple(&position, ft_inversion(sphere.matrix,
-				4), SECOND);
-	spherical_mapping(point_object.x, point_object.y, point_object.z,
-		sphere.material->texture, &texture_color);
-	return (ft_mult_color_tog(texture_color, light.intensity));
-}
-
-t_color ft_planar(t_tuple position, t_plan plan, t_light light)
-{
-    t_tuple	point_object;
-    t_color	texture_color;
-
-    point_object = ft_mult_mat_tuple(&position, ft_inversion(plan.matrix,
-                4), SECOND);
-    planar_mapping(point_object.x, point_object.y, plan.material->texture,
-        &texture_color);
-    return (ft_mult_color_tog(texture_color, light.intensity));
-}
-
-t_color ft_cylindrical(t_tuple position, t_cylinder cylinder, t_light light)
-{
-    t_tuple	point_object;
-    t_color	texture_color;
-
-    point_object = ft_mult_mat_tuple(&position, ft_inversion(cylinder.matrix,
-                4), SECOND);
-    cylindrical_mapping(point_object.x, point_object.y, point_object.z,
-        cylinder.material->texture, &texture_color);
-    return (ft_mult_color_tog(texture_color, light.intensity));
-}
 
 t_color	define_effective_color(t_objects type, t_tuple position, void *object, t_light light)
 {

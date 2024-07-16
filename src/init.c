@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/16 16:52:09 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/16 16:59:19 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,6 +171,7 @@ int	init_camera(t_world *data, char **data_split)
 	up = ft_init_tuple_reg(atof(split[0]), atof(split[1]), atof(split[2]),
 			0);
 	camera->matrix = ft_view_transform(from, to, up);
+	print_matrix(camera->matrix, 4);
 	free_char_tab(split);
 	data->camera = camera;
 	return (1);
@@ -474,6 +475,7 @@ int	init_cone(t_world *data, char **data_split, t_win *mlx)
 {
 	char		**split;
 	t_cone	*cone;
+	int y;
 	char		**color_split;
 	t_color		*p_color_1;
 	t_color		*p_color_2;
