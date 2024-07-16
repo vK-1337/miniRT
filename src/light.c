@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 18:04:20 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/09 10:25:32 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/16 16:13:42 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,7 @@ t_color	ft_lighting(t_material *m, t_light light, t_tuple position,
 	float	light_dot_normal;
 
     if ( type && type != 0 && m->is_texture)
-    {
         effective_color = define_effective_color(type, position, object, light);
-        printf("effective_color: %f %f %f\n", effective_color.r, effective_color.g, effective_color.b);
-    }
     else
 	    effective_color = ft_mult_color_tog(m->color, light.intensity);
 	lightv = ft_normalization(ft_dif_tuple(light.position, position));
@@ -108,29 +105,17 @@ t_color	define_effective_color(t_objects type, t_tuple position, void *object, t
 	return (effective_color);
 }
 
-t_color	define_effective_color(t_objects type, t_tuple position, void *object, t_light light)
-{
-	t_color	effective_color;
-
-	if (type == Sphere)
-		effective_color = ft_spherical(position, *(t_sphere *)object, light);
-	else if (type == Plan)
-		effective_color = ft_planar(position, *(t_plan *)object, light);
-	else if (type == Cylinder || type == Cone)
-		effective_color = ft_cylindrical(position, *(t_cylinder *)object, light);
-	else
-		effective_color = *(ft_color(1, 1, 1));
-	return (effective_color);
-}
-
 t_color	ft_spherical(t_tuple position, t_sphere sphere, t_light light)
 {
 	t_tuple	point_object;
 	t_color	texture_color;
 
+    // printf("Spherical mapping\n");
+    // print_matrix(sphere.matrix, 4);
+    // printf("x = %f, y = %f, z = %f\n", position.x, position.y, position.z);
 	point_object = ft_mult_mat_tuple(&position, ft_inversion(sphere.matrix,
 				4));
-	spherical_mapping(point_object.x, point_object.y, point_object.z,
+	spherical_mapping(position.x, position.y, position.z,
 		sphere.material->texture, &texture_color);
 	return (ft_mult_color_tog(texture_color, light.intensity));
 }
@@ -176,24 +161,6 @@ unsigned int	color_to_int(t_color color)
 	b = (unsigned int)(color.b * 255);
 	return ((r << 16) | (g << 8) | b);
 }
-int	ft_texture_color_to_int(t_color color)
-{
-	int	r;
-	int	g;
-	int	b;
-
-	r = (int)(color.r);
-	g = (int)(color.g);
-	b = (int)(color.b);
-	if (r > 255)
-		r = 255;
-	if (g > 255)
-		g = 255;
-	if (b > 255)
-		b = 255;
-	return (r << 16 | g << 8 | b);
-}
-
 int	ft_texture_color_to_int(t_color color)
 {
 	int	r;

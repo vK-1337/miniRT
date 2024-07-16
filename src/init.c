@@ -50,7 +50,7 @@ t_world	*init_all_data(int fd, t_win *mlx)
 			exit(EXIT_FAILURE);
 		}
 	}
-	return (data);
+	return (*data);
 }
 
 int	init_corresponding_data(char *file_data, t_world *data, t_win *mlx)
@@ -152,7 +152,8 @@ int	init_camera(t_world *data, char **data_split)
 		return (0);
 	split = ft_split(data_split[1], ',');
 	if (!split)
-		return (free(camera), 0);
+	return (free(camera) , 0);
+	from = ft_init_tuple_reg(ft_atof(split[0]), ft_atof(split[1]), ft_atof(split[2]), 1);
 	free_char_tab(split);
 	split = ft_split(data_split[2], ',');
 	if (!split)
@@ -161,15 +162,12 @@ int	init_camera(t_world *data, char **data_split)
 	camera->vector.y = atof(split[1]);
 	camera->vector.z = atof(split[2]);
 	camera->fov = ft_atoi(data_split[3]);
-	from = ft_init_tuple_reg(atof(split[0]), atof(split[1]),
-			atof(split[2]), 1);
 	free_char_tab(split);
 	split = ft_split(data_split[2], ',');
 	if (!split)
 		return (free(camera), 0);
 	to = ft_init_tuple_reg(0, 0, 0, 1);
-	up = ft_init_tuple_reg(atof(split[0]), atof(split[1]), atof(split[2]),
-			0);
+	up = ft_init_tuple_reg(ft_atof(split[0]), ft_atof(split[1]), ft_atof(split[2]), 0);
 	camera->matrix = ft_view_transform(from, to, up);
 	free_char_tab(split);
 	data->camera = camera;
@@ -218,75 +216,70 @@ int	init_sphere(t_world *data, char **data_split, t_win *mlx)
 	char		**color_split;
 	t_color		*p_color_1;
 	t_color		*p_color_2;
-
-	sphere = malloc(sizeof(t_sphere));
-	if (!sphere)
-		return (0);
-	split = ft_split(data_split[1], ',');
-	if (!split)
-		return (free(sphere), 0);
-	sphere->matrix = translation(atof(split[0]), atof(split[1]),
-			atof(split[2]));
-	sphere->center = ft_init_tuple_reg(atof(split[0]), atof(split[1]),
-			atof(split[2]), 1);
-	free_char_tab(split);
-	sphere->radius = atof(data_split[2]) / 2;
-	split = ft_split(data_split[3], ',');
-	if (!split)
-		return (free(sphere), 0);
-	sphere->material = ft_material();
-	sphere->material->color.r = ft_atoi(split[0]) / 255.0f;
-	sphere->material->color.g = ft_atoi(split[1]) / 255.0f;
-	sphere->material->color.b = ft_atoi(split[2]) / 255.0f;
-	if (data->alight != NULL)
+    sphere = malloc(sizeof(t_sphere));
+    if (!sphere)
+        return (0);
+    split = ft_split(data_split[1], ',');
+    if (!split)
+        return (free(sphere) , 0);
+    sphere->center.x = ft_atof(split[0]);
+    sphere->center.y = ft_atof(split[1]);
+    sphere->center.z = ft_atof(split[2]);
+    free_char_tab(split);
+    sphere->radius = ft_atof(data_split[2]) / 2;
+    split = ft_split(data_split[3], ',');
+    if (!split)
+        return (free(sphere) , 0);
+    sphere->material = ft_material();
+    sphere->material->color.r = ft_atoi(split[0]);
+    sphere->material->color.g = ft_atoi(split[1]);
+    sphere->material->color.b = ft_atoi(split[2]);
+    free_char_tab(split);
+    if (data_split[4])
+    {
+        split = ft_split(data_split[4], ':');
+        if (!split)
+            return (free(sphere), 0);
+        if (ft_strncmp(split[0], "texture", 8) == 0)
+        {
+            sphere->material = ft_texture(split[1], mlx);
+            if (!sphere->material)
+                return (free(sphere), free_char_tab(split), 0);
+        }
+        else if (ft_strncmp(split[0], "pattern", 8) == 0)
+        {
+            color_split = ft_split(split[1], ';');
+            if (!color_split)
+                return (free(sphere), 0);
+            p_color_1 = ft_color(ft_atoi(color_split[0]), ft_atoi(color_split[1]), ft_atoi(color_split[2]));
+            if (!p_color_1)
+                return (free(sphere), free_char_tab(color_split), 0);
+            p_color_2 = ft_color(ft_atoi(color_split[3]), ft_atoi(color_split[4]), ft_atoi(color_split[5]));
+            if (!p_color_2)
+                return (free(sphere), free(p_color_1),free_char_tab(color_split), 0);
+            sphere->material->pattern = ft_pattern(p_color_1, p_color_2);
+            if (!sphere->material->pattern)
+                return (free(sphere), free_char_tab(color_split), free(p_color_1), free(p_color_2), 0);
+        }
+        free_char_tab(split);
+    }
+    if (data->alight != NULL)
 	{
 		sphere->material->ambiant_color = data->alight;
 		sphere->material->ambiant = data->alight_intensity;
 	}
-	free_char_tab(split);
-	if (data_split[4])
-	{
-		split = ft_split(data_split[4], ':');
-		if (!split)
-			return (free(sphere), 0);
-		if (ft_strncmp(split[0], "texture", 8) == 0)
-		{
-			sphere->material = ft_texture(split[1], mlx);
-			if (!sphere->material->texture)
-				return (free(sphere), free_char_tab(split), 0);
-		}
-		else if (ft_strncmp(split[0], "pattern", 8) == 0)
-		{
-			color_split = ft_split(split[1], ';');
-			if (!color_split)
-				return (free(sphere), 0);
-			p_color_1 = ft_color(ft_atoi(color_split[0]),
-					ft_atoi(color_split[1]), ft_atoi(color_split[2]));
-			if (!p_color_1)
-				return (free(sphere), free_char_tab(color_split), 0);
-			p_color_2 = ft_color(ft_atoi(color_split[3]),
-					ft_atoi(color_split[4]), ft_atoi(color_split[5]));
-			if (!p_color_2)
-				return (free(sphere), free(p_color_1),
-					free_char_tab(color_split), 0);
-			sphere->material->pattern = ft_pattern(p_color_1, p_color_2);
-			if (!sphere->material->pattern)
-				return (free(sphere), free_char_tab(color_split),
-					free(p_color_1), free(p_color_2), 0);
-		}
-		free_char_tab(split);
-	}
-	sphere->next = NULL;
-	if (!data->sphere)
-	{
-		data->sphere = malloc(sizeof(t_sphere *));
-		if (!data->sphere)
-			return (free(sphere), 0);
-		*data->sphere = sphere;
-	}
-	else
-		sphere_lstadd_back(data->sphere, sphere);
-	return (1);
+    sphere->matrix = identity_matrix(4);
+    sphere->next = NULL;
+    if (!data->sphere)
+    {
+        data->sphere = malloc(sizeof(t_sphere*));
+        if (!data->sphere)
+            return (free(sphere), 0);
+        *data->sphere = sphere;
+    }
+    else
+        sphere_lstadd_back(data->sphere, sphere);
+    return (1);
 }
 
 int	init_plan(t_world *data, char **data_split, t_win *mlx)
@@ -308,7 +301,7 @@ int	init_plan(t_world *data, char **data_split, t_win *mlx)
 	plan->coord.y = atof(split[1]);
 	plan->coord.z = atof(split[2]);
 	plan->normal = ft_init_tuple_reg(0, 1, 0, 0);
-	matrix = translation(atof(split[0]), atof(split[1]), atof(split[2]));
+	matrix = translation(ft_atof(split[0]), ft_atof(split[1]), ft_atof(split[2]));
 	plan->matrix = identity_matrix(4);
 	plan->matrix = ft_mult_mat(plan->matrix, matrix, ALL);
 	free_char_tab(split);
@@ -517,9 +510,9 @@ int	init_cone(t_world *data, char **data_split, t_win *mlx)
 
 t_dtype	determine_type(char *data)
 {
-	if (strlen(data) > 2 || strlen(data) <= 0)
+	if (ft_strlen(data) > 2 || ft_strlen(data) <= 0)
 		return (NOTYPE);
-	if (strlen(data) == 1)
+	if (ft_strlen(data) == 1)
 	{
 		if (data[0] == 'A')
 			return (A);

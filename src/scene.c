@@ -64,7 +64,19 @@ void	ft_sphere_intersections(t_intersection **t_tab, t_sphere **sphere,
 	*sphere = (*sphere)->next;
 }
 
-t_intersection *ft_intersect_world(t_ray ray, t_world **data)
+void ft_print_intersections(t_intersection *t_tab, int count)
+{
+    int i;
+
+    i = 0;
+    while (i < count)
+    {
+        printf("t[%d].t = %f\n", i, t_tab[i].t);
+        i++;
+    }
+}
+
+t_intersection	*ft_intersect_world(t_ray ray, t_world **data)
 {
 	t_intersection	*t_tab;
 	int				count;
@@ -106,7 +118,7 @@ t_intersection *ft_intersect_world(t_ray ray, t_world **data)
 	return (t_tab);
 }
 
-t_comps	ft_prepare_computations(t_intersection *i, t_ray ray)
+t_comps ft_prepare_computations(t_intersection *i, t_ray ray)
 {
 	t_comps	comps;
 
@@ -187,16 +199,16 @@ t_color	ft_shade_hit(t_world *data, t_comps *comps)
 		in_shadow = ft_is_shadowed(data, comps->over_point);
 		if (comps->plan != NULL)
 			*tmp_color = ft_lighting(ft_set_pattern(comps, PLAN), *light,
-								comps->over_point, comps->eyev, comps->normalv, in_shadow, NULL, Notype);
+								comps->point, comps->eyev, comps->normalv, in_shadow, comps->plan, Plan);
 		else if (comps->sphere != NULL)
 			*tmp_color = ft_lighting(ft_set_pattern(comps, SPHERE), *light,
-								comps->over_point, comps->eyev, comps->normalv, in_shadow, NULL, Notype);
+								comps->point, comps->eyev, comps->normalv, in_shadow, comps->sphere, Sphere);
 		else if (comps->cylinder != NULL)
 			*tmp_color = ft_lighting(ft_set_pattern(comps, CYLINDER), *light,
-								comps->over_point, comps->eyev, comps->normalv, in_shadow, NULL, Notype);
+								comps->point, comps->eyev, comps->normalv, in_shadow, comps->cylinder, Cylinder);
 		else if (comps->cone != NULL)
 			*tmp_color = ft_lighting(ft_set_pattern(comps, CONE), *light,
-								comps->over_point, comps->eyev, comps->normalv, in_shadow, NULL, Notype);
+								comps->point, comps->eyev, comps->normalv, in_shadow, comps->cone, Cone);
 		else
 			tmp_color = ft_color(0, 0, 0);
 		color = ft_sum_color(color, *tmp_color);
