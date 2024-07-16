@@ -47,10 +47,10 @@
 #include <pthread.h>
 
 /******************************************************************************/
-/*                                   50:21
-	/ 1:33:17                                         */
+/*                                                                            */
 /*                                                                            */
 /*                              STRUCT & ENUM                                 */
+/*                                                                            */
 /*                                                                            */
 /*                                                                            */
 /******************************************************************************/
@@ -296,9 +296,9 @@ void					print_char_tab(char **tab);
 /*                                                                            */
 /*                                                                            */
 /******************************************************************************/
-
+void ft_print_intersections(t_intersection *t_tab, int count);
+double					ft_atof(char *str);
 int	scene_name_check(char *av); // Convert color to int
-
 t_world					*init_all_data(int fd, t_win *mlx);
 void					null_data(t_world *data);
 int						init_corresponding_data(char *file_data, t_world *data, t_win *mlx);
@@ -321,10 +321,12 @@ int						verify_coord(char *data);
 int						verify_vect(char *data);
 int						verify_fov(char *data);
 int						verify_colors_syntax(char *data);
+int						verify_texture(char *texture);
+int						verify_texture_and_pattern(char *data);
+int						verify_pattern(char *pattern);
 int						check_fov_syntax(char *data);
 int						check_vect_syntax(char *data);
 int						check_coord_syntax(char *data);
-
 int						init_alight(t_world *data, char **data_split);
 int						init_camera(t_world *data, char **data_split);
 int						init_light(t_world *data, char **data_split);
@@ -376,7 +378,7 @@ void					free_data(t_world **data);
 /*                                   TUPLE_CALCULATION                        */
 /*                                                                            */
 /*                                                                            */
-/*************************************************************	printf("Hit\n");*****************/
+/******************************************************************************/
 
 //										TUPLE									//
 t_tuple					*ft_init_tuple(float x, float y, float z, float w);

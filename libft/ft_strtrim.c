@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 16:50:38 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/21 18:32:27 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/15 10:13:03 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ char	*ft_strtrim(char const *s1, char const *set)
 	char	*s2;
 
 	i = ft_get_index(s1, set);
-	if (i == strlen(s1) || !s1)
+	if (i == ft_strlen(s1) || !s1)
 	{
 		s2 = malloc(sizeof(char));
 		s2[0] = '\0';

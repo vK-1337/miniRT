@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   camera.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 14:30:46 by vda-conc          #+#    #+#             */
 /*   Updated: 2024/07/10 18:12:47 by udumas           ###   ########.fr       */
@@ -25,9 +25,11 @@ void *render(void *thread_)
 		{
 			t_ray ray = ray_for_pixel(camera, x, y);
 			t_color color = ft_color_at(data, ray);
-			unsigned int color_int = color_to_int(color); // Convert color to int
+            // ! IF COLOR IS TEXTURE COLOR THEN USE THE TEXTURE COLOR INT FUNCTION
+			// unsigned int color_int = color_to_int(color); // Convert color to int
+            unsigned int color_int_texture = ft_texture_color_to_int(color);
 			pthread_mutex_lock(data->pixel_put);
-			put_pixel(win, x, y, color_int);
+			put_pixel(win, x, y, color_int_texture);
 			pthread_mutex_unlock(data->pixel_put);
 		}
 	}
