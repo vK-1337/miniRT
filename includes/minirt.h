@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/14 18:28:42 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/16 15:59:21 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -544,9 +544,9 @@ t_plan					*ft_plan(void);
 void					ft_cylinder_intersect(t_intersection **t_tab,
 							t_cylinder **cylinder, t_ray ray, int *count);
 t_cylinder				*ft_cylinder(void);
-t_intersection			*ft_add_t(t_intersection *t_tab, t_intersection t[2],
+t_intersection			*ft_add_t(t_intersection **t_tab, t_intersection t[2],
 							int count);
-t_intersection			*ft_add_one_t(t_intersection *t_tab, t_intersection t,
+t_intersection			*ft_add_one_t(t_intersection **t_tab, t_intersection t,
 							int count);
 void					ft_cylinder_caps_intersect(t_intersection **t_tab,
 							t_cylinder **cylinder, t_ray ray, int *count);

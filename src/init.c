@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/14 18:43:28 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/16 16:26:03 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -469,11 +469,13 @@ int	init_cone(t_world *data, char **data_split, t_win *mlx)
 {
 	char	**split;
 	t_cone	*cone;
-
+	char		**color_split;
+	t_color		*p_color_1;
+	t_color		*p_color_2;
+	
 	cone = malloc(sizeof(t_cone));
 	if (!cone)
 		return (0);
-	cone = NULL;
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return (free(cone), 0);
@@ -500,6 +502,38 @@ int	init_cone(t_world *data, char **data_split, t_win *mlx)
 	cone->material->color.g = ft_atoi(split[1]) / 255.0f;
 	cone->material->color.b = ft_atoi(split[2]) / 255.0f;
 	cone->next = NULL;
+	if (data_split[6])
+	{
+		split = ft_split(data_split[6], ':');
+		if (!split)
+			return (free(cone), 0);
+		if (ft_strncmp(split[0], "texture", 8) == 0)
+		{
+			cone->material = ft_texture(split[1], mlx);
+			if (!cone->material->texture)
+				return (free(cone), free_char_tab(split), 0);
+		}
+		else if (ft_strncmp(split[0], "pattern", 8) == 0)
+		{
+			color_split = ft_split(split[1], ';');
+			if (!color_split)
+				return (free(cone), 0);
+			p_color_1 = ft_color(ft_atoi(color_split[0]),
+					ft_atoi(color_split[1]), ft_atoi(color_split[2]));
+			if (!p_color_1)
+				return (free(cone), free_char_tab(color_split), 0);
+			p_color_2 = ft_color(ft_atoi(color_split[3]),
+					ft_atoi(color_split[4]), ft_atoi(color_split[5]));
+			if (!p_color_2)
+				return (free(cone), free(p_color_1),
+					free_char_tab(color_split), 0);
+			cone->material->pattern = ft_pattern(p_color_1, p_color_2);
+			if (!cone->material->pattern)
+				return (free(cone), free_char_tab(color_split),
+					free(p_color_1), free(p_color_2), 0);
+		}
+		free_char_tab(split);
+	}
 	free_char_tab(split);
 	if (data->alight != NULL)
 		cone->material->ambiant_color = data->alight;

@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 12:51:28 by bainur            #+#    #+#             */
-/*   Updated: 2024/07/14 18:02:12 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/16 15:59:37 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void ft_check_cone_caps(t_intersection **t_tab, t_cone **cone, t_ray ray, int *c
 float get_cone_discriminant(t_ray ray, float abc[3])
 {
     float	discriminant;
-    (void) cone;
+    
 	abc[0] = ray.direction.x * ray.direction.x - ray.direction.y * ray.direction.y \
 	+ ray.direction.z * ray.direction.z;
 	abc[1] = 2 * ray.direction.x * ray.origin.x - 2 * ray.direction.y * ray.origin.y \

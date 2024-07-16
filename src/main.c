@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:55 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/14 18:20:46 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/16 15:53:46 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,8 +115,14 @@ void start_threads(t_complete *complete)
     free(complete->data->pixel_put);
 }
 
-
-
+void free_win_classic(t_win *win)
+{
+    mlx_destroy_image(win->mlx, win->img);
+    mlx_destroy_window(win->mlx, win->win);
+    mlx_destroy_display(win->mlx);
+    free(win->mlx);
+    free(win);
+}
 
 int main(int ac, char **av)
 {
@@ -130,10 +136,12 @@ int main(int ac, char **av)
     fd = open(av[1], O_RDONLY);
     if (fd == -1)
         return (write(2, "File not found\n", 16), EXIT_FAILURE);
-    data = init_all_data(fd);
     t_win *win = init_mlx();
     if (!win)
         return (free_data(&data), EXIT_FAILURE);
+    data = init_all_data(fd, win);
+    if (!data)
+        return (free_win_classic(win), EXIT_FAILURE);
     t_complete *complete = malloc(sizeof(t_complete));
     complete->data = data;
     complete->win = win;
