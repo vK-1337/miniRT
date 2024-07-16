@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   plan.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 19:15:10 by udumas            #+#    #+#             */
-/*   Updated: 2024/07/10 15:54:14 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/11 13:00:13 by bainur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,10 @@ t_intersection *ft_add_one_t(t_intersection **t_tab, t_intersection t, int count
 void ft_plan_intersect(t_intersection **t_tab, t_plan **plan, t_ray ray, int *count)
 {
     t_ray new_ray;
-    t_intersection *tmp;
     t_intersection t;
     
     if (!*plan)
         return ;
-    tmp = *t_tab;
     new_ray = ray_transform(ray, ft_inversion((*plan)->matrix, 4));
     if (fabsf(new_ray.direction.y) < EPSILON)
     {

@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/16 15:59:21 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/16 16:49:51 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
-#define EPSILON 0.001
+#define EPSILON 0.0001
 #define INFINITY 1e10
 #define SIZE_X 50
 #define SIZE_Y 50
@@ -47,8 +47,7 @@
 #include <pthread.h>
 
 /******************************************************************************/
-/*                                   50:21
-	/ 1:33:17                                         */
+/*                                                         					  */
 /*                                                                            */
 /*                              STRUCT & ENUM                                 */
 /*                                                                            */
@@ -170,7 +169,6 @@ typedef struct s_sphere
 
 typedef struct s_cylinder
 {
-	t_tuple coord;
 	t_tuple n_vector;
 	float radius;
 	float y_max;

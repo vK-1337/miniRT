@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 12:51:28 by bainur            #+#    #+#             */
-/*   Updated: 2024/07/16 15:59:37 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/16 16:50:32 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int within_cone_radius(const t_ray *ray, double t, double cone_val)
 
 	x = ray->origin.x + ray->direction.x * t;
 	z = ray->origin.z + ray->direction.z * t;
+    cone_val = fabs(cone_val);
 	if ((x * x + z * z) <= (cone_val * cone_val))
 		return (1);
 	return (0);
@@ -27,9 +28,15 @@ void ft_check_cone_caps(t_intersection **t_tab, t_cone **cone, t_ray ray, int *c
 {
     t_intersection t;
     if (!*cone)
+	{
         return ;
+	}
+	ray = ray_transform(ray, ft_inversion((*cone)->matrix, 4));
     if (fabsf(ray.direction.y) < EPSILON)
+	{
+		*cone = (*cone)->next;
         return ;
+	}
     t.t = ((*cone)->y_max - ray.origin.y) / ray.direction.y;
     if (within_cone_radius(&ray, t.t, (*cone)->y_max) == 1)
     {
@@ -50,6 +57,7 @@ void ft_check_cone_caps(t_intersection **t_tab, t_cone **cone, t_ray ray, int *c
         *count += 1;
         *t_tab = ft_add_one_t(t_tab, t, *count);
     }
+	*cone = (*cone)->next;
 }
 
 float get_cone_discriminant(t_ray ray, float abc[3])
@@ -72,21 +80,15 @@ void	ft_cone_intersect(t_intersection **t_tab, t_cone **cone, t_ray ray,
     float discriminant;
     t_intersection t;
     t_ray new_ray;
-   float y0;
+  	float y0;
     
-    if (*cone == NULL)
+    if (!*cone)
         return ;
     new_ray = ray_transform(ray, ft_inversion((*cone)->matrix, 4));
-    ft_check_cone_caps(t_tab, cone, new_ray, count);
     discriminant = get_cone_discriminant(new_ray, abc);
-    if(discriminant < EPSILON && discriminant > -EPSILON)
-        discriminant = 0;
-    if (discriminant < 0)
-    {
-        *cone = (*cone)->next;
+    if (discriminant < EPSILON)
         return ;
-    }
-    if (fabsf(abc[0]) < EPSILON && fabsf(abc[1]) > 0.1)
+    if (fabsf(abc[0]) < EPSILON && fabsf(abc[1]) > EPSILON)
     {
         t.t = -abc[2] / (2 * abc[1]);
         t.cone = *cone;
@@ -95,7 +97,6 @@ void	ft_cone_intersect(t_intersection **t_tab, t_cone **cone, t_ray ray,
         t.cylinder = NULL;
         *count += 1; 
         *t_tab = ft_add_one_t(t_tab, t, *count);
-        *cone = (*cone)->next;
         return ;
     }
     discriminant = sqrt(discriminant);
@@ -117,7 +118,6 @@ void	ft_cone_intersect(t_intersection **t_tab, t_cone **cone, t_ray ray,
         *count += 1;
         *t_tab = ft_add_one_t(t_tab, t, *count);
     }
-    *cone = (*cone)->next;
 }
 
 t_cone	*ft_cone(void)

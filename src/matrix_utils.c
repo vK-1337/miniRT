@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 15:10:22 by udumas            #+#    #+#             */
-/*   Updated: 2024/05/30 18:35:46 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/12 10:54:50 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,8 @@ float	**ft_submat(float **matrice, int row_col, int row, int col)
 	i = -1;
 	k = 0;
 	l = 0;
+	if (matrice == NULL)
+		return (NULL);
 	new_mat = malloc(sizeof(float *) * (row_col - 1));
 	if (!new_mat)
 		return (printf("Erreur malloc\n"), NULL);

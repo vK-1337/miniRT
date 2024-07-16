@@ -6,7 +6,7 @@
 /*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 11:41:54 by udumas            #+#    #+#             */
-/*   Updated: 2024/07/14 18:23:36 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/16 16:54:28 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ t_intersection *ft_intersect_world(t_ray ray, t_world **data)
 		ft_cylinder_intersect(&t_tab, &cylinder, ray, &count);
 		ft_cylinder_caps_intersect(&t_tab, &cylinder, ray, &count);
 		ft_cone_intersect(&t_tab, &cone, ray, &count);
+		ft_check_cone_caps(&t_tab, &cone, ray, &count);
 	}
 	ft_sort_intersections(t_tab, count);
 	return (t_tab);
