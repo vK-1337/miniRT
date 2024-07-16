@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 14:30:46 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/15 15:22:02 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/10 18:12:47 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ t_camera *ft_new_camera(float hsize, float vsize, double fov)
 	camera->hsize = hsize;
 	camera->vsize = vsize;
 	camera->fov = fov;
-	camera->matrix = identity_matrix(4);
 	camera->pixel_size = compute_pixel_size(camera);
 	return (camera);
 }
@@ -90,11 +89,9 @@ t_ray ray_for_pixel(t_camera *camera, int px, int py)
 	world_x = camera->half_width - xoffset;
 	world_y = camera->half_height - yoffset;
 	tmp_comput = ft_init_tuple(world_x, world_y, -1, 1);
-	pixel = ft_mult_mat_tuple(tmp_comput, ft_inversion(camera->matrix, 4));
-	free(tmp_comput);
+	pixel = ft_mult_mat_tuple(tmp_comput, ft_inversion(camera->matrix, 4), ALL);
 	tmp_comput = ft_init_tuple(0, 0, 0, 1);
-	origin = ft_mult_mat_tuple(tmp_comput, ft_inversion(camera->matrix, 4));
-	free(tmp_comput);
+	origin = ft_mult_mat_tuple(tmp_comput, ft_inversion(camera->matrix, 4), ALL);
 	direction = ft_normalization(ft_dif_tuple(pixel, origin));
 	// printf("origin: %f %f %f\n", origin.x, origin.y, origin.z);
 	// printf("direction: %f %f %f\n", direction.x, direction.y, direction.z);

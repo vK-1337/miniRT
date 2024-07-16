@@ -3,48 +3,48 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/15 17:14:30 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/14 18:28:42 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINIRT_H
 # define MINIRT_H
 
-# ifndef M_PI
-#  define M_PI 3.14159265358979323846
-# endif
-# define EPSILON 0.001
-# define INFINITY 1e10
-# define SIZE_X 500
-# define SIZE_Y 500
-# define CENTER_X SIZE_X / 2
-# define CENTER_Y SIZE_Y / 2
-# define SPHERE 0
-# define PLAN 1
-# define CYLINDER 2
-# define CONE 3
-# define FIRST 0
-# define SECOND 1
-# define THIRD 2
-# define ALL 3
-# define NONE 4
-# include "get_next_line.h"
-# include "libft.h"
-# include "mlx.h"
-# include <X11/keysym.h>
-# include <fcntl.h>
-# include <math.h>
-# include <pthread.h>
-# include <stdarg.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <sys/stat.h>
-# include <sys/types.h>
-# include <unistd.h>
-# include <wait.h>
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+#define EPSILON 0.001
+#define INFINITY 1e10
+#define SIZE_X 50
+#define SIZE_Y 50
+#define CENTER_X SIZE_X / 2
+#define CENTER_Y SIZE_Y / 2
+#define SPHERE 0
+#define PLAN 1
+#define CYLINDER 2
+#define CONE 3
+#define FIRST 0
+#define SECOND 1
+#define THIRD 2
+#define ALL 3
+#define NONE 4
+#include "get_next_line.h"
+#include "libft.h"
+#include "mlx.h"
+#include <X11/keysym.h>
+#include <fcntl.h>
+#include <math.h>
+#include <stdarg.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <wait.h>
+#include <pthread.h>
 
 /******************************************************************************/
 /*                                                                            */
@@ -170,16 +170,15 @@ typedef struct s_sphere
 
 typedef struct s_cylinder
 {
-	t_tuple				coord;
-	t_tuple				n_vector;
-	float				radius;
-	float				y_max;
-	float				y_min;
-	t_material			*material;
-	t_color				colors;
-	float				**matrix;
-	struct s_cylinder	*next;
-}						t_cylinder;
+	t_tuple coord;
+	t_tuple n_vector;
+	float radius;
+	float y_max;
+	float y_min;
+	t_material *material;
+	float **matrix;
+	struct s_cylinder *next;
+} t_cylinder;
 
 typedef struct s_cone
 {
@@ -300,12 +299,11 @@ void					print_char_tab(char **tab);
 void ft_print_intersections(t_intersection *t_tab, int count);
 double					ft_atof(char *str);
 int	scene_name_check(char *av); // Convert color to int
-t_world					init_all_data(int fd, void *mlx);
+t_world					*init_all_data(int fd, t_win *mlx);
 void					null_data(t_world *data);
-int						init_corresponding_data(char *file_data, t_world *data,
-							void *mlx);
+int						init_corresponding_data(char *file_data, t_world *data, t_win *mlx);
 int						init_data_w_line(t_world *data, t_dtype type,
-							char **data_split, void *mlx);
+							char **data_split, t_win *mlx);
 t_dtype					determine_type(char *data);
 int						char_tab_len(char **tab);
 void					free_char_tab(char **tab);
@@ -332,12 +330,10 @@ int						check_coord_syntax(char *data);
 int						init_alight(t_world *data, char **data_split);
 int						init_camera(t_world *data, char **data_split);
 int						init_light(t_world *data, char **data_split);
-int						init_sphere(t_world *data, char **data_split,
-							void *mlx);
-int						init_plan(t_world *data, char **data_split, void *mlx);
-int						init_cylinder(t_world *data, char **data_split,
-							void *mlx);
-int						init_cone(t_world *data, char **data_split, void *mlx);
+int						init_sphere(t_world *data, char **data_split, t_win *mlx);
+int						init_plan(t_world *data, char **data_split, t_win *mlx);
+int						init_cylinder(t_world *data, char **data_split, t_win *mlx);
+int						init_cone(t_world *data, char **data_split, t_win *mlx);
 t_dtype					determine_type(char *data);
 void					null_data(t_world *data);
 void					print_all_data(t_world *data);
@@ -421,11 +417,11 @@ t_color					ft_color_reg(float r, float g, float b);
 
 //										CALCUL								//
 
-float					**ft_mult_mat(float **mat1, float **mat2);
-t_tuple					ft_mult_mat_tuple(t_tuple *tuple, float **mat);
-float					**ft_transpose(float **mat);
-int						ft_comp_mat(float **mat1, float **mat2, int row_col);
-float					**ft_inversion(float **matrice, int row_col);
+float **ft_mult_mat(float **mat1, float **mat2, int free_data);
+t_tuple ft_mult_mat_tuple(t_tuple *tuple, float **mat, int free_data);
+float **ft_transpose(float **mat);
+int ft_comp_mat(float **mat1, float **mat2, int row_col);
+float **ft_inversion(float **matrice, int row_col);
 
 //										UTILS								//
 
@@ -526,8 +522,8 @@ void					*render(void *world);
 
 //										CALCUL								//
 
-float					**ft_mult_mat(float **mat1, float **mat2);
-t_tuple					ft_mult_mat_tuple(t_tuple *tuple, float **mat);
+float					**ft_mult_mat(float **mat1, float **mat2, int free_data);
+t_tuple					ft_mult_mat_tuple(t_tuple *tuple, float **mat, int free_data);
 float					**ft_transpose(float **mat);
 int						ft_comp_mat(float **mat1, float **mat2, int row_col);
 float					**ft_inversion(float **matrice, int row_col);

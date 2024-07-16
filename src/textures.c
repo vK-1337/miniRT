@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   textures.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:01:11 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/15 15:04:44 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/14 18:24:44 by udumas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,11 +92,12 @@ void	cylindrical_mapping(float x, float y, float z, Image *image,
 t_material	*ft_texture(char *path, void *mlx)
 {
 	t_material *m;
-
-	m = malloc(sizeof(t_material));
-	if (!m)
-		return (NULL);
-	m->color = *ft_color(1, 1, 1);
+    m = malloc(sizeof(t_material));
+    if (!m)
+	{
+        return (NULL);
+	}
+	m->color = ft_color_reg(1, 1, 1);
 	m->ambiant = 0.1;
 	m->diffuse = 0.9;
 	m->specular = 0.9;
