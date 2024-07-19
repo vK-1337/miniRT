@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:55 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/16 16:54:01 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/19 22:56:29 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ void ft_free_all(t_complete **complete)
 int exit_window(t_complete *complete)
 {
     t_win *win = complete->win;
-    mlx_destroy_image(win->mlx, win->img);
     mlx_destroy_window(win->mlx, win->win);
+    mlx_destroy_image(win->mlx, win->img);
     mlx_destroy_display(win->mlx);
     free(win->mlx);
     free(win);
@@ -152,7 +152,7 @@ int main(int ac, char **av)
     t_win *win = init_mlx();
     if (!win)
         return (free_data(&data), EXIT_FAILURE);
-    data = init_all_data(fd, win);
+    data = init_all_data(fd, win->mlx);
     if (!data)
         return (free_win_classic(win), EXIT_FAILURE);
     t_complete *complete = malloc(sizeof(t_complete));

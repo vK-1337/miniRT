@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 21:45:44 by vk                #+#    #+#             */
-/*   Updated: 2024/07/10 16:37:21 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/19 17:00:06 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,12 @@ void free_light(t_light *light)
 	tmp = light;
 	while (light)
 	{
-		tmp = light->next;
+	    tmp = light->next;
 		free(light);
 		light = tmp;
 	}
 	return ;
-}	
+}
 void free_material(t_material *material)
 {
 	if (material->pattern)

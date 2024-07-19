@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/16 17:02:19 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/19 19:36:19 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,7 @@ int	init_corresponding_data(char *file_data, t_world *data, t_win *mlx)
 	{
 		write(STDERR_FILENO, "A malloc failed.\n", 18);
 		return (free_char_tab(data_split), 2);
-	}
-	free_char_tab(data_split);
+	}	free_char_tab(data_split);
 	return (EXIT_SUCCESS);
 }
 
@@ -177,8 +176,8 @@ int	init_light(t_world *data, char **data_split)
 		return (0);
 	light->next = NULL;
 	light->position = (t_tuple){0, 0, 0, 1};
-	light->intensity = (t_color){0, 0, 0};
-	light->colors = (t_color){0, 0, 0};
+	light->intensity = (t_color){0, 0, 0, 0};
+	light->colors = (t_color){0, 0, 0, 0};
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return (free(light), 0);
@@ -228,11 +227,6 @@ int	init_sphere(t_world *data, char **data_split, t_win *mlx)
 	sphere->material->color.r = ft_atoi(split[0]) / 255.0f;
 	sphere->material->color.g = ft_atoi(split[1]) / 255.0f;
 	sphere->material->color.b = ft_atoi(split[2]) / 255.0f;
-	if (data->alight != NULL)
-	{
-		sphere->material->ambiant_color = data->alight;
-		sphere->material->ambiant = data->alight_intensity;
-	}
 	free_char_tab(split);
 	if (data_split[4])
 	{
@@ -264,7 +258,13 @@ int	init_sphere(t_world *data, char **data_split, t_win *mlx)
 				return (free(sphere), free_char_tab(color_split),
 					free(p_color_1), free(p_color_2), 0);
 		}
+
 		free_char_tab(split);
+	}
+    if (data->alight != NULL)
+	{
+		sphere->material->ambiant_color = data->alight;
+		sphere->material->ambiant = data->alight_intensity;
 	}
 	sphere->next = NULL;
 	if (!data->sphere)
@@ -321,11 +321,6 @@ int	init_plan(t_world *data, char **data_split, t_win *mlx)
 	plan->material->color.b = ft_atoi(split[2]) / 255.0f;
 	plan->next = NULL;
 	free_char_tab(split);
-	if (data->alight != NULL)
-	{
-		plan->material->ambiant_color = data->alight;
-		plan->material->ambiant = data->alight_intensity;
-	}
 	if (data_split[4])
 	{
 		split = ft_split(data_split[4], ':');
@@ -357,6 +352,11 @@ int	init_plan(t_world *data, char **data_split, t_win *mlx)
 					free(p_color_2), 0);
 		}
 		free_char_tab(split);
+	}
+    if (data->alight != NULL)
+	{
+		plan->material->ambiant_color = data->alight;
+		plan->material->ambiant = data->alight_intensity;
 	}
 	if (!data->plan)
 	{
@@ -448,6 +448,11 @@ int	init_cylinder(t_world *data, char **data_split, t_win *mlx)
 		}
 		free_char_tab(split);
 	}
+    if (data->alight != NULL)
+	{
+		cylinder->material->ambiant_color = data->alight;
+		cylinder->material->ambiant = data->alight_intensity;
+	}
 	if (!data->cylinder)
 	{
 		data->cylinder = malloc(sizeof(t_cylinder *));
@@ -468,7 +473,7 @@ int	init_cone(t_world *data, char **data_split, t_win *mlx)
 	char		**color_split;
 	t_color		*p_color_1;
 	t_color		*p_color_2;
-	
+
 	cone = malloc(sizeof(t_cone));
 	if (!cone)
 		return (0);

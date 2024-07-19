@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   textures.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:01:11 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/16 16:06:36 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/19 22:25:36 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,8 @@ Image	*load_xpm_image(void *mlx_ptr, const char *file_path)
 	Image	*image;
 
 	image = malloc(sizeof(Image));
-	printf("mlx_ptr = %p\n", mlx_ptr);
-	printf("file_path = %s\n", file_path);
-	image->img_ptr = mlx_xpm_file_to_image(mlx_ptr, (char *)file_path,
+	printf("file_path = %s", file_path);
+	image->img_ptr = mlx_xpm_file_to_image(mlx_ptr, ft_strtrim((char *)file_path, "\n"),
 			&image->width, &image->height);
 	if (image->img_ptr == NULL)
 	{
@@ -56,21 +55,25 @@ void	get_interpolated_color(float u, float v, Image *image, t_color *color)
 void	spherical_mapping(float x, float y, float z, Image *image,
 		t_color *color)
 {
-	float theta = atan2f(z, x);            // Angle autour de l'axe Y
-	float phi = acosf(y);                  // Angle du pôle Nord
-	float u = (theta + M_PI) / (2 * M_PI); // Remap from [-π, π] to [0, 1]
-	float v = phi / M_PI;                  // Remap from [0, π] to [0, 1]
+	float theta = atan2f(z, x);             // Angle autour de l'axe Y
+	float phi = acosf(y);                   // Angle du pôle Nord
+	float u = (theta + M_PI) / (2 * M_PI);  // Remap from [-π, π] to [0, 1]
+	float v = phi / M_PI;                   // Remap from [0, π] to [0, 1]
 	get_interpolated_color(u, v, image, color);
 }
 
-void	planar_mapping(float x, float y, Image *image, t_color *color)
+void planar_mapping(float x, float y, Image *image, t_color *color)
 {
-	float	u;
-	float	v;
+    // Wrapping coordinates to the range [0, 1)
+    float u = fmodf(x + 1.0f, 1.0f);
+    float v = fmodf(y + 1.0f, 1.0f);
 
-	u = fmodf(x + 1.0f, 1.0f);
-	v = fmodf(y + 1.0f, 1.0f);
-	get_interpolated_color(u, v, image, color);
+    // Ensure u and v are positive
+    if (u < 0) u += 1.0f;
+    if (v < 0) v += 1.0f;
+
+    // Get the interpolated color from the image
+    get_interpolated_color(u, v, image, color);
 }
 
 void	cylindrical_mapping(float x, float y, float z, Image *image,

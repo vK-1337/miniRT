@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   scene.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 11:41:54 by udumas            #+#    #+#             */
-/*   Updated: 2024/07/16 16:54:28 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/19 22:18:09 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,19 +188,23 @@ t_color	ft_shade_hit(t_world *data, t_comps *comps)
 		in_shadow = ft_is_shadowed(data, comps->over_point);
 		if (comps->plan != NULL)
 			*tmp_color = ft_lighting(ft_set_pattern(comps, PLAN), *light,
-								comps->over_point, comps->eyev, comps->normalv, in_shadow, NULL, Notype);
+								comps->over_point, comps->eyev, comps->normalv, in_shadow, comps->plan, Plan);
 		else if (comps->sphere != NULL)
 			*tmp_color = ft_lighting(ft_set_pattern(comps, SPHERE), *light,
-								comps->over_point, comps->eyev, comps->normalv, in_shadow, NULL, Notype);
+								comps->over_point, comps->eyev, comps->normalv, in_shadow, comps->sphere, Sphere);
 		else if (comps->cylinder != NULL)
 			*tmp_color = ft_lighting(ft_set_pattern(comps, CYLINDER), *light,
-								comps->over_point, comps->eyev, comps->normalv, in_shadow, NULL, Notype);
+								comps->over_point, comps->eyev, comps->normalv, in_shadow, comps->cylinder, Cylinder);
 		else if (comps->cone != NULL)
 			*tmp_color = ft_lighting(ft_set_pattern(comps, CONE), *light,
-								comps->over_point, comps->eyev, comps->normalv, in_shadow, NULL, Notype);
+								comps->over_point, comps->eyev, comps->normalv, in_shadow, comps->cone, Cone);
 		else
 			tmp_color = ft_color(0, 0, 0);
 		color = ft_sum_color(color, *tmp_color);
+        if (tmp_color->text_color == 1)
+            color.text_color = 1;
+        else
+            color.text_color = 0;
 		free(tmp_color);
 		light = light->next;
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   reflections.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:42:34 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/14 17:41:00 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/19 19:37:55 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ t_tuple ft_normal_at(t_comps object, t_tuple world_point)
         object_normal = object.plan->normal;
     }
     else if (object.type == CYLINDER)
-    {   
-        matrix = object.cylinder->matrix;   
+    {
+        matrix = object.cylinder->matrix;
         object_point = ft_mult_matrix_tuple(ft_inversion(matrix, 4), &world_point, FIRST);
         float dist = object_point.x * object_point.x + object_point.z * object_point.z;
         if (dist < pow(object.cylinder->radius, 2) && (object_point.y >= (object.cylinder->y_max - EPSILON)))
@@ -70,7 +70,7 @@ t_tuple ft_normal_at(t_comps object, t_tuple world_point)
         matrix = identity_matrix(4);
     }
     world_normal = ft_mult_matrix_tuple(ft_transpose(ft_inversion(matrix, 4)), &object_normal, FIRST);
-    
+
     world_normal.w = 0;
     return (ft_normalization(world_normal));
 }

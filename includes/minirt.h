@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/16 17:05:57 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/19 16:48:25 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ typedef struct s_color
 	double				r;
 	double				g;
 	double				b;
+    int                 text_color;
 }						t_color;
 
 typedef struct s_pattern
@@ -320,6 +321,9 @@ int						verify_coord(char *data);
 int						verify_vect(char *data);
 int						verify_fov(char *data);
 int						verify_colors_syntax(char *data);
+int						verify_texture_and_pattern(char *data);
+int						verify_pattern(char *pattern);
+int						verify_texture(char *texture);
 int						check_fov_syntax(char *data);
 int						check_vect_syntax(char *data);
 int						check_coord_syntax(char *data);

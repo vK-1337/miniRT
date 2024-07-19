@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   camera.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 14:30:46 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/16 16:49:59 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/19 17:04:14 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,20 @@ void *render(void *thread_)
 		{
 			t_ray ray = ray_for_pixel(camera, x, y);
 			t_color color = ft_color_at(data, ray);
-			unsigned int color_int = color_to_int(color); // Convert color to int
-			pthread_mutex_lock(data->pixel_put);
-			put_pixel(win, x, y, color_int);
-			pthread_mutex_unlock(data->pixel_put);
+            if (color.text_color == 1)
+            {
+                int color_int = ft_texture_color_to_int(color);
+                pthread_mutex_lock(data->pixel_put);
+                put_pixel(win, x, y, color_int);
+                pthread_mutex_unlock(data->pixel_put);
+            }
+            else
+            {
+                unsigned int color_int = color_to_int(color); // Convert color to int
+                pthread_mutex_lock(data->pixel_put);
+                put_pixel(win, x, y, color_int);
+                pthread_mutex_unlock(data->pixel_put);
+            }
 		}
 	}
 	return (NULL);
