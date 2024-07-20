@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/19 16:48:25 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/20 15:10:04 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 # endif
 # define EPSILON 0.0001
 # define INFINITY 1e10
-# define SIZE_X 500
-# define SIZE_Y 500
+# define SIZE_X 50
+# define SIZE_Y 50
 # define CENTER_X SIZE_X / 2
 # define CENTER_Y SIZE_Y / 2
 # define SPHERE 0
@@ -107,7 +107,7 @@ typedef struct s_color
 	double				r;
 	double				g;
 	double				b;
-    int                 text_color;
+	int					text_color;
 }						t_color;
 
 typedef struct s_pattern
@@ -322,8 +322,8 @@ int						verify_vect(char *data);
 int						verify_fov(char *data);
 int						verify_colors_syntax(char *data);
 int						verify_texture_and_pattern(char *data);
-int						verify_pattern(char *pattern);
-int						verify_texture(char *texture);
+int						verify_pattern(char *pattern, char ***upper_split);
+int						verify_texture(char *pattern, char ***upper_split);
 int						check_fov_syntax(char *data);
 int						check_vect_syntax(char *data);
 int						check_coord_syntax(char *data);
@@ -373,7 +373,7 @@ void					print_sphere_list(t_sphere **sphere_list);
 void					print_plan_list(t_plan **plan_list);
 void					print_cylinder_list(t_cylinder **cylinder_list);
 
-void					free_data(t_world **data);
+void					free_data(t_world **data, void *mlx_ptr);
 
 /******************************************************************************/
 /*                                                                            */
@@ -576,7 +576,8 @@ int						ft_texture_color_to_int(t_color color);
 void					cylindrical_mapping(float x, float y, float z,
 							Image *image, t_color *color);
 void					planar_mapping(float x, float y, Image *image,
-							t_color *color);
+							t_color *color, float plane_width,
+							float plane_height);
 void					spherical_mapping(float x, float y, float z,
 							Image *image, t_color *color);
 void					get_interpolated_color(float u, float v, Image *image,
@@ -595,5 +596,7 @@ int						ft_check_caps(t_ray ray, float t, float radius);
 void					ft_check_cone_caps(t_intersection **t_tab,
 							t_cone **cone, t_ray ray, int *count);
 int						ft_equal_tuple(t_tuple *t1, t_tuple *t2);
+void					calculate_plane_dimensions(float **matrix, float *width,
+							float *height);
 
 #endif

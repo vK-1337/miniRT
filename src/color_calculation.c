@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   color_calculation.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 16:30:27 by udumas            #+#    #+#             */
-/*   Updated: 2024/07/14 17:59:31 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/20 18:10:49 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ t_color ft_color_reg(float r, float g, float b)
     new.r = r;
     new.g = g;
     new.b = b;
+    new.text_color = 0;
     return (new);
 }
 

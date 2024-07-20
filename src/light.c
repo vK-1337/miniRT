@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 18:04:20 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/19 22:20:52 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/20 13:52:11 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,10 +119,7 @@ t_color	define_effective_color(t_objects type, t_tuple position, void *object,
 	if (type == Sphere)
 		effective_color = ft_spherical(position, *(t_sphere *)object, light);
 	else if (type == Plan)
-    {
-        printf("x = %f, y = %f, z = %f\n", position.x, position.y, position.z);
 		effective_color = ft_planar(position, *(t_plan *)object, light);
-    }
 	else if (type == Cylinder || type == Cone)
 		effective_color = ft_cylindrical(position, *(t_cylinder *)object,
 				light);
@@ -147,12 +144,15 @@ t_color	ft_planar(t_tuple position, t_plan plan, t_light light)
 {
 	t_tuple	point_object;
 	t_color	texture_color;
+    float plane_width;
+    float plane_height;
 
     printf("position.x = %f, position.y = %f, position.z = %f\n", position.x, position.y, position.z);
-	point_object = ft_normalization(ft_mult_mat_tuple(&position, ft_inversion(plan.matrix, 4),
-			SECOND));
-	planar_mapping(point_object.x, point_object.y, plan.material->texture,
-		&texture_color);
+    calculate_plane_dimensions(plan.matrix, &plane_width, &plane_height);
+	point_object = ft_mult_mat_tuple(&position, ft_inversion(plan.matrix, 4),
+			SECOND);
+	planar_mapping(point_object.x, point_object.z, plan.material->texture,
+		&texture_color, plane_width, plane_height);
 	return (ft_mult_color_tog(texture_color, light.intensity));
 }
 

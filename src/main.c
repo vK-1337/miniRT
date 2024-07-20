@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:55 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/19 22:56:29 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/20 18:37:29 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,18 @@ void put_pixel(t_win *win, int x, int y, unsigned int color)
 
 void ft_free_all(t_complete **complete)
 {
-    free_data(&(*complete)->data);
+    free_data(&(*complete)->data, (*complete)->win->mlx);
 }
 
 int exit_window(t_complete *complete)
 {
-    t_win *win = complete->win;
+    t_win *win = (t_win *)complete->win;
+    ft_free_all(&complete);
     mlx_destroy_window(win->mlx, win->win);
     mlx_destroy_image(win->mlx, win->img);
     mlx_destroy_display(win->mlx);
     free(win->mlx);
     free(win);
-    ft_free_all(&complete);
     free(complete);
     exit(0);
     return (0);
@@ -59,6 +59,55 @@ t_win *init_mlx(void)
     return (win);
 }
 
+void print_world_structure(t_world *world) {
+    if (world == NULL) {
+        printf("La structure 'world' est NULL.\n");
+        return;
+    }
+
+    printf("Affichage du contenu de la structure 'world':\n");
+    printf("alight: %p\n", world->alight);
+    printf("alight_intensity: %f\n", world->alight_intensity);
+    printf("camera: %p\n", world->camera);
+    printf("light: %p\n", world->light);
+    printf("sphere: %p\n", world->sphere);
+    printf("plan: %p\n", world->plan);
+    printf("cylinder: %p\n", world->cylinder);
+    printf("cone: %p\n", world->cone);
+    printf("pixel_put: %p\n", world->pixel_put);
+
+    for (int i = 0; i < 6; i++) {
+        printf("counter[%d]: %d\n", i, world->counter[i]);
+    }
+}
+
+void print_complete_structure(t_complete *complete) {
+    if (complete == NULL) {
+        printf("La structure 'complete' est NULL.\n");
+        return;
+    }
+
+    printf("Affichage du contenu de la structure 'complete':\n");
+    // Exemple d'affichage de quelques champs hypothétiques de 'complete'
+    // Adaptez ces lignes selon la structure réelle de vos données
+    printf("win: %p\n", complete->win);
+    if (complete->data != NULL) {
+        print_world_structure(complete->data); // Utilisez la fonction print_world_structure pour afficher le contenu de 'data'
+    } else {
+        printf("Le champ 'data' est NULL.\n");
+    }
+
+    if (complete->thread != NULL) {
+        // Supposant qu'il y a un nombre spécifique de threads, ajustez selon votre cas
+        for (int i = 0; i < 100; i++) {
+            printf("Thread %d:\n", i);
+            // Affichez ici les champs de 'thread' que vous souhaitez inspecter
+        }
+    } else {
+        printf("Le champ 'thread' est NULL.\n");
+    }
+}
+
 void start_threads(t_complete *complete)
 {
     int i;
@@ -74,6 +123,7 @@ void start_threads(t_complete *complete)
     complete->thread = malloc(sizeof(t_thread) * (10 *10));
     complete->data->pixel_put = malloc(sizeof(pthread_mutex_t));
     pthread_mutex_init(complete->data->pixel_put, NULL);
+
     i = 0;
     while (i < 10 * 10)       {
         complete->thread[i].start_x = start_x;
@@ -151,7 +201,7 @@ int main(int ac, char **av)
         return (write(2, "File not found\n", 16), EXIT_FAILURE);
     t_win *win = init_mlx();
     if (!win)
-        return (free_data(&data), EXIT_FAILURE);
+        return (free_data(&data, win->mlx), EXIT_FAILURE);
     data = init_all_data(fd, win->mlx);
     if (!data)
         return (free_win_classic(win), EXIT_FAILURE);

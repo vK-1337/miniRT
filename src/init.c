@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/19 19:36:19 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/20 17:57:13 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ t_world	*init_all_data(int fd, t_win *mlx)
 	}
 	if (init_corresponding_data(file_data, data, mlx) == 2)
 	{
-		free_data(&data);
+		free_data(&data, mlx);
 		free(file_data);
 		exit(EXIT_FAILURE);
 	}
@@ -45,7 +45,7 @@ t_world	*init_all_data(int fd, t_win *mlx)
 		if (init_corresponding_data(file_data, data, mlx) == 2)
 		{
 			get_next_line(fd, 1);
-			free_data(&data);
+			free_data(&data, mlx->mlx);
 			free(file_data);
 			exit(EXIT_FAILURE);
 		}
@@ -83,37 +83,37 @@ int	init_data_w_line(t_world *data, t_dtype type, char **data_split, t_win *mlx)
 	if (type == A)
 	{
 		if (!init_alight(data, data_split))
-			return (free_data(&data), 0);
+			return (free_data(&data, mlx), 0);
 	}
 	else if (type == C)
 	{
 		if (!init_camera(data, data_split))
-			return (free_data(&data), 0);
+			return (free_data(&data, mlx), 0);
 	}
 	else if (type == L)
 	{
 		if (!init_light(data, data_split))
-			return (free_data(&data), 0);
+			return (free_data(&data, mlx), 0);
 	}
 	else if (type == PL)
 	{
 		if (!init_plan(data, data_split, mlx))
-			return (free_data(&data), 0);
+			return (free_data(&data, mlx), 0);
 	}
 	else if (type == SP)
 	{
 		if (!init_sphere(data, data_split, mlx))
-			return (free_data(&data), 0);
+			return (free_data(&data, mlx), 0);
 	}
 	else if (type == CY)
 	{
 		if (!init_cylinder(data, data_split, mlx))
-			return (free_data(&data), 0);
+			return (free_data(&data, mlx), 0);
 	}
 	else if (type == CO)
 	{
 		if (!init_cone(data, data_split, mlx))
-			return (free_data(&data), 0);
+			return (free_data(&data, mlx), 0);
 	}
 	return (1);
 }
@@ -230,6 +230,7 @@ int	init_sphere(t_world *data, char **data_split, t_win *mlx)
 	free_char_tab(split);
 	if (data_split[4])
 	{
+        free(sphere->material);
 		split = ft_split(data_split[4], ':');
 		if (!split)
 			return (free(sphere), 0);
@@ -323,6 +324,7 @@ int	init_plan(t_world *data, char **data_split, t_win *mlx)
 	free_char_tab(split);
 	if (data_split[4])
 	{
+        free(plan->material);
 		split = ft_split(data_split[4], ':');
 		if (!split)
 			return (free(plan), 0);
@@ -418,6 +420,7 @@ int	init_cylinder(t_world *data, char **data_split, t_win *mlx)
 	}
 	if (data_split[6])
 	{
+        free(cylinder->material);
 		split = ft_split(data_split[6], ':');
 		if (!split)
 			return (free(cylinder), 0);
@@ -587,17 +590,16 @@ void	null_data(t_world *data)
 	int	i;
 
 	data->alight = NULL;
+    data->alight_intensity = 0;
 	data->camera = NULL;
+	data->cone = NULL;
 	data->cylinder = NULL;
 	data->light = NULL;
+    data->pixel_put = NULL;
 	data->plan = NULL;
 	data->sphere = NULL;
-	data->cone = NULL;
 	i = 0;
-	while (i < 6)
-	{
-		data->counter[i] = 0;
-		i++;
-	}
+	while (i < 5)
+		data->counter[i++] = 0;
 	return ;
 }

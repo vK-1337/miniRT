@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 21:45:44 by vk                #+#    #+#             */
-/*   Updated: 2024/07/19 17:00:06 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/20 18:38:08 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,27 +36,33 @@ int	char_tab_len(char **tab)
 	return (i);
 }
 
-void free_light(t_light *light)
+void	free_light(t_light *light)
 {
 	t_light	*tmp;
 
 	tmp = light;
 	while (light)
 	{
-	    tmp = light->next;
+		tmp = light->next;
 		free(light);
 		light = tmp;
 	}
 	return ;
 }
-void free_material(t_material *material)
+void	free_material(t_material *material, void *mlx)
 {
+    (void)mlx;
 	if (material->pattern)
 		free(material->pattern);
+	if (material->texture)
+    {
+        mlx_destroy_image(mlx, material->texture->img_ptr);
+		free(material->texture);
+    }
 	free(material);
 }
 
-void free_plan(t_plan **plan)
+void	free_plan(t_plan **plan, void *mlx)
 {
 	t_plan	*tmp;
 
@@ -64,7 +70,7 @@ void free_plan(t_plan **plan)
 	while (*plan)
 	{
 		tmp = (*plan)->next;
-		free_material((*plan)->material);
+		free_material((*plan)->material, mlx);
 		ft_free_mat((*plan)->matrix, 4);
 		free(*plan);
 		*plan = tmp;
@@ -72,7 +78,7 @@ void free_plan(t_plan **plan)
 	return ;
 }
 
-void free_sphere(t_sphere **sphere)
+void	free_sphere(t_sphere **sphere, void *mlx)
 {
 	t_sphere	*tmp;
 
@@ -80,7 +86,7 @@ void free_sphere(t_sphere **sphere)
 	while (*sphere)
 	{
 		tmp = (*sphere)->next;
-		free_material((*sphere)->material);
+		free_material((*sphere)->material, mlx);
 		ft_free_mat((*sphere)->matrix, 4);
 		free(*sphere);
 		*sphere = tmp;
@@ -88,7 +94,7 @@ void free_sphere(t_sphere **sphere)
 	return ;
 }
 
-void free_cylinder(t_cylinder **cylinder)
+void	free_cylinder(t_cylinder **cylinder, void *mlx)
 {
 	t_cylinder	*tmp;
 
@@ -96,7 +102,7 @@ void free_cylinder(t_cylinder **cylinder)
 	while (*cylinder)
 	{
 		tmp = (*cylinder)->next;
-		free_material((*cylinder)->material);
+		free_material((*cylinder)->material, mlx);
 		ft_free_mat((*cylinder)->matrix, 4);
 		free(*cylinder);
 		*cylinder = tmp;
@@ -104,7 +110,7 @@ void free_cylinder(t_cylinder **cylinder)
 	return ;
 }
 
-void free_cone(t_cone **cone)
+void	free_cone(t_cone **cone, void *mlx)
 {
 	t_cone	*tmp;
 
@@ -112,7 +118,7 @@ void free_cone(t_cone **cone)
 	while (*cone)
 	{
 		tmp = (*cone)->next;
-		free_material((*cone)->material);
+		free_material((*cone)->material, mlx);
 		ft_free_mat((*cone)->matrix, 4);
 		free(*cone);
 		*cone = tmp;
@@ -120,7 +126,7 @@ void free_cone(t_cone **cone)
 	return ;
 }
 
-void	free_data(t_world **data)
+void	free_data(t_world **data, void *mlx)
 {
 	if ((*data)->alight)
 		free((*data)->alight);
@@ -133,22 +139,22 @@ void	free_data(t_world **data)
 		free_light((*data)->light);
 	if ((*data)->plan)
 	{
-		free_plan((*data)->plan);
+		free_plan((*data)->plan, mlx);
 		free((*data)->plan);
 	}
 	if ((*data)->sphere)
 	{
-		free_sphere((*data)->sphere);
+		free_sphere((*data)->sphere, mlx);
 		free((*data)->sphere);
 	}
 	if ((*data)->cylinder)
 	{
-		free_cylinder((*data)->cylinder);
+		free_cylinder((*data)->cylinder, mlx);
 		free((*data)->cylinder);
 	}
 	if ((*data)->cone)
 	{
-		free_cone((*data)->cone);
+		free_cone((*data)->cone, mlx);
 		free((*data)->cone);
 	}
 	free(*data);

@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 14:30:46 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/19 17:04:14 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/20 18:09:53 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,17 @@
 
 void *render(void *thread_)
 {
-	t_thread *thread = thread_;
+	t_thread *thread = (t_thread *)thread_;
 	t_camera *camera = thread->data->camera;
 	t_win *win = thread->win;
 	t_world *data = thread->data;
-
 	for (int y = thread->start_y; y < thread->end_y; y++)
 	{
 		for (int x = thread->start_x; x < thread->end_x; x++)
 		{
 			t_ray ray = ray_for_pixel(camera, x, y);
-			t_color color = ft_color_at(data, ray);
+            t_color color = {0};
+			color = ft_color_at(data, ray);
             if (color.text_color == 1)
             {
                 int color_int = ft_texture_color_to_int(color);
@@ -53,6 +53,8 @@ t_camera *ft_new_camera(float hsize, float vsize, double fov)
 	camera->vsize = vsize;
 	camera->fov = fov;
 	camera->pixel_size = compute_pixel_size(camera);
+    camera->half_height = 0;
+    camera->half_width = 0;
 	return (camera);
 }
 

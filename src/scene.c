@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 11:41:54 by udumas            #+#    #+#             */
-/*   Updated: 2024/07/19 22:18:09 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/20 18:11:19 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,7 +219,7 @@ t_color	ft_color_at(t_world *data, t_ray ray)
 
 	xs = ft_intersect_world(ray, &data);
 	if (ft_hit(xs, xs[0].count) == NULL)
-		return (ft_color_reg(0, 0, 0));
+		return (free(xs), ft_color_reg(0, 0, 0));
 	comps = ft_prepare_computations(ft_hit(xs, xs[0].count), ray);
 	free(xs);
 	return (ft_shade_hit(data, &comps));

@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:52 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/11 13:54:13 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/20 14:24:37 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,27 +257,27 @@ int	verify_texture_and_pattern(char *data)
 	if (char_tab_len(data_split) != 2)
 		return (free_char_tab(data_split), 0);
 	if (ft_strncmp(data_split[0], "texture", 7) == 0)
-		return (verify_texture(data_split[1]));
+		return (verify_texture(data_split[1], &data_split));
 	else if (ft_strncmp(data_split[0], "pattern", 7) == 0)
-		return (verify_pattern(data_split[1]));
+		return (verify_pattern(data_split[1], &data_split));
 	return (free_char_tab(data_split), 0);
 }
 
-int	verify_pattern(char *pattern)
+int	verify_pattern(char *pattern, char*** upper_split)
 {
 	char	**data_split;
 
 	data_split = ft_split(pattern, ';');
 	if (!data_split)
-		return (0);
+		return (free_char_tab(*upper_split), 0);
 	if (char_tab_len(data_split) != 2)
-		return (free_char_tab(data_split), 0);
+		return (free_char_tab(*upper_split), free_char_tab(data_split), 0);
 	if (!verify_colors(data_split[0]) || !verify_colors(data_split[1]))
-		return (free_char_tab(data_split), 0);
-	return (free_char_tab(data_split), 1);
+		return (free_char_tab(*upper_split), free_char_tab(data_split), 0);
+	return (free_char_tab(*upper_split), free_char_tab(data_split), 1);
 }
 
-int	verify_texture(char *texture)
+int	verify_texture(char *texture, char*** data_split)
 {
 	int	i;
 
@@ -286,13 +286,13 @@ int	verify_texture(char *texture)
 	while (texture[i])
 		i++;
 	if (i < 6)
-		return (0);
+		return (free_char_tab(*data_split), 0);
     printf("texture[i] = %c\n", texture[i - 2]);
 	if (texture[i - 2] != 'm' && texture[i - 3] != 'p' && texture[i - 4] != 'x')
-		return (0);
+		return (free_char_tab(*data_split), 0);
 	if (texture[i - 5] != '.')
-		return (0);
-	return (1);
+		return (free_char_tab(*data_split), 0);
+	return (free_char_tab(*data_split), 1);
 }
 
 int	verify_sphere(char **data)

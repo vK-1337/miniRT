@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:01:11 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/19 22:25:36 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/20 14:42:04 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,14 @@
 Image	*load_xpm_image(void *mlx_ptr, const char *file_path)
 {
 	Image	*image;
+    char *trimmed_path;
 
 	image = malloc(sizeof(Image));
 	printf("file_path = %s", file_path);
-	image->img_ptr = mlx_xpm_file_to_image(mlx_ptr, ft_strtrim((char *)file_path, "\n"),
+    trimmed_path = ft_strtrim((char *)file_path, "\n");
+	image->img_ptr = mlx_xpm_file_to_image(mlx_ptr, trimmed_path,
 			&image->width, &image->height);
+    free(trimmed_path);
 	if (image->img_ptr == NULL)
 	{
 		printf("Error loading image\n");
@@ -62,17 +65,46 @@ void	spherical_mapping(float x, float y, float z, Image *image,
 	get_interpolated_color(u, v, image, color);
 }
 
-void planar_mapping(float x, float y, Image *image, t_color *color)
-{
-    // Wrapping coordinates to the range [0, 1)
-    float u = fmodf(x + 1.0f, 1.0f);
-    float v = fmodf(y + 1.0f, 1.0f);
+float distance(t_tuple a, t_tuple b) {
+    return sqrtf((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y) + (b.z - a.z) * (b.z - a.z));
+}
 
-    // Ensure u and v are positive
+void calculate_plane_dimensions(float **matrix, float *width, float *height)
+{
+    // Define the corners of the plane in object space
+    t_tuple corners[4] = {
+        {-1, 0, -1, 1}, // bottom-left
+        {1, 0, -1, 1},  // bottom-right
+        {1, 0, 1, 1},   // top-right
+        {-1, 0, 1, 1}   // top-left
+    };
+
+    // Apply the matrix transformation to each corner
+    t_tuple transformed_corners[4];
+    for (int i = 0; i < 4; i++) {
+        transformed_corners[i] = ft_mult_matrix_tuple(matrix, &corners[i], NONE);
+    }
+
+    // Calculate the width and height from the transformed corners
+    *width = distance(transformed_corners[0], transformed_corners[1]);
+    *height = distance(transformed_corners[1], transformed_corners[2]);
+}
+
+void planar_mapping(float x, float y, Image *image, t_color *color, float plane_width, float plane_height) {
+    // Calcul de l'échelle dynamique
+    float scale_u = 27.0f;
+
+    // Calcul des coordonnées de texture ajustées
+    float u = x / (plane_width * scale_u);
+    float v = y / (plane_height * scale_u);
+
+    // Wrap u and v within [0, 1] to avoid repeating the texture
+    u = fmodf(u, 1.0f);
+    v = fmodf(v, 1.0f);
+
     if (u < 0) u += 1.0f;
     if (v < 0) v += 1.0f;
 
-    // Get the interpolated color from the image
     get_interpolated_color(u, v, image, color);
 }
 
