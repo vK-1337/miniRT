@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 21:45:44 by vk                #+#    #+#             */
-/*   Updated: 2024/07/20 18:38:08 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/22 17:55:15 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ void	free_cone(t_cone **cone, void *mlx)
 	return ;
 }
 
-void	free_data(t_world **data, void *mlx)
+void    free_data(t_world **data, void *mlx)
 {
 	if ((*data)->alight)
 		free((*data)->alight);

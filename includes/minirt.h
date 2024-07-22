@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/20 15:10:04 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/22 18:22:21 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -598,5 +598,6 @@ void					ft_check_cone_caps(t_intersection **t_tab,
 int						ft_equal_tuple(t_tuple *t1, t_tuple *t2);
 void					calculate_plane_dimensions(float **matrix, float *width,
 							float *height);
+void					destroy_t_win(t_win *win);
 
 #endif

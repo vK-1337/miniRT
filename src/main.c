@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:55 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/20 18:37:29 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/22 18:21:48 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int exit_window(t_complete *complete)
 {
     t_win *win = (t_win *)complete->win;
     ft_free_all(&complete);
+    mlx_clear_window(complete->win->mlx, complete->win->win);
     mlx_destroy_window(win->mlx, win->win);
     mlx_destroy_image(win->mlx, win->img);
     mlx_destroy_display(win->mlx);
@@ -57,6 +58,15 @@ t_win *init_mlx(void)
     win->addr = mlx_get_data_addr(win->img, &win->bits_per_pixel,
                                   &win->line_length, &win->endian);
     return (win);
+}
+
+void destroy_t_win(t_win *win)
+{
+    mlx_destroy_image(win->mlx, win->img);
+    mlx_destroy_window(win->mlx, win->win);
+    mlx_destroy_display(win->mlx);
+    free(win->mlx);
+    free(win);
 }
 
 void print_world_structure(t_world *world) {
