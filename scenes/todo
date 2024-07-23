@@ -1,0 +1,58 @@
+MiniRT scene to do :
+
+    Basic shapes scene :
+
+        ✔ 1 - Place a sphere at the coordinates {0, 0, 0}. With the camera facing the sphere, display the rendered image. The sphere should be visible and displayed without glitching. @done(24-07-23 14:26)
+
+        ✔ 2 - Place a plane with a 'z' value of null. With the camera facing the plane, display the rendered image. The plane should be visible and displayed without glitching. @done(24-07-23 14:41)
+
+        ✔ 3 - Place a cylinder extending along the y axis. With the camera facing the cylinder, display the rendered image. The cylinder should be visible and displayed without glitching. @done(24-07-23 14:52)
+
+    Translation and rotations :
+
+        ✔ 1 - Place two spheres at the coordinates {0, 0, 0}, the camera facing those spheres. Then put a translation on one of the two spheres oriented in a direction parallelto the camera's, of a greater distance than the sphere's diameter and display the rendered image. Both spheres should be visible and displayed without glitching. @done(24-07-23 16:02)
+
+        ✔ 2 - Place a cylinder extending along the y axis, the camera facing the cylinder. Then put a 90° rotation (PI/2 radian) along the z axis and display the rendered image. The cylinder should be visible and displayed without glitching. @done(24-07-23 16:41)
+
+    Multi-objects :
+
+        ✔ 1 - Place several intersecting objects on the scene, such as for example a sphere and a cylinder, and display the rendered image. Both objects should be visible and displayed without glitching. (especially where both object intersect). @done(24-07-23 16:45)
+✔ @done(24-07-23 16:45)
+
+        ✔ 2 - - Execute the same test, but ensure it's possible to place the same object several times, for example two cylinders, two spheres and a plane. @done(24-07-23 18:16)
+
+     Camera's position and direction :
+
+
+        //!! METTRE TALLES MAX POUR LA WINDOW PENDANT CES TESTS
+
+        ✔ 1 - Generate a random scene and place the camera extending along the x axis pointed towards the coordinates {0, 0, 0} and display the rendered image. The scene must be visible and displayed without glitching. @done(24-07-23 18:28)
+
+        ✔ 2 - Generate a random scene and place the camera extending along the y axis pointed towards the coordinates {0, 0, 0} and display the rendered image. The scene must be visible and displayed without glitching. @done(24-07-23 18:30)
+
+        ✔ 3 - Generate a random scene and place the camera extending along the z axis pointed towards the coordinates {0, 0, 0} and display the rendered image. The scene must be visible and displayed without glitching. @done(24-07-23 18:28)
+
+        ✔ 4 - Generate a random scene and place the camera at a random location which isn't on any axis or a diagonal, pointed towards the coordinates {0, 0, 0} and display the rendered image. The scene must be visible and displayed without glitching. @done(24-07-23 20:13)
+
+    Brightness 1 / 2 :
+
+        ✔ 1 - Place a sphere at the coordinates {0, 0, 0}, the camera facing the sphere, and put a spot left or right of the camera but positioned in such a way that the sphere will be lit sideways. @done(24-07-23 20:41)
+        ☐ 2 - Place a sphere at some coordinates resulting from a translation, the camera facing the sphere, and place a spot left or right of the camera but positioned in such a way that the sphere will be lit sideways. Display the rendered image. The sphere should be visible, properly illuminated and displayed without glitch. Properly means that the halo of light should be computed after translation not before.
+
+    Brightness 2 / 2 :
+
+       ☐ 1 - Place a vertical spot, a sphere and a plane. The spot lighting the sphere's position to create a sphere shadow on the plane. Put the camera aside so we can see the sphere, the plane and the sphere's shadow on the plane. The shadow must be properly displayed without glitching.
+
+       ☐ 2 - Put a complex scene together with several objects like on illustration V.6 page 10 of the subject. Shadows must be properly displayed without glitching.
+
+    Bonuses :
+
+        ☐ 1 - Specular reflection
+
+        ☐ 2 - Color disruption : Checkerboard
+
+        ☐ 3 - Colored and multi-spot lights
+
+        ☐ 4 - Cones
+
+        ☐ 5 - Textures

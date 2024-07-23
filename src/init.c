@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/22 18:27:38 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/23 15:51:00 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,7 @@ int	init_camera(t_world *data, char **data_split)
 	camera = ft_new_camera(SIZE_X, SIZE_Y, atoi(data_split[3]) * (M_PI / 180));
 	if (!camera)
 		return (0);
+    printf("camera->fov = %f\n", camera->fov);
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return (free(camera), 0);
@@ -160,6 +161,7 @@ int	init_light(t_world *data, char **data_split)
 	float	intensity;
 
 	light = malloc(sizeof(t_light));
+    print_char_tab(data_split);
 	if (!light)
 		return (0);
 	light->next = NULL;
@@ -205,6 +207,7 @@ int	init_sphere(t_world *data, char **data_split, t_win *mlx)
 	sphere->radius = atof(data_split[2]) / 2;
 	sphere->matrix = translation(atof(split[0]), atof(split[1]),
 			atof(split[2]));
+    print_matrix(sphere->matrix, 4);
 	sphere->center = ft_init_tuple_reg(atof(split[0]), atof(split[1]),
 			atof(split[2]), 1);
 	free_char_tab(split);
@@ -381,11 +384,11 @@ int	init_cylinder(t_world *data, char **data_split, t_win *mlx)
 	split = ft_split(data_split[2], ',');
 	if (!split)
 		return (free(cylinder), 0);
-	cylinder->matrix = ft_mult_mat(cylinder->matrix, rotation_x(atoi(split[0])
+	cylinder->matrix = ft_mult_mat(cylinder->matrix, rotation_x(atof(split[0])
 				* M_PI), ALL);
-	cylinder->matrix = ft_mult_mat(cylinder->matrix, rotation_y(atoi(split[1])
+	cylinder->matrix = ft_mult_mat(cylinder->matrix, rotation_y(atof(split[1])
 				* M_PI), ALL);
-	cylinder->matrix = ft_mult_mat(cylinder->matrix, rotation_z(atoi(split[2])
+	cylinder->matrix = ft_mult_mat(cylinder->matrix, rotation_z(atof(split[2])
 				* M_PI), ALL);
 	cylinder->radius = atof(data_split[3]) / 2;
 	cylinder->y_max = y + atof(data_split[4]) / 2;

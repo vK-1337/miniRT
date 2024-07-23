@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/22 18:22:21 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/23 20:47:31 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 # endif
 # define EPSILON 0.0001
 # define INFINITY 1e10
-# define SIZE_X 50
-# define SIZE_Y 50
+# define SIZE_X 1500
+# define SIZE_Y 500
 # define CENTER_X SIZE_X / 2
 # define CENTER_Y SIZE_Y / 2
 # define SPHERE 0

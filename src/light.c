@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 18:04:20 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/20 13:52:11 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/23 21:22:03 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,6 @@ t_color	ft_lighting(t_material *m, t_light light, t_tuple position,
 
 	if (type && type != 0 && m->is_texture)
 	{
-        if (type == Plan)
-        {
-            printf("Plan position in FT_LIGHTING x = %f, y = %f, z = %f\n", position.x, position.y, position.z);
-        }
 		is_textured = 1;
 		effective_color = define_effective_color(type, position, object, light);
 	}
