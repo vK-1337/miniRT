@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:01:11 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/20 14:42:04 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/24 00:30:15 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,12 @@ Image	*load_xpm_image(void *mlx_ptr, const char *file_path)
     char *trimmed_path;
 
 	image = malloc(sizeof(Image));
-	printf("file_path = %s", file_path);
     trimmed_path = ft_strtrim((char *)file_path, "\n");
 	image->img_ptr = mlx_xpm_file_to_image(mlx_ptr, trimmed_path,
 			&image->width, &image->height);
     free(trimmed_path);
 	if (image->img_ptr == NULL)
-	{
-		printf("Error loading image\n");
-		exit(1);
-	}
+		return (printf("Error loading image\n"), NULL);
 	image->data = mlx_get_data_addr(image->img_ptr, &image->bpp,
 			&image->size_line, &image->endian);
 	return (image);

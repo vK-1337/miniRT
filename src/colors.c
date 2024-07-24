@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   colors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:28:52 by bainur            #+#    #+#             */
-/*   Updated: 2024/07/12 11:15:06 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/24 08:31:18 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,15 @@ t_color *ft_stripe_at(t_pattern *pattern, t_tuple point)
 		return (pattern->b);
 }
 
+t_color *ft_checkerboard_at(t_pattern *pattern, float u, float v)
+{
+    if (((int)floor(u * 10) + (int)floor(v * 10)) % 2 == 0)
+        return pattern->a;
+    else
+        return pattern->b;
+}
+
+
 t_material *ft_set_pattern(t_comps *comps, int type)
 {
 	t_tuple *object_point;
@@ -42,9 +51,12 @@ t_material *ft_set_pattern(t_comps *comps, int type)
 	{
 		if (comps->sphere->material->pattern == NULL)
 			return (free(object_point), free(pattern_point), comps->sphere->material);
-		*object_point = ft_mult_mat_tuple(&comps->over_point, ft_inversion(comps->sphere->matrix, 4), SECOND);
-		*pattern_point = ft_mult_mat_tuple(object_point, ft_inversion(comps->sphere->material->pattern->transform, 4), ALL);
-		comps->sphere->material->color = *ft_stripe_at(comps->sphere->material->pattern, *pattern_point);
+		*object_point = ft_normalization(ft_mult_mat_tuple(&comps->over_point, ft_inversion(comps->sphere->matrix, 4), SECOND));
+        float theta = atan2f(object_point->z, object_point->x);
+        float phi = acosf(object_point->y);
+        float u = (theta + M_PI) / (2 * M_PI);
+        float v = phi / M_PI;
+		comps->sphere->material->color = *ft_checkerboard_at(comps->sphere->material->pattern, u, v);
 		free(pattern_point);
 		return (comps->sphere->material);
 	}

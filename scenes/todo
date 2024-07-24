@@ -37,22 +37,22 @@ MiniRT scene to do :
     Brightness 1 / 2 :
 
         ✔ 1 - Place a sphere at the coordinates {0, 0, 0}, the camera facing the sphere, and put a spot left or right of the camera but positioned in such a way that the sphere will be lit sideways. @done(24-07-23 20:41)
-        ☐ 2 - Place a sphere at some coordinates resulting from a translation, the camera facing the sphere, and place a spot left or right of the camera but positioned in such a way that the sphere will be lit sideways. Display the rendered image. The sphere should be visible, properly illuminated and displayed without glitch. Properly means that the halo of light should be computed after translation not before.
+        ✔ 2 - Place a sphere at some coordinates resulting from a translation, the camera facing the sphere, and place a spot left or right of the camera but positioned in such a way that the sphere will be lit sideways. Display the rendered image. The sphere should be visible, properly illuminated and displayed without glitch. Properly means that the halo of light should be computed after translation not before. @done(24-07-24 05:28)
 
     Brightness 2 / 2 :
 
-       ☐ 1 - Place a vertical spot, a sphere and a plane. The spot lighting the sphere's position to create a sphere shadow on the plane. Put the camera aside so we can see the sphere, the plane and the sphere's shadow on the plane. The shadow must be properly displayed without glitching.
+       ✔ 1 - Place a vertical spot, a sphere and a plane. The spot lighting the sphere's position to create a sphere shadow on the plane. Put the camera aside so we can see the sphere, the plane and the sphere's shadow on the plane. The shadow must be properly displayed without glitching. @done(24-07-24 05:29)
 
        ☐ 2 - Put a complex scene together with several objects like on illustration V.6 page 10 of the subject. Shadows must be properly displayed without glitching.
 
     Bonuses :
 
-        ☐ 1 - Specular reflection
+        ✔ 1 - Specular reflection @done(24-07-24 05:34)
 
-        ☐ 2 - Color disruption : Checkerboard
+        ✔ 2 - Color disruption : Checkerboard @done(24-07-24 09:12)
 
         ☐ 3 - Colored and multi-spot lights
 
-        ☐ 4 - Cones
+        ✔ 4 - Cones @done(24-07-24 05:34)
 
-        ☐ 5 - Textures
+        ✔ 5 - Textures @done(24-07-24 05:34)

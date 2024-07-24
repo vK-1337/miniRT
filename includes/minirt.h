@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/23 20:47:31 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/24 08:48:24 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # endif
 # define EPSILON 0.0001
 # define INFINITY 1e10
-# define SIZE_X 1500
+# define SIZE_X 800
 # define SIZE_Y 500
 # define CENTER_X SIZE_X / 2
 # define CENTER_Y SIZE_Y / 2
@@ -156,6 +156,7 @@ typedef struct s_material
 	t_pattern			*pattern;
 	int					is_texture;
 	Image				*texture;
+    int is_pattern;
 }						t_material;
 
 typedef struct s_sphere
@@ -407,6 +408,8 @@ t_color					ft_mult_color_tog(t_color c, t_color c2);
 t_color					*ft_color(float r, float g, float b);
 t_pattern				*ft_pattern(t_color *a, t_color *b);
 t_color					*ft_stripe_at(t_pattern *pattern, t_tuple point);
+t_color					*ft_checkerboard_at(t_pattern *pattern, float u,
+							float v);
 t_material				*ft_set_pattern(t_comps *comps, int type);
 t_color					ft_color_reg(float r, float g, float b);
 
@@ -599,5 +602,6 @@ int						ft_equal_tuple(t_tuple *t1, t_tuple *t2);
 void					calculate_plane_dimensions(float **matrix, float *width,
 							float *height);
 void					destroy_t_win(t_win *win);
+t_color	define_pattern_color(t_objects type, t_tuple position, void *object, t_light light);
 
 #endif

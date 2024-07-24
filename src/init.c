@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/23 15:51:00 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/24 08:55:58 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,6 @@ int	init_camera(t_world *data, char **data_split)
 	camera = ft_new_camera(SIZE_X, SIZE_Y, atoi(data_split[3]) * (M_PI / 180));
 	if (!camera)
 		return (0);
-    printf("camera->fov = %f\n", camera->fov);
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return (free(camera), 0);
@@ -161,7 +160,6 @@ int	init_light(t_world *data, char **data_split)
 	float	intensity;
 
 	light = malloc(sizeof(t_light));
-    print_char_tab(data_split);
 	if (!light)
 		return (0);
 	light->next = NULL;
@@ -207,9 +205,7 @@ int	init_sphere(t_world *data, char **data_split, t_win *mlx)
 	sphere->radius = atof(data_split[2]) / 2;
 	sphere->matrix = translation(atof(split[0]), atof(split[1]),
 			atof(split[2]));
-    print_matrix(sphere->matrix, 4);
-	sphere->center = ft_init_tuple_reg(atof(split[0]), atof(split[1]),
-			atof(split[2]), 1);
+	sphere->center = ft_init_tuple_reg(0, 0, 0, 1);
 	free_char_tab(split);
 	split = ft_split(data_split[3], ',');
 	if (!split)
@@ -236,16 +232,21 @@ int	init_sphere(t_world *data, char **data_split, t_win *mlx)
 			color_split = ft_split(split[1], ';');
 			if (!color_split)
 				return (free(sphere), 0);
-			p_color_1 = ft_color(ft_atoi(color_split[0]),
-					ft_atoi(color_split[1]), ft_atoi(color_split[2]));
-			if (!p_color_1)
+            char **first_color = ft_split(color_split[0], ',');
+            if (!first_color)
 				return (free(sphere), free_char_tab(color_split), 0);
-			p_color_2 = ft_color(ft_atoi(color_split[3]),
-					ft_atoi(color_split[4]), ft_atoi(color_split[5]));
+			p_color_1 = ft_color(ft_atoi(first_color[0]),
+					ft_atoi(first_color[1]), ft_atoi(first_color[2]));
+			if (!p_color_1)
+				return (free(sphere), free_char_tab(color_split), free_char_tab(first_color), 0);
+			char **second_color = ft_split(color_split[1], ',');
+            p_color_2 = ft_color(ft_atoi(second_color[0]),
+					ft_atoi(second_color[1]), ft_atoi(second_color[2]));
 			if (!p_color_2)
 				return (free(sphere), free(p_color_1),
 					free_char_tab(color_split), 0);
 			sphere->material->pattern = ft_pattern(p_color_1, p_color_2);
+            sphere->material->is_pattern = 1;
 			if (!sphere->material->pattern)
 				return (free(sphere), free_char_tab(color_split),
 					free(p_color_1), free(p_color_2), 0);
@@ -479,11 +480,11 @@ int	init_cone(t_world *data, char **data_split, t_win *mlx)
 	split = ft_split(data_split[2], ',');
 	if (!split)
 		return (free(cone), 0);
-	cone->matrix = ft_mult_mat(cone->matrix, rotation_x(atoi(split[0]) * M_PI),
+	cone->matrix = ft_mult_mat(cone->matrix, rotation_x(atof(split[0]) * M_PI),
 			ALL);
-	cone->matrix = ft_mult_mat(cone->matrix, rotation_y(atoi(split[1]) * M_PI),
+	cone->matrix = ft_mult_mat(cone->matrix, rotation_y(atof(split[1]) * M_PI),
 			ALL);
-	cone->matrix = ft_mult_mat(cone->matrix, rotation_z(atoi(split[2]) * M_PI),
+	cone->matrix = ft_mult_mat(cone->matrix, rotation_z(atof(split[2]) * M_PI),
 			ALL);
 	cone->radius = atof(data_split[3]) / 2;
 	cone->y_max = y + atof(data_split[4]) / 2;

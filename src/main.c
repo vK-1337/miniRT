@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:55 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/22 18:21:48 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/24 00:28:28 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,7 @@ void put_pixel(t_win *win, int x, int y, unsigned int color)
     char *dst;
 
     if ((x > SIZE_X || x < 0) || (y > SIZE_Y || y < 0))
-    {
-        printf("x: %d, y: %d\n", x, y);
         return;
-    }
     dst = win->addr + (y * win->line_length + x * (win->bits_per_pixel / 8));
     *(unsigned int *)dst = color;
 }
@@ -130,7 +127,7 @@ void start_threads(t_complete *complete)
     start_y = 0;
     end_x = SIZE_X / 10;
     end_y = SIZE_Y / 10;
-    complete->thread = malloc(sizeof(t_thread) * (10 *10));
+    complete->thread = malloc(sizeof(t_thread) * (10 * 10));
     complete->data->pixel_put = malloc(sizeof(pthread_mutex_t));
     pthread_mutex_init(complete->data->pixel_put, NULL);
 

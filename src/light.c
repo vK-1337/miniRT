@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 18:04:20 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/23 21:22:03 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/24 08:43:28 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,13 @@ t_color	ft_lighting(t_material *m, t_light light, t_tuple position,
 	int		is_textured;
 	t_color	final_color;
 
-	if (type && type != 0 && m->is_texture)
+	if (type && type != 0 && (m->is_texture || m->pattern))
 	{
-		is_textured = 1;
-		effective_color = define_effective_color(type, position, object, light);
+        is_textured = 1;
+        if (m->is_texture)
+		    effective_color = define_effective_color(type, position, object, light);
+        else
+            effective_color = define_pattern_color(type, position, object, light);
 	}
 	else
 	{
