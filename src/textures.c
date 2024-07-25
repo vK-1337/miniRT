@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:01:11 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/24 00:30:15 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/25 14:01:31 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void calculate_plane_dimensions(float **matrix, float *width, float *height)
 
 void planar_mapping(float x, float y, Image *image, t_color *color, float plane_width, float plane_height) {
     // Calcul de l'échelle dynamique
-    float scale_u = 27.0f;
+    float scale_u = 1.0f;
 
     // Calcul des coordonnées de texture ajustées
     float u = x / (plane_width * scale_u);

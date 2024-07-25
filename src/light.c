@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 18:04:20 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/24 08:43:28 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/25 10:54:55 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ t_color	ft_lighting(t_material *m, t_light light, t_tuple position,
 	lightv = ft_normalization(ft_dif_tuple(light.position, position));
 	ambiant = ft_mult_color(effective_color, m->ambiant);
 	light_dot_normal = ft_dotproduct(lightv, normalv);
-	if (light_dot_normal < 0 || in_shadow)
+	if (light_dot_normal < 0|| in_shadow)
 	{
 		color_black(&diffuse);
 		color_black(&specular);

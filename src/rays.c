@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 09:54:05 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/20 18:04:40 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/25 10:31:19 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 t_ray	ft_ray(t_tuple origin, t_tuple direction)
 {
 	t_ray	r;
-    
+
 	r.origin = origin;
 	r.direction = direction;
 	return (r);
@@ -138,7 +138,7 @@ t_intersection	*ft_hit(t_intersection *intersections, int count)
 		return (NULL);
 	while (i < count && intersections)
 	{
-		if (intersections[i].t > 0.01)
+		if (intersections[i].t > 0.1)
 			return (&intersections[i]);
 		i++;
 	}

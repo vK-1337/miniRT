@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 11:41:54 by udumas            #+#    #+#             */
-/*   Updated: 2024/07/23 22:32:52 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/25 13:51:44 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,6 +186,7 @@ t_color	ft_shade_hit(t_world *data, t_comps *comps)
 	{
 		tmp_color = malloc(sizeof(t_color));
 		in_shadow = ft_is_shadowed(data, comps->over_point);
+        printf("in_shadow = %d\n", in_shadow);
 		if (comps->plan != NULL)
 			*tmp_color = ft_lighting(ft_set_pattern(comps, PLAN), *light,
 								comps->over_point, comps->eyev, comps->normalv, in_shadow, comps->plan, Plan);

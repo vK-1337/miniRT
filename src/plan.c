@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   plan.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 19:15:10 by udumas            #+#    #+#             */
-/*   Updated: 2024/07/11 13:00:13 by bainur           ###   ########.fr       */
+/*   Updated: 2024/07/25 09:56:51 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void ft_plan_intersect(t_intersection **t_tab, t_plan **plan, t_ray ray, int *co
 {
     t_ray new_ray;
     t_intersection t;
-    
+
     if (!*plan)
         return ;
     new_ray = ray_transform(ray, ft_inversion((*plan)->matrix, 4));

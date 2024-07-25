@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:28:52 by bainur            #+#    #+#             */
-/*   Updated: 2024/07/24 08:31:18 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/25 14:09:55 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_pattern *ft_pattern(t_color *a, t_color *b)
 
 t_color *ft_stripe_at(t_pattern *pattern, t_tuple point)
 {
-	if (((int)floor(point.x) + (int)floor(point.y) + (int)floor(point.z)) % 2 == 0)
+    if (((int)floor(point.x) + (int)floor(point.y) + (int)floor(point.z)) % 2 == 0)
 		return (pattern->a);
 	else
 		return (pattern->b);
@@ -38,6 +38,7 @@ t_color *ft_checkerboard_at(t_pattern *pattern, float u, float v)
     else
         return pattern->b;
 }
+
 
 
 t_material *ft_set_pattern(t_comps *comps, int type)
@@ -65,7 +66,7 @@ t_material *ft_set_pattern(t_comps *comps, int type)
 		if (comps->plan->material->pattern == NULL)
 			return (free(object_point), free(pattern_point),comps->plan->material);
 		*object_point = ft_mult_mat_tuple(&comps->over_point, ft_inversion(comps->plan->matrix, 4), SECOND);
-		*pattern_point = ft_mult_mat_tuple(object_point, ft_inversion(comps->plan->material->pattern->transform, 4), ALL);
+		*pattern_point = ft_mult_mat_tuple(object_point, ft_inversion(comps->plan->material->pattern->transform, 4), SECOND);
 		comps->plan->material->color = *ft_stripe_at(comps->plan->material->pattern, *pattern_point);
 		free(pattern_point);
 		return (comps->plan->material);
