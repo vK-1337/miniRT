@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 18:04:20 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/25 10:54:55 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/25 15:18:11 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ t_color	ft_lighting(t_material *m, t_light light, t_tuple position,
 	int		is_textured;
 	t_color	final_color;
 
-	if (type && type != 0 && (m->is_texture || m->pattern))
+	if (type && type != 0 && (m->is_texture || m->is_pattern))
 	{
         is_textured = 1;
         if (m->is_texture)
@@ -146,7 +146,6 @@ t_color	ft_planar(t_tuple position, t_plan plan, t_light light)
     float plane_width;
     float plane_height;
 
-    printf("position.x = %f, position.y = %f, position.z = %f\n", position.x, position.y, position.z);
     calculate_plane_dimensions(plan.matrix, &plane_width, &plane_height);
 	point_object = ft_mult_mat_tuple(&position, ft_inversion(plan.matrix, 4),
 			SECOND);

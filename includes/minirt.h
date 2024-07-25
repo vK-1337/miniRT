@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/24 08:48:24 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/25 17:21:28 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,7 @@ typedef struct s_material
 	t_pattern			*pattern;
 	int					is_texture;
 	Image				*texture;
-    int is_pattern;
+	int					is_pattern;
 }						t_material;
 
 typedef struct s_sphere
@@ -249,7 +249,7 @@ typedef struct s_world
 	t_color				*alight;
 	float				alight_intensity;
 	t_camera			*camera;
-	t_light				*light;
+	t_light				**light;
 	t_sphere			**sphere;
 	t_plan				**plan;
 	t_cylinder			**cylinder;
@@ -370,11 +370,17 @@ int						cone_lstsize(t_cone *lst);
 void					cone_lstadd_back(t_cone **lst, t_cone *new);
 void					cone_lstfree(t_cone **lst);
 
+t_light					*light_lstlast(t_light *lst);
+int						light_lstsize(t_light *lst);
+void					light_lstadd_back(t_light **lst, t_light *new);
+void					light_lstfree(t_light **lst);
+
 void					print_sphere_list(t_sphere **sphere_list);
 void					print_plan_list(t_plan **plan_list);
 void					print_cylinder_list(t_cylinder **cylinder_list);
 
 void					free_data(t_world **data, void *mlx_ptr);
+void					free_material(t_material *material, void *mlx);
 
 /******************************************************************************/
 /*                                                                            */
@@ -602,6 +608,7 @@ int						ft_equal_tuple(t_tuple *t1, t_tuple *t2);
 void					calculate_plane_dimensions(float **matrix, float *width,
 							float *height);
 void					destroy_t_win(t_win *win);
-t_color	define_pattern_color(t_objects type, t_tuple position, void *object, t_light light);
+t_color					define_pattern_color(t_objects type, t_tuple position,
+							void *object, t_light light);
 
 #endif

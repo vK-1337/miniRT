@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:28:52 by bainur            #+#    #+#             */
-/*   Updated: 2024/07/25 14:09:55 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/25 14:54:52 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ t_color *ft_checkerboard_at(t_pattern *pattern, float u, float v)
     else
         return pattern->b;
 }
-
 
 
 t_material *ft_set_pattern(t_comps *comps, int type)

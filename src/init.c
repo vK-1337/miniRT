@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/25 09:39:25 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/25 17:25:09 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,7 +184,16 @@ int	init_light(t_world *data, char **data_split)
 	light->colors = ft_color_reg(light->intensity.r, light->intensity.g,
 			light->intensity.b);
 	free_char_tab(split);
-	data->light = light;
+    light->next = NULL;
+	if (!data->light)
+	{
+		data->light = malloc(sizeof(t_light *));
+		if (!data->light)
+			return (free(light), 0);
+		*data->light = light;
+	}
+	else
+		light_lstadd_back(data->light, light);
 	return (1);
 }
 
@@ -431,16 +440,21 @@ int	init_cylinder(t_world *data, char **data_split, t_win *mlx)
 			color_split = ft_split(split[1], ';');
 			if (!color_split)
 				return (free(cylinder), 0);
-			p_color_1 = ft_color(ft_atoi(color_split[0]),
-					ft_atoi(color_split[1]), ft_atoi(color_split[2]));
-			if (!p_color_1)
+            char **first_color = ft_split(color_split[0], ',');
+            if (!first_color)
 				return (free(cylinder), free_char_tab(color_split), 0);
-			p_color_2 = ft_color(ft_atoi(color_split[3]),
-					ft_atoi(color_split[4]), ft_atoi(color_split[5]));
+			p_color_1 = ft_color(ft_atoi(first_color[0]),
+					ft_atoi(first_color[1]), ft_atoi(first_color[2]));
+			if (!p_color_1)
+				return (free(cylinder), free_char_tab(color_split), free_char_tab(first_color), 0);
+			char **second_color = ft_split(color_split[1], ',');
+            p_color_2 = ft_color(ft_atoi(second_color[0]),
+					ft_atoi(second_color[1]), ft_atoi(second_color[2]));
 			if (!p_color_2)
 				return (free(cylinder), free(p_color_1),
 					free_char_tab(color_split), 0);
 			cylinder->material->pattern = ft_pattern(p_color_1, p_color_2);
+            cylinder->material->is_pattern = 1;
 			if (!cylinder->material->pattern)
 				return (free(cylinder), free_char_tab(color_split),
 					free(p_color_1), free(p_color_2), 0);
@@ -473,6 +487,7 @@ int	init_cone(t_world *data, char **data_split, t_win *mlx)
 	t_color	*p_color_1;
 	t_color	*p_color_2;
 
+    print_char_tab(data_split);
 	cone = malloc(sizeof(t_cone));
 	if (!cone)
 		return (0);
@@ -519,19 +534,24 @@ int	init_cone(t_world *data, char **data_split, t_win *mlx)
 			color_split = ft_split(split[1], ';');
 			if (!color_split)
 				return (free(cone), 0);
-			p_color_1 = ft_color(ft_atoi(color_split[0]),
-					ft_atoi(color_split[1]), ft_atoi(color_split[2]));
-			if (!p_color_1)
+            char **first_color = ft_split(color_split[0], ',');
+            if (!first_color)
 				return (free(cone), free_char_tab(color_split), 0);
-			p_color_2 = ft_color(ft_atoi(color_split[3]),
-					ft_atoi(color_split[4]), ft_atoi(color_split[5]));
+			p_color_1 = ft_color(ft_atoi(first_color[0]),
+					ft_atoi(first_color[1]), ft_atoi(first_color[2]));
+			if (!p_color_1)
+				return (free(cone), free_char_tab(color_split), free_char_tab(first_color), 0);
+			char **second_color = ft_split(color_split[1], ',');
+            p_color_2 = ft_color(ft_atoi(second_color[0]),
+					ft_atoi(second_color[1]), ft_atoi(second_color[2]));
 			if (!p_color_2)
-				return (free(cone), free(p_color_1), free_char_tab(color_split),
-					0);
+				return (free(cone), free(p_color_1),
+					free_char_tab(color_split), 0);
 			cone->material->pattern = ft_pattern(p_color_1, p_color_2);
+            cone->material->is_pattern = 1;
 			if (!cone->material->pattern)
-				return (free(cone), free_char_tab(color_split), free(p_color_1),
-					free(p_color_2), 0);
+				return (free(cone), free_char_tab(color_split),
+					free(p_color_1), free(p_color_2), 0);
 		}
 		free_char_tab(split);
 	}
