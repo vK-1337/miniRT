@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/25 17:21:28 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/29 17:16:31 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,8 @@
 # endif
 # define EPSILON 0.0001
 # define INFINITY 1e10
-# define SIZE_X 800
-# define SIZE_Y 500
-# define CENTER_X SIZE_X / 2
-# define CENTER_Y SIZE_Y / 2
+# define SIZE_X 50
+# define SIZE_Y 50
 # define SPHERE 0
 # define PLAN 1
 # define CYLINDER 2
@@ -47,14 +45,14 @@
 # include <wait.h>
 
 /******************************************************************************/
-/*                                                         						*/
+/*                                                                            */
 /*                                                                            */
 /*                              STRUCT & ENUM                                 */
 /*                                                                            */
 /*                                                                            */
 /******************************************************************************/
 
-typedef struct
+typedef struct s_image
 {
 	void				*img_ptr;
 	int					width;
@@ -63,7 +61,7 @@ typedef struct
 	int					size_line;
 	int					endian;
 	char				*data;
-}						Image;
+}						t_image;
 
 typedef enum e_objects
 {
@@ -155,7 +153,7 @@ typedef struct s_material
 	float				shininess;
 	t_pattern			*pattern;
 	int					is_texture;
-	Image				*texture;
+	t_image				*texture;
 	int					is_pattern;
 }						t_material;
 
@@ -297,7 +295,7 @@ void					print_char_tab(char **tab);
 /*                                                                            */
 /******************************************************************************/
 
-int	scene_name_check(char *av); // Convert color to int
+int						scene_name_check(char *av);
 
 t_world					*init_all_data(int fd, t_win *mlx);
 void					null_data(t_world *data);
@@ -388,9 +386,9 @@ void					free_material(t_material *material, void *mlx);
 /*                                   TUPLE_CALCULATION                        */
 /*                                                                            */
 /*                                                                            */
-/*************************************************************	printf("Hit\n");*****************/
+/******************************************************************************/
 
-//										TUPLE									//
+//										TUPLE								//
 t_tuple					*ft_init_tuple(float x, float y, float z, float w);
 t_tuple					ft_init_tuple_reg(float x, float y, float z, float w);
 t_tuple					ft_sum_tuple(t_tuple t1, t_tuple t2);
@@ -405,7 +403,7 @@ t_tuple					ft_normalization(t_tuple v);
 float					ft_dotproduct(t_tuple v1, t_tuple v2);
 t_tuple					cross_product(t_tuple v1, t_tuple v2);
 
-//										COLORS									//
+//										COLORS							    //
 
 t_color					ft_sum_color(t_color c1, t_color c2);
 t_color					ft_dif_color(t_color c1, t_color c2);
@@ -529,7 +527,7 @@ void					*render(void *world);
 /******************************************************************************/
 /*                                                                            */
 /*                                                                            */
-/*                                   SCENES										*/
+/*                                   SCENES                                   */
 /*                                                                            */
 /*                                                                            */
 /******************************************************************************/
@@ -575,7 +573,7 @@ t_cone					*ft_cone(void);
 /******************************************************************************/
 /*                                                                            */
 /*                                                                            */
-/*                                   TEXTURES									*/
+/*                                   TEXTURES                                 */
 /*                                                                            */
 /*                                                                            */
 /******************************************************************************/
@@ -583,16 +581,16 @@ t_cone					*ft_cone(void);
 t_material				*ft_texture(char *path, void *mlx);
 int						ft_texture_color_to_int(t_color color);
 void					cylindrical_mapping(float x, float y, float z,
-							Image *image, t_color *color);
-void					planar_mapping(float x, float y, Image *image,
+							t_image *image, t_color *color);
+void					planar_mapping(float x, float y, t_image *image,
 							t_color *color, float plane_width,
 							float plane_height);
 void					spherical_mapping(float x, float y, float z,
-							Image *image, t_color *color);
-void					get_interpolated_color(float u, float v, Image *image,
+							t_image *image, t_color *color);
+void					get_interpolated_color(float u, float v, t_image *image,
 							t_color *color);
-uint8_t					*get_pixel(Image *image, int x, int y);
-Image					*load_xpm_image(void *mlx_ptr, const char *file_path);
+uint8_t					*get_pixel(t_image *image, int x, int y);
+t_image					*load_xpm_image(void *mlx_ptr, const char *file_path);
 t_color					define_effective_color(t_objects type, t_tuple position,
 							void *object, t_light light);
 t_color					ft_spherical(t_tuple position, t_sphere sphere,

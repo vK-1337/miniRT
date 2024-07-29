@@ -6,71 +6,71 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 12:56:18 by udumas            #+#    #+#             */
-/*   Updated: 2024/07/19 19:35:51 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/29 17:27:07 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
 
-
-float **translation(float x, float y, float z)
+float	**translation(float x, float y, float z)
 {
-    float **mat;
+	float	**mat;
 
-    mat = identity_matrix(4);
-    mat[0][3] = x;
-    mat[1][3] = y;
-    mat[2][3] = z;
-    return (mat);
+	mat = identity_matrix(4);
+	if (!mat)
+		return (NULL);
+	mat[0][3] = x;
+	mat[1][3] = y;
+	mat[2][3] = z;
+	return (mat);
 }
 
-float   **scaling(float x, float y, float z)
+float	**scaling(float x, float y, float z)
 {
-    float **mat;
-    
-    mat = identity_matrix(4);
-    mat[0][0] = x;
-    mat[1][1] = y;
-    mat[2][2] = z;
-    return (mat);
+	float	**mat;
+
+	mat = identity_matrix(4);
+	mat[0][0] = x;
+	mat[1][1] = y;
+	mat[2][2] = z;
+	return (mat);
 }
 
-float    **rotation_x(float rad)
+float	**rotation_x(float rad)
 {
-    float **mat;
+	float	**mat;
 
-    mat = identity_matrix(4);
-    mat[1][1] = cos(rad);
-    mat[1][2] = -sin(rad);
-    mat[2][1] = sin(rad);
-    mat[2][2] = cos(rad);
-    return (mat);
+	mat = identity_matrix(4);
+	mat[1][1] = cos(rad);
+	mat[1][2] = -sin(rad);
+	mat[2][1] = sin(rad);
+	mat[2][2] = cos(rad);
+	return (mat);
 }
 
-float    **rotation_y(float rad)
+float	**rotation_y(float rad)
 {
-    float **mat;
+	float	**mat;
 
-    mat = identity_matrix(4);
-    mat[0][0] = cos(rad);
-    mat[0][2] = sin(rad);
-    mat[2][0] = -sin(rad);
-    mat[2][2] = cos(rad);
-    return (mat);
+	mat = identity_matrix(4);
+	mat[0][0] = cos(rad);
+	mat[0][2] = sin(rad);
+	mat[2][0] = -sin(rad);
+	mat[2][2] = cos(rad);
+	return (mat);
 }
 
-float **rotation_z(float rad)
+float	**rotation_z(float rad)
 {
-    float **mat;
+	float	**mat;
 
-    mat = identity_matrix(4);
-    mat[0][0] = cos(rad);
-    mat[0][1] = -sin(rad);
-    mat[1][0] = sin(rad);
-    mat[1][1] = cos(rad);
-    return (mat);
+	mat = identity_matrix(4);
+	mat[0][0] = cos(rad);
+	mat[0][1] = -sin(rad);
+	mat[1][0] = sin(rad);
+	mat[1][1] = cos(rad);
+	return (mat);
 }
-
 
 // int main()
 // {

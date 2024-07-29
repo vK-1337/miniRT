@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cylinder.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 19:02:29 by bainur            #+#    #+#             */
-/*   Updated: 2024/07/14 17:04:26 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/29 17:52:14 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ void	ft_cylinder_caps_intersect(t_intersection **t_tab,
 	t0 = ((*cylinder)->y_min - new_ray.origin.y) / new_ray.direction.y;
 	if (ft_check_caps(new_ray, t0, (*cylinder)->radius))
 	{
+		t.status = 1;
 		t.t = t0;
 		t.cylinder = *cylinder;
 		t.plan = NULL;
@@ -96,6 +97,7 @@ void	ft_cylinder_caps_intersect(t_intersection **t_tab,
 	t1 = ((*cylinder)->y_max - new_ray.origin.y) / new_ray.direction.y;
 	if (ft_check_caps(new_ray, t1, (*cylinder)->radius))
 	{
+		t.status = 1;
 		t.t = t1;
 		t.cylinder = *cylinder;
 		t.plan = NULL;
@@ -109,7 +111,7 @@ void	ft_cylinder_caps_intersect(t_intersection **t_tab,
 
 t_cylinder	*ft_cylinder(void)
 {
-	t_cylinder *cylinder;
+	t_cylinder	*cylinder;
 
 	cylinder = malloc(sizeof(t_cylinder));
 	cylinder->radius = 1;

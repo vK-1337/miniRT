@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:52 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/24 09:14:38 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/29 17:33:05 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int	scene_name_check(char *av)
 		return (0);
 	return (1);
 }
+
 int	verified_content(char **data, t_dtype type)
 {
 	if (type == A)
@@ -156,7 +157,7 @@ int	verify_vect(char *data)
 
 int	check_vect_syntax(char *data)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (data[i])
@@ -184,7 +185,7 @@ int	check_vect_syntax(char *data)
 
 int	verify_coord(char *data)
 {
-	char **coord_split;
+	char	**coord_split;
 
 	if (!check_coord_syntax(data))
 		return (0);
@@ -199,7 +200,7 @@ int	verify_coord(char *data)
 
 int	check_coord_syntax(char *data)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (data[i])
@@ -243,6 +244,7 @@ int	verify_light(char **data)
 int	verify_texture_and_pattern(char *data)
 {
 	char	**data_split;
+
 	data_split = ft_split(data, ':');
 	if (!data_split)
 		return (0);
@@ -255,7 +257,7 @@ int	verify_texture_and_pattern(char *data)
 	return (free_char_tab(data_split), 0);
 }
 
-int	verify_pattern(char *pattern, char*** upper_split)
+int	verify_pattern(char *pattern, char ***upper_split)
 {
 	char	**data_split;
 
@@ -269,7 +271,7 @@ int	verify_pattern(char *pattern, char*** upper_split)
 	return (free_char_tab(*upper_split), free_char_tab(data_split), 1);
 }
 
-int	verify_texture(char *texture, char*** data_split)
+int	verify_texture(char *texture, char ***data_split)
 {
 	int	i;
 
@@ -296,10 +298,7 @@ int	verify_sphere(char **data)
 	if (!verify_colors(data[3]))
 		return (0);
 	if (data[4] && !verify_texture_and_pattern(data[4]))
-    {
-        printf("verify_texture_and_pattern return 0\n");
 		return (0);
-    }
 	return (1);
 }
 

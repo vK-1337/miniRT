@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/25 17:25:09 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/29 17:25:37 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ t_world	*init_all_data(int fd, t_win *mlx)
 	if (file_data == NULL)
 		return (write(3, "The file is empty\n", 19), free(data), NULL);
 	if (init_corresponding_data(file_data, data, mlx) == 2)
-		return (get_next_line(fd, 1), free_data(&data, mlx), free(file_data), NULL);
+		return (get_next_line(fd, 1), free_data(&data, mlx), free(file_data),
+			NULL);
 	while (file_data)
 	{
 		free(file_data);
@@ -34,8 +35,7 @@ t_world	*init_all_data(int fd, t_win *mlx)
 			continue ;
 		if (init_corresponding_data(file_data, data, mlx) == 2)
 		{
-			return (get_next_line(fd, 1), free_data(&data, mlx->mlx),
-				free(file_data), NULL);
+			return (get_next_line(fd, 1), free(file_data), NULL);
 		}
 	}
 	return (data);
@@ -56,11 +56,11 @@ int	init_corresponding_data(char *file_data, t_world *data, t_win *mlx)
 	{
 		free_char_tab(data_split);
 		write(STDERR_FILENO, ".rt file content is not valid.\n", 32);
-		return (2);
+		return (free_data(&data, mlx), 2);
 	}
 	if (!init_data_w_line(data, type, data_split, mlx))
 	{
-		write(STDERR_FILENO, "A malloc failed.\n", 18);
+		write(STDERR_FILENO, "Error initiating data.\n", 24);
 		return (free_char_tab(data_split), 2);
 	}
 	free_char_tab(data_split);
@@ -184,7 +184,7 @@ int	init_light(t_world *data, char **data_split)
 	light->colors = ft_color_reg(light->intensity.r, light->intensity.g,
 			light->intensity.b);
 	free_char_tab(split);
-    light->next = NULL;
+	light->next = NULL;
 	if (!data->light)
 	{
 		data->light = malloc(sizeof(t_light *));
@@ -204,6 +204,8 @@ int	init_sphere(t_world *data, char **data_split, t_win *mlx)
 	char		**color_split;
 	t_color		*p_color_1;
 	t_color		*p_color_2;
+	char		**first_color;
+	char		**second_color;
 
 	sphere = malloc(sizeof(t_sphere));
 	if (!sphere)
@@ -214,51 +216,64 @@ int	init_sphere(t_world *data, char **data_split, t_win *mlx)
 	sphere->radius = atof(data_split[2]) / 2;
 	sphere->matrix = translation(atof(split[0]), atof(split[1]),
 			atof(split[2]));
+	if (!sphere->matrix)
+		return (free(sphere), 0);
 	sphere->center = ft_init_tuple_reg(0, 0, 0, 1);
 	free_char_tab(split);
 	split = ft_split(data_split[3], ',');
 	if (!split)
-		return (free(sphere), 0);
+		return (ft_free_mat(sphere->matrix, 4), free(sphere), 0);
 	sphere->material = ft_material();
+	if (!sphere->material)
+		return (free_char_tab(split), ft_free_mat(sphere->matrix, 4),
+			free(sphere), 0);
 	sphere->material->color.r = ft_atoi(split[0]) / 255.0f;
 	sphere->material->color.g = ft_atoi(split[1]) / 255.0f;
 	sphere->material->color.b = ft_atoi(split[2]) / 255.0f;
 	free_char_tab(split);
 	if (data_split[4])
 	{
-		free(sphere->material);
 		split = ft_split(data_split[4], ':');
 		if (!split)
 			return (free(sphere), 0);
 		if (ft_strncmp(split[0], "texture", 8) == 0)
 		{
+			free(sphere->material);
 			sphere->material = ft_texture(split[1], mlx);
 			if (!sphere->material->texture)
-				return (free(sphere), free_char_tab(split), 0);
+				return (free_material(sphere->material, mlx),
+					ft_free_mat(sphere->matrix, 4), free(sphere),
+					free_char_tab(split), 0);
 		}
 		else if (ft_strncmp(split[0], "pattern", 8) == 0)
 		{
 			color_split = ft_split(split[1], ';');
 			if (!color_split)
-				return (free(sphere), 0);
-            char **first_color = ft_split(color_split[0], ',');
-            if (!first_color)
-				return (free(sphere), free_char_tab(color_split), 0);
+				return (ft_free_mat(sphere->matrix, 4), free(sphere), 0);
+			first_color = ft_split(color_split[0], ',');
+			if (!first_color)
+				return (ft_free_mat(sphere->matrix, 4), free(sphere),
+					free_char_tab(color_split), 0);
 			p_color_1 = ft_color(ft_atoi(first_color[0]),
 					ft_atoi(first_color[1]), ft_atoi(first_color[2]));
 			if (!p_color_1)
-				return (free(sphere), free_char_tab(color_split), free_char_tab(first_color), 0);
-			char **second_color = ft_split(color_split[1], ',');
-            p_color_2 = ft_color(ft_atoi(second_color[0]),
+				return (ft_free_mat(sphere->matrix, 4), free(sphere),
+					free_char_tab(color_split), free_char_tab(first_color), 0);
+			second_color = ft_split(color_split[1], ',');
+			free_char_tab(color_split);
+			p_color_2 = ft_color(ft_atoi(second_color[0]),
 					ft_atoi(second_color[1]), ft_atoi(second_color[2]));
 			if (!p_color_2)
-				return (free(sphere), free(p_color_1),
-					free_char_tab(color_split), 0);
+				return (ft_free_mat(sphere->matrix, 4), free(sphere),
+					free(p_color_1), free_char_tab(color_split), 0);
 			sphere->material->pattern = ft_pattern(p_color_1, p_color_2);
-            sphere->material->is_pattern = 1;
+			sphere->material->is_pattern = 1;
 			if (!sphere->material->pattern)
-				return (free(sphere), free_char_tab(color_split),
-					free(p_color_1), free(p_color_2), 0);
+				return (ft_free_mat(sphere->matrix, 4), free(sphere),
+					free_char_tab(color_split), free(p_color_1),
+					free(p_color_2), 0);
+			free_char_tab(first_color);
+			free_char_tab(second_color);
 		}
 		free_char_tab(split);
 	}
@@ -288,6 +303,8 @@ int	init_plan(t_world *data, char **data_split, t_win *mlx)
 	t_plan	*plan;
 	t_color	*p_color_1;
 	t_color	*p_color_2;
+	char	**first_color;
+	char	**second_color;
 
 	plan = malloc(sizeof(t_plan));
 	if (!plan)
@@ -324,12 +341,12 @@ int	init_plan(t_world *data, char **data_split, t_win *mlx)
 	free_char_tab(split);
 	if (data_split[4])
 	{
-		free(plan->material);
 		split = ft_split(data_split[4], ':');
 		if (!split)
 			return (free(plan), 0);
 		if (ft_strncmp(split[0], "texture", 8) == 0)
 		{
+			free(plan->material);
 			plan->material = ft_texture(split[1], mlx);
 			if (!plan->material->texture)
 				return (free(plan), free_char_tab(split), 0);
@@ -339,24 +356,28 @@ int	init_plan(t_world *data, char **data_split, t_win *mlx)
 			color_split = ft_split(split[1], ';');
 			if (!color_split)
 				return (free(plan), 0);
-            char **first_color = ft_split(color_split[0], ',');
-            if (!first_color)
+			first_color = ft_split(color_split[0], ',');
+			if (!first_color)
 				return (free(plan), free_char_tab(color_split), 0);
 			p_color_1 = ft_color(ft_atoi(first_color[0]),
 					ft_atoi(first_color[1]), ft_atoi(first_color[2]));
 			if (!p_color_1)
-				return (free(plan), free_char_tab(color_split), free_char_tab(first_color), 0);
-			char **second_color = ft_split(color_split[1], ',');
-            p_color_2 = ft_color(ft_atoi(second_color[0]),
+				return (free(plan), free_char_tab(color_split),
+					free_char_tab(first_color), 0);
+			second_color = ft_split(color_split[1], ',');
+			free_char_tab(color_split);
+			p_color_2 = ft_color(ft_atoi(second_color[0]),
 					ft_atoi(second_color[1]), ft_atoi(second_color[2]));
 			if (!p_color_2)
-				return (free(plan), free(p_color_1),
-					free_char_tab(color_split), 0);
+				return (free(plan), free(p_color_1), free_char_tab(color_split),
+					0);
 			plan->material->pattern = ft_pattern(p_color_1, p_color_2);
-            plan->material->is_pattern = 1;
+			plan->material->is_pattern = 1;
 			if (!plan->material->pattern)
-				return (free(plan), free_char_tab(color_split),
-					free(p_color_1), free(p_color_2), 0);
+				return (free(plan), free_char_tab(color_split), free(p_color_1),
+					free(p_color_2), 0);
+			free_char_tab(first_color);
+			free_char_tab(second_color);
 		}
 		free_char_tab(split);
 	}
@@ -385,6 +406,8 @@ int	init_cylinder(t_world *data, char **data_split, t_win *mlx)
 	t_color		*p_color_1;
 	t_color		*p_color_2;
 	int			y;
+	char		**first_color;
+	char		**second_color;
 
 	cylinder = malloc(sizeof(t_cylinder));
 	if (!cylinder)
@@ -425,12 +448,12 @@ int	init_cylinder(t_world *data, char **data_split, t_win *mlx)
 	}
 	if (data_split[6])
 	{
-		free(cylinder->material);
 		split = ft_split(data_split[6], ':');
 		if (!split)
 			return (free(cylinder), 0);
 		if (ft_strncmp(split[0], "texture", 8) == 0)
 		{
+			free(cylinder->material);
 			cylinder->material = ft_texture(split[1], mlx);
 			if (!cylinder->material->texture)
 				return (free(cylinder), free_char_tab(split), 0);
@@ -440,24 +463,28 @@ int	init_cylinder(t_world *data, char **data_split, t_win *mlx)
 			color_split = ft_split(split[1], ';');
 			if (!color_split)
 				return (free(cylinder), 0);
-            char **first_color = ft_split(color_split[0], ',');
-            if (!first_color)
+			first_color = ft_split(color_split[0], ',');
+			if (!first_color)
 				return (free(cylinder), free_char_tab(color_split), 0);
 			p_color_1 = ft_color(ft_atoi(first_color[0]),
 					ft_atoi(first_color[1]), ft_atoi(first_color[2]));
 			if (!p_color_1)
-				return (free(cylinder), free_char_tab(color_split), free_char_tab(first_color), 0);
-			char **second_color = ft_split(color_split[1], ',');
-            p_color_2 = ft_color(ft_atoi(second_color[0]),
+				return (free(cylinder), free_char_tab(color_split),
+					free_char_tab(first_color), 0);
+			second_color = ft_split(color_split[1], ',');
+			free_char_tab(color_split);
+			p_color_2 = ft_color(ft_atoi(second_color[0]),
 					ft_atoi(second_color[1]), ft_atoi(second_color[2]));
 			if (!p_color_2)
 				return (free(cylinder), free(p_color_1),
 					free_char_tab(color_split), 0);
 			cylinder->material->pattern = ft_pattern(p_color_1, p_color_2);
-            cylinder->material->is_pattern = 1;
+			cylinder->material->is_pattern = 1;
 			if (!cylinder->material->pattern)
 				return (free(cylinder), free_char_tab(color_split),
 					free(p_color_1), free(p_color_2), 0);
+			free_char_tab(first_color);
+			free_char_tab(second_color);
 		}
 		free_char_tab(split);
 	}
@@ -486,8 +513,9 @@ int	init_cone(t_world *data, char **data_split, t_win *mlx)
 	char	**color_split;
 	t_color	*p_color_1;
 	t_color	*p_color_2;
+	char	**first_color;
+	char	**second_color;
 
-    print_char_tab(data_split);
 	cone = malloc(sizeof(t_cone));
 	if (!cone)
 		return (0);
@@ -534,24 +562,28 @@ int	init_cone(t_world *data, char **data_split, t_win *mlx)
 			color_split = ft_split(split[1], ';');
 			if (!color_split)
 				return (free(cone), 0);
-            char **first_color = ft_split(color_split[0], ',');
-            if (!first_color)
+			first_color = ft_split(color_split[0], ',');
+			if (!first_color)
 				return (free(cone), free_char_tab(color_split), 0);
 			p_color_1 = ft_color(ft_atoi(first_color[0]),
 					ft_atoi(first_color[1]), ft_atoi(first_color[2]));
 			if (!p_color_1)
-				return (free(cone), free_char_tab(color_split), free_char_tab(first_color), 0);
-			char **second_color = ft_split(color_split[1], ',');
-            p_color_2 = ft_color(ft_atoi(second_color[0]),
+				return (free(cone), free_char_tab(color_split),
+					free_char_tab(first_color), 0);
+			second_color = ft_split(color_split[1], ',');
+			free_char_tab(color_split);
+			p_color_2 = ft_color(ft_atoi(second_color[0]),
 					ft_atoi(second_color[1]), ft_atoi(second_color[2]));
 			if (!p_color_2)
-				return (free(cone), free(p_color_1),
-					free_char_tab(color_split), 0);
+				return (free(cone), free(p_color_1), free_char_tab(color_split),
+					0);
 			cone->material->pattern = ft_pattern(p_color_1, p_color_2);
-            cone->material->is_pattern = 1;
+			cone->material->is_pattern = 1;
 			if (!cone->material->pattern)
-				return (free(cone), free_char_tab(color_split),
-					free(p_color_1), free(p_color_2), 0);
+				return (free(cone), free_char_tab(color_split), free(p_color_1),
+					free(p_color_2), 0);
+			free_char_tab(first_color);
+			free_char_tab(second_color);
 		}
 		free_char_tab(split);
 	}

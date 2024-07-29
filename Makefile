@@ -43,7 +43,7 @@ INCLUDE			= 	-I ./includes/\
 
 OBJ_DIR_F 		= obj/
 SRC_DIR_F		= src/
-SRC_FUNCTIONS_F	= main patterns textures color_calculation tuple_calculations tuple_calculations2 rays \
+SRC_FUNCTIONS_F	= main patterns textures color_calculation tuple_calculations tuple_calculations2 rays rays_2 \
 					matrix_calcul matrix_deter_cofac matrix_utils matrix_utils2 utils init \
 					parsing get_next_line get_next_line_utils light_lst cylinder_lst sphere_lst plan_lst \
 					reflections light tuple_init scene matrix_transformation matrix_transformation2\
@@ -63,7 +63,10 @@ $(IFMAKE_DIR_F):
 
 $(MLX):
 					@echo "Getting MinilibX ready"
+					git clone https://github.com/42Paris/minilibx-linux.git mlx42
 					@make -sC $(MLX_DIR)
+					cp ./mlx42/mlx.h ./includes/
+					rm ./mlx42/mlx.h
 
 $(LIBFT):
 					@echo "Getting libft ready"
@@ -93,6 +96,12 @@ fclean:			clean
 					@echo "Removing Mini_rt..."
 					@rm -f $(NAME)
 					@rm -f $(LIBFT_DIR)$(LIBFT_NAME)
+
+cleanmlx:
+					@echo "Cleaning MiniLibX..."
+					@rm -f ./includes/mlx.h
+					@rm -rf ./mlx42
+					@echo "$(GREEN)MiniLibX repo and .h deleted.$(DEF_COLOR)"
 
 re:				fclean all
 					@echo "$(BLUE)Cleaned and rebuilt everything for MiniRT$(DEF_COLOR)"

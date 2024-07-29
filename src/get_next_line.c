@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 18:19:03 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/22 22:00:02 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/29 17:25:35 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ char	*ft_fill_line(char **stash, ssize_t index)
 
 char	*get_next_line(int fd, int err)
 {
-    t_norme norme;
+	t_norme		norme;
 	static char	*stash;
 
 	norme.line = NULL;

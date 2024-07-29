@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 21:45:44 by vk                #+#    #+#             */
-/*   Updated: 2024/07/25 17:21:09 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/29 17:29:43 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,16 @@ void	free_light(t_light **light)
 	tmp = (*light);
 	while (*light)
 	{
-		tmp = (*light)->next;
-		free(light);
+		tmp = NULL;
+		if ((*light)->next)
+			tmp = (*light)->next;
+		free(*light);
 		*light = tmp;
 	}
+	free(light);
 	return ;
 }
+
 void	free_plan(t_plan **plan, void *mlx)
 {
 	t_plan	*tmp;
@@ -67,17 +71,20 @@ void	free_plan(t_plan **plan, void *mlx)
 
 void	free_material(t_material *material, void *mlx)
 {
-    (void)mlx;
 	if (material->pattern)
+	{
+		free(material->pattern->a);
+		free(material->pattern->b);
+		ft_free_mat(material->pattern->transform, 4);
 		free(material->pattern);
+	}
 	if (material->texture)
-    {
-        mlx_destroy_image(mlx, material->texture->img_ptr);
+	{
+		mlx_destroy_image(mlx, material->texture->img_ptr);
 		free(material->texture);
-    }
+	}
 	free(material);
 }
-
 
 void	free_sphere(t_sphere **sphere, void *mlx)
 {
@@ -127,7 +134,7 @@ void	free_cone(t_cone **cone, void *mlx)
 	return ;
 }
 
-void    free_data(t_world **data, void *mlx)
+void	free_data(t_world **data, void *mlx)
 {
 	if ((*data)->alight)
 		free((*data)->alight);

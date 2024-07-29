@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   matrix_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 15:10:22 by udumas            #+#    #+#             */
-/*   Updated: 2024/07/12 10:54:50 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/29 17:46:46 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,14 @@ float	**ft_create_mat_null(int row_col)
 	int		j;
 
 	new_mat = malloc(sizeof(float *) * row_col);
+	if (!new_mat)
+		return (NULL);
 	i = 0;
 	while (i < row_col)
 	{
 		new_mat[i] = malloc(sizeof(float) * row_col);
+		if (!new_mat[i])
+			return (NULL);
 		j = 0;
 		while (j < row_col)
 		{
@@ -73,19 +77,6 @@ float	**ft_create_mat_null(int row_col)
 		i++;
 	}
 	return (new_mat);
-}
-
-void	print_matrix(float **mat, int row_col)
-{
-	int x, y;
-	for (y = 0; y < row_col; y++)
-	{
-		for (x = 0; x < row_col; x++)
-		{
-			printf("%f ", mat[y][x]);
-		}
-		printf("\n");
-	}
 }
 
 float	**ft_submat(float **matrice, int row_col, int row, int col)

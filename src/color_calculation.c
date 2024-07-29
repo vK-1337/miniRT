@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 16:30:27 by udumas            #+#    #+#             */
-/*   Updated: 2024/07/23 20:03:11 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/29 17:23:07 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,64 +14,64 @@
 
 t_color	ft_sum_color(t_color c1, t_color c2)
 {
-	t_color new;
+	t_color	new;
 
 	new.r = c1.r + c2.r;
 	new.g = c1.g + c2.g;
 	new.b = c1.b + c2.b;
-    return (new);
+	return (new);
 }
 
 t_color	ft_dif_color(t_color c1, t_color c2)
 {
-	t_color new;
+	t_color	new;
 
 	new.r = c1.r - c2.r;
 	new.g = c1.g - c2.g;
 	new.b = c1.b - c2.b;
-    return (new);
+	return (new);
 }
 
-t_color ft_mult_color(t_color c, float scalar)
+t_color	ft_mult_color(t_color c, float scalar)
 {
-    t_color new;
+	t_color	new;
 
-    new.r = c.r * scalar;
-    new.g = c.g * scalar;
-    new.b = c.b * scalar;
-    return (new);
+	new.r = c.r * scalar;
+	new.g = c.g * scalar;
+	new.b = c.b * scalar;
+	return (new);
 }
 
-t_color ft_mult_color_tog(t_color c1, t_color c2)
+t_color	ft_mult_color_tog(t_color c1, t_color c2)
 {
-    t_color new;
+	t_color	new;
 
-    new.r = c1.r * c2.r;
-    new.g = c1.g * c2.g;
-    new.b = c1.b * c2.b;
-    return (new);
+	new.r = c1.r * c2.r;
+	new.g = c1.g * c2.g;
+	new.b = c1.b * c2.b;
+	return (new);
 }
 
-t_color ft_color_reg(float r, float g, float b)
+t_color	ft_color_reg(float r, float g, float b)
 {
-    t_color new;
+	t_color	new;
 
-    new.r = r;
-    new.g = g;
-    new.b = b;
-    new.text_color = 0;
-    return (new);
+	new.r = r;
+	new.g = g;
+	new.b = b;
+	new.text_color = 0;
+	return (new);
 }
 
-t_color *ft_color(float r, float g, float b)
+t_color	*ft_color(float r, float g, float b)
 {
-    t_color *new;
+	t_color	*new;
 
-    new = malloc(sizeof(t_color));
-    if (!new)
-        return (NULL);
-    new->r = r;
-    new->g = g;
-    new->b = b;
-    return (new);
+	new = malloc(sizeof(t_color));
+	if (!new)
+		return (NULL);
+	new->r = r;
+	new->g = g;
+	new->b = b;
+	return (new);
 }

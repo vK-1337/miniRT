@@ -6,19 +6,22 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 11:41:54 by udumas            #+#    #+#             */
-/*   Updated: 2024/07/25 17:21:52 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/29 17:40:39 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
 
-t_intersection *ft_add_t(t_intersection **t_tab, t_intersection t[2], int count)
+t_intersection	*ft_add_t(t_intersection **t_tab, t_intersection t[2],
+		int count)
 {
 	t_intersection	*new_t_tab;
 	int				i;
 
 	i = 0;
 	new_t_tab = malloc(sizeof(t_intersection) * (count));
+	if (!new_t_tab)
+		return (NULL);
 	while (i < count - 2)
 	{
 		new_t_tab[i] = *t_tab[i];
@@ -64,7 +67,7 @@ void	ft_sphere_intersections(t_intersection **t_tab, t_sphere **sphere,
 	*sphere = (*sphere)->next;
 }
 
-t_intersection *ft_intersect_world(t_ray ray, t_world **data)
+t_intersection	*ft_intersect_world(t_ray ray, t_world **data)
 {
 	t_intersection	*t_tab;
 	int				count;
@@ -93,6 +96,8 @@ t_intersection *ft_intersect_world(t_ray ray, t_world **data)
 	else
 		cone = NULL;
 	t_tab = malloc(sizeof(t_intersection));
+	if (!t_tab)
+		return (NULL);
 	t_tab[0].status = 0;
 	while (sphere != NULL || plan != NULL || cylinder != NULL || cone != NULL)
 	{
@@ -175,41 +180,46 @@ t_comps	ft_prepare_computations(t_intersection *i, t_ray ray)
 
 t_color	ft_shade_hit(t_world *data, t_comps *comps)
 {
-	int in_shadow;
-	t_color color;
-	t_color *tmp_color;
-	t_light *light;
+	int		in_shadow;
+	t_color	color;
+	t_color	*tmp_color;
+	t_light	*light;
 
 	light = *data->light;
 	color = ft_color_reg(0, 0, 0);
 	while (light != NULL)
 	{
 		tmp_color = malloc(sizeof(t_color));
+		if (!tmp_color)
+			return (color);
 		in_shadow = ft_is_shadowed(data, comps->over_point);
 		if (comps->plan != NULL)
 			*tmp_color = ft_lighting(ft_set_pattern(comps, PLAN), *light,
-								comps->over_point, comps->eyev, comps->normalv, in_shadow, comps->plan, Plan);
+					comps->over_point, comps->eyev, comps->normalv, in_shadow,
+					comps->plan, Plan);
 		else if (comps->sphere != NULL)
 			*tmp_color = ft_lighting(ft_set_pattern(comps, SPHERE), *light,
-								comps->point, comps->eyev, comps->normalv, in_shadow, comps->sphere, Sphere);
+					comps->point, comps->eyev, comps->normalv, in_shadow,
+					comps->sphere, Sphere);
 		else if (comps->cylinder != NULL)
 			*tmp_color = ft_lighting(ft_set_pattern(comps, CYLINDER), *light,
-								comps->over_point, comps->eyev, comps->normalv, in_shadow, comps->cylinder, Cylinder);
+					comps->over_point, comps->eyev, comps->normalv, in_shadow,
+					comps->cylinder, Cylinder);
 		else if (comps->cone != NULL)
 			*tmp_color = ft_lighting(ft_set_pattern(comps, CONE), *light,
-								comps->over_point, comps->eyev, comps->normalv, in_shadow, comps->cone, Cone);
+					comps->over_point, comps->eyev, comps->normalv, in_shadow,
+					comps->cone, Cone);
 		else
 			tmp_color = ft_color(0, 0, 0);
 		color = ft_sum_color(color, *tmp_color);
-        if (tmp_color->text_color == 1)
-            color.text_color = 1;
-        else
-            color.text_color = 0;
+		if (tmp_color->text_color == 1)
+			color.text_color = 1;
+		else
+			color.text_color = 0;
 		free(tmp_color);
 		light = light->next;
 	}
 	return (color);
-
 }
 
 t_color	ft_color_at(t_world *data, t_ray ray)
@@ -248,6 +258,6 @@ float	**ft_view_transform(t_tuple from, t_tuple to, t_tuple up)
 	orientation[2][1] = -forward.y;
 	orientation[2][2] = -forward.z;
 	orientation = ft_mult_mat(orientation, translation(-from.x, -from.y,
-													   -from.z), ALL);
+				-from.z), ALL);
 	return (orientation);
 }
