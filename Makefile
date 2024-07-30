@@ -44,8 +44,8 @@ INCLUDE			= 	-I ./includes/\
 OBJ_DIR_F 		= obj/
 SRC_DIR_F		= src/
 SRC_FUNCTIONS_F	= main atof patterns textures color_calculation color_calculation_2 tuple_calculations tuple_calculations2 tuple_calculations_3 rays rays_2 rays_3 \
-					matrix_calcul matrix_deter_cofac matrix_utils matrix_utils2 utils utils_2 init \
-					parsing parsing_2 parsing_3 parsing_4 parsing_5 get_next_line get_next_line_utils light_lst cylinder_lst sphere_lst plan_lst \
+					matrix_calcul matrix_deter_cofac hooks matrix_utils matrix_utils2 utils utils_2 init \
+					parsing parsing_2 parsing_3 parsing_4 parsing_5 win get_next_line get_next_line_utils light_lst cylinder_lst sphere_lst plan_lst \
 					reflections light light2 light3 tuple_init scene matrix_transformation matrix_transformation2\
 					camera shadows plan colors cylinder cone cone_lst\
 

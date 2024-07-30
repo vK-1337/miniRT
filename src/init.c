@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/30 14:58:41 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/30 17:41:42 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,13 +235,13 @@ int	init_sphere(t_world *data, char **data_split, t_win *mlx)
 	split = ft_split(data_split[3], ',');
 	if (!split)
 		return (ft_free_mat(sphere->matrix, 4), free(sphere), 0);
-	sphere->material = ft_material();
-	if (!sphere->material)
+	sphere->m = ft_material();
+	if (!sphere->m)
 		return (free_char_tab(split), ft_free_mat(sphere->matrix, 4),
 			free(sphere), 0);
-	sphere->material->color.r = ft_atoi(split[0]) / 255.0f;
-	sphere->material->color.g = ft_atoi(split[1]) / 255.0f;
-	sphere->material->color.b = ft_atoi(split[2]) / 255.0f;
+	sphere->m->color.r = ft_atoi(split[0]) / 255.0f;
+	sphere->m->color.g = ft_atoi(split[1]) / 255.0f;
+	sphere->m->color.b = ft_atoi(split[2]) / 255.0f;
 	free_char_tab(split);
 	if (data_split[4])
 	{
@@ -250,10 +250,10 @@ int	init_sphere(t_world *data, char **data_split, t_win *mlx)
 			return (free(sphere), 0);
 		if (ft_strncmp(split[0], "texture", 8) == 0)
 		{
-			free(sphere->material);
-			sphere->material = ft_texture(split[1], mlx);
-			if (!sphere->material->texture)
-				return (free_material(sphere->material, mlx),
+			free(sphere->m);
+			sphere->m = ft_texture(split[1], mlx);
+			if (!sphere->m->texture)
+				return (free_material(sphere->m, mlx),
 					ft_free_mat(sphere->matrix, 4), free(sphere),
 					free_char_tab(split), 0);
 		}
@@ -278,9 +278,9 @@ int	init_sphere(t_world *data, char **data_split, t_win *mlx)
 			if (!p_color_2)
 				return (ft_free_mat(sphere->matrix, 4), free(sphere),
 					free(p_color_1), free_char_tab(color_split), 0);
-			sphere->material->pattern = ft_pattern(p_color_1, p_color_2);
-			sphere->material->is_pattern = 1;
-			if (!sphere->material->pattern)
+			sphere->m->pattern = ft_pattern(p_color_1, p_color_2);
+			sphere->m->is_pattern = 1;
+			if (!sphere->m->pattern)
 				return (ft_free_mat(sphere->matrix, 4), free(sphere),
 					free_char_tab(color_split), free(p_color_1),
 					free(p_color_2), 0);
@@ -291,8 +291,8 @@ int	init_sphere(t_world *data, char **data_split, t_win *mlx)
 	}
 	if (data->alight != NULL)
 	{
-		sphere->material->ambiant_color = data->alight;
-		sphere->material->ambiant = data->alight_intensity;
+		sphere->m->ambiant_color = data->alight;
+		sphere->m->ambiant = data->alight_intensity;
 	}
 	sphere->next = NULL;
 	if (!data->sphere)
@@ -448,16 +448,16 @@ int	init_cylinder(t_world *data, char **data_split, t_win *mlx)
 	split = ft_split(data_split[5], ',');
 	if (!split)
 		return (free(cylinder), 0);
-	cylinder->material = ft_material();
-	cylinder->material->color.r = ft_atoi(split[0]) / 255.0f;
-	cylinder->material->color.g = ft_atoi(split[1]) / 255.0f;
-	cylinder->material->color.b = ft_atoi(split[2]) / 255.0f;
+	cylinder->m = ft_material();
+	cylinder->m->color.r = ft_atoi(split[0]) / 255.0f;
+	cylinder->m->color.g = ft_atoi(split[1]) / 255.0f;
+	cylinder->m->color.b = ft_atoi(split[2]) / 255.0f;
 	cylinder->next = NULL;
 	free_char_tab(split);
 	if (data->alight != NULL)
 	{
-		cylinder->material->ambiant_color = data->alight;
-		cylinder->material->ambiant = data->alight_intensity;
+		cylinder->m->ambiant_color = data->alight;
+		cylinder->m->ambiant = data->alight_intensity;
 	}
 	if (data_split[6])
 	{
@@ -466,9 +466,9 @@ int	init_cylinder(t_world *data, char **data_split, t_win *mlx)
 			return (free(cylinder), 0);
 		if (ft_strncmp(split[0], "texture", 8) == 0)
 		{
-			free(cylinder->material);
-			cylinder->material = ft_texture(split[1], mlx);
-			if (!cylinder->material->texture)
+			free(cylinder->m);
+			cylinder->m = ft_texture(split[1], mlx);
+			if (!cylinder->m->texture)
 				return (free(cylinder), free_char_tab(split), 0);
 		}
 		else if (ft_strncmp(split[0], "pattern", 8) == 0)
@@ -491,9 +491,9 @@ int	init_cylinder(t_world *data, char **data_split, t_win *mlx)
 			if (!p_color_2)
 				return (free(cylinder), free(p_color_1),
 					free_char_tab(color_split), 0);
-			cylinder->material->pattern = ft_pattern(p_color_1, p_color_2);
-			cylinder->material->is_pattern = 1;
-			if (!cylinder->material->pattern)
+			cylinder->m->pattern = ft_pattern(p_color_1, p_color_2);
+			cylinder->m->is_pattern = 1;
+			if (!cylinder->m->pattern)
 				return (free(cylinder), free_char_tab(color_split),
 					free(p_color_1), free(p_color_2), 0);
 			free_char_tab(first_color);
@@ -503,8 +503,8 @@ int	init_cylinder(t_world *data, char **data_split, t_win *mlx)
 	}
 	if (data->alight != NULL)
 	{
-		cylinder->material->ambiant_color = data->alight;
-		cylinder->material->ambiant = data->alight_intensity;
+		cylinder->m->ambiant_color = data->alight;
+		cylinder->m->ambiant = data->alight_intensity;
 	}
 	if (!data->cylinder)
 	{

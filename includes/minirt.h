@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/30 14:57:32 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/30 17:41:37 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,7 +187,7 @@ typedef struct s_sphere
 	struct s_sphere		*next;
 	float				radius;
 	float				**matrix;
-	t_material			*material;
+	t_material			*m;
 }						t_sphere;
 
 typedef struct s_cylinder
@@ -196,7 +196,7 @@ typedef struct s_cylinder
 	float				radius;
 	float				y_max;
 	float				y_min;
-	t_material			*material;
+	t_material			*m;
 	float				**matrix;
 	struct s_cylinder	*next;
 }						t_cylinder;
@@ -332,6 +332,16 @@ typedef struct s_complete
 	t_win				*win;
 	t_world				*data;
 }						t_complete;
+
+typedef struct s_norme_set_patt
+{
+    t_tuple	*object_point;
+	t_tuple	*pattern_point;
+	float	theta;
+	float	phi;
+	float	u;
+	float	v;
+}        t_norme_set_patt;
 
 void					print_char_tab(char **tab);
 /******************************************************************************/
@@ -634,8 +644,8 @@ void					cylindrical_mapping(float x, float y, float z,
 void					planar_mapping(float x, float y, t_image *image,
 							t_color *color, float plane_width,
 							float plane_height);
-void					spherical_mapping(float x, float y, float z,
-							t_image *image, t_color *color);
+void					spherical_mapping(t_tuple point, t_image *image,
+							t_color *color);
 void					get_interpolated_color(float u, float v, t_image *image,
 							t_color *color);
 uint8_t					*get_pixel(t_image *image, int x, int y);
@@ -659,5 +669,21 @@ t_color					define_pattern_color(t_objects type, t_tuple position,
 							void *object);
 int						init_helper(t_world *data, t_dtype type,
 							char **data_split, t_win *mlx);
+t_tuple					calculate_sphere_normal(t_comps object,
+							t_tuple world_point, float ***attr_mat);
+t_tuple					calculate_cylinder_normal(t_comps object,
+							t_tuple world_point, float ***attr_mat);
+t_tuple					calculate_cone_normal(t_comps object,
+							t_tuple world_point, float ***attr_mat);
+void					thread_attribution(t_thread *thread,
+							t_complete *complete);
+void					cone_inter_util(t_intersection *t,
+							t_intersection **t_tab, t_cone **cone, int *count,
+							float abc[3]);
+void					destroy_t_win(t_win *win);
+void					free_win_classic(t_win *win);
+void					start_threads(t_complete *complete);
+void					setup_hooks(t_win *win, t_complete *complete);
+int						exit_window(t_complete *complete);
 
 #endif

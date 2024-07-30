@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 07:37:15 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/30 13:30:00 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/30 17:41:57 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_color	define_pattern_color(t_objects type, t_tuple position, void *object)
 		vars.phi = acosf(vars.object_point.y);
 		vars.u = (vars.theta + M_PI) / (2 * M_PI);
 		vars.v = vars.phi / M_PI;
-		vars.eff_color = *ft_chkr_at(((t_sphere *)object)->material->pattern,
+		vars.eff_color = *ft_chkr_at(((t_sphere *)object)->m->pattern,
 				vars.u, vars.v);
 	}
 	else if (type == Plan)
@@ -35,7 +35,7 @@ t_color	define_pattern_color(t_objects type, t_tuple position, void *object)
 				vars.point_object);
 	}
 	else if (type == Cylinder || type == Cone)
-		vars.eff_color = ((t_cylinder *)object)->material->color;
+		vars.eff_color = ((t_cylinder *)object)->m->color;
 	else
 		vars.eff_color = *(ft_color(1, 1, 1));
 	return (vars.eff_color);

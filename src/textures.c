@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:01:11 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/30 14:45:35 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/30 16:13:38 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	get_interpolated_color(float u, float v, t_image *image, t_color *color)
 	color->b = pixel[0];
 }
 
-void	spherical_mapping(float x, float y, float z, t_image *image,
+void	spherical_mapping(t_tuple point, t_image *image,
 		t_color *color)
 {
 	float	theta;
@@ -61,8 +61,8 @@ void	spherical_mapping(float x, float y, float z, t_image *image,
 	float	u;
 	float	v;
 
-	theta = atan2f(z, x);
-	phi = acosf(y);
+	theta = atan2f(point.z, point.x);
+	phi = acosf(point.y);
 	u = (theta + M_PI) / (2 * M_PI);
 	v = phi / M_PI;
 	get_interpolated_color(u, v, image, color);

@@ -1,25 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   light3.c                                           :+:      :+:    :+:   */
+/*   win.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/30 12:07:54 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/30 17:43:13 by vda-conc         ###   ########.fr       */
+/*   Created: 2024/07/30 16:09:34 by vda-conc          #+#    #+#             */
+/*   Updated: 2024/07/30 16:09:52 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
 
-t_color	ft_spherical(t_tuple position, t_sphere sphere, t_light light)
+void	destroy_t_win(t_win *win)
 {
-	t_tuple	point_object;
-	t_color	texture_color;
+	mlx_destroy_image(win->mlx, win->img);
+	mlx_destroy_window(win->mlx, win->win);
+	mlx_destroy_display(win->mlx);
+	free(win->mlx);
+	free(win);
+}
 
-	point_object = ft_normalization(ft_mult_mat_tuple(&position,
-				ft_inversion(sphere.matrix, 4), SECOND));
-	spherical_mapping(point_object,
-		sphere.m->texture, &texture_color);
-	return (ft_mult_color_tog(texture_color, light.intensity));
+void	free_win_classic(t_win *win)
+{
+	mlx_destroy_image(win->mlx, win->img);
+	mlx_destroy_window(win->mlx, win->win);
+	mlx_destroy_display(win->mlx);
+	free(win->mlx);
+	free(win);
 }

@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 12:03:27 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/30 12:05:33 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/30 17:42:22 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	free_sphere(t_sphere **sphere, void *mlx)
 	while (*sphere)
 	{
 		tmp = (*sphere)->next;
-		free_material((*sphere)->material, mlx);
+		free_material((*sphere)->m, mlx);
 		ft_free_mat((*sphere)->matrix, 4);
 		free(*sphere);
 		*sphere = tmp;
@@ -36,7 +36,7 @@ void	free_cylinder(t_cylinder **cylinder, void *mlx)
 	while (*cylinder)
 	{
 		tmp = (*cylinder)->next;
-		free_material((*cylinder)->material, mlx);
+		free_material((*cylinder)->m, mlx);
 		ft_free_mat((*cylinder)->matrix, 4);
 		free(*cylinder);
 		*cylinder = tmp;

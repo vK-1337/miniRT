@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 12:07:14 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/30 12:09:03 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/30 17:37:05 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_color	ft_cylindrical(t_tuple position, t_cylinder cylinder, t_light light)
 	point_object = ft_normalization(ft_mult_mat_tuple(&position,
 				ft_inversion(cylinder.matrix, 4), SECOND));
 	cylindrical_mapping(point_object.x, point_object.y, point_object.z,
-		cylinder.material->texture, &texture_color);
+		cylinder.m->texture, &texture_color);
 	return (ft_mult_color_tog(texture_color, light.intensity));
 }
 

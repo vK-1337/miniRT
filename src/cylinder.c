@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 19:02:29 by bainur            #+#    #+#             */
-/*   Updated: 2024/07/29 17:52:14 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/30 17:36:17 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ t_cylinder	*ft_cylinder(void)
 	cylinder->y_min = 0;
 	cylinder->y_max = 3;
 	cylinder->matrix = identity_matrix(4);
-	cylinder->material = ft_material();
+	cylinder->m = ft_material();
 	cylinder->next = NULL;
 	return (cylinder);
 }

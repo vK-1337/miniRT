@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:55 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/30 14:11:38 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/30 17:15:01 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,15 +59,6 @@ t_win	*init_mlx(void)
 	win->addr = mlx_get_data_addr(win->img, &win->bits_per_pixel,
 			&win->line_length, &win->endian);
 	return (win);
-}
-
-void	destroy_t_win(t_win *win)
-{
-	mlx_destroy_image(win->mlx, win->img);
-	mlx_destroy_window(win->mlx, win->win);
-	mlx_destroy_display(win->mlx);
-	free(win->mlx);
-	free(win);
 }
 
 void	start_threads(t_complete *complete)
@@ -132,26 +123,15 @@ void	start_threads(t_complete *complete)
 	free(complete->data->pixel_put);
 }
 
-int	key_hook(int keycode, t_complete *complete)
+void	thread_attribution(t_thread *thread, t_complete *complete)
 {
-	if (keycode == XK_Escape)
-		exit_window(complete);
-	return (0);
-}
-
-void	setup_hooks(t_win *win, t_complete *complete)
-{
-	mlx_key_hook(win->win, key_hook, complete);
-	mlx_hook(win->win, 17, 0, exit_window, complete);
-}
-
-void	free_win_classic(t_win *win)
-{
-	mlx_destroy_image(win->mlx, win->img);
-	mlx_destroy_window(win->mlx, win->win);
-	mlx_destroy_display(win->mlx);
-	free(win->mlx);
-	free(win);
+	thread->start_x = 0;
+	thread->start_y = 0;
+	thread->end_x = SIZE_X;
+	thread->end_y = SIZE_Y;
+	thread->index = 0;
+	thread->win = complete->win;
+	thread->data = complete->data;
 }
 
 int	main(int ac, char **av)

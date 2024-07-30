@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 09:54:05 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/30 13:43:16 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/30 17:42:09 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ t_sphere	*ft_sphere(void)
 	s->center = *ft_init_tuple(0, 0, 0, 1);
 	s->radius = 1;
 	s->matrix = identity_matrix(4);
-	s->material = ft_material();
+	s->m = ft_material();
 	return (s);
 }
 

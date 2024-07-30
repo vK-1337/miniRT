@@ -1,25 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   light3.c                                           :+:      :+:    :+:   */
+/*   hooks.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/30 12:07:54 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/30 17:43:13 by vda-conc         ###   ########.fr       */
+/*   Created: 2024/07/30 16:07:30 by vda-conc          #+#    #+#             */
+/*   Updated: 2024/07/30 16:09:54 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
 
-t_color	ft_spherical(t_tuple position, t_sphere sphere, t_light light)
+int	key_hook(int keycode, t_complete *complete)
 {
-	t_tuple	point_object;
-	t_color	texture_color;
+	if (keycode == XK_Escape)
+		exit_window(complete);
+	return (0);
+}
 
-	point_object = ft_normalization(ft_mult_mat_tuple(&position,
-				ft_inversion(sphere.matrix, 4), SECOND));
-	spherical_mapping(point_object,
-		sphere.m->texture, &texture_color);
-	return (ft_mult_color_tog(texture_color, light.intensity));
+void	setup_hooks(t_win *win, t_complete *complete)
+{
+	mlx_key_hook(win->win, key_hook, complete);
+	mlx_hook(win->win, 17, 0, exit_window, complete);
 }
