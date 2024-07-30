@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:01:11 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/29 18:09:06 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/30 14:45:35 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,12 +78,15 @@ void	calculate_plane_dimensions(float **matrix, float *width, float *height)
 {
 	t_tuple	transformed_corners[4];
 	t_tuple	corners[4] = {{-1, 0, -1, 1}, {1, 0, -1, 1}, {1, 0, 1, 1}, {-1, 0,
-	1, 1}};
+			1, 1}};
+	int		i;
 
-	for (int i = 0; i < 4; i++)
+	i = 0;
+	while (i < 4)
 	{
 		transformed_corners[i] = ft_mult_matrix_tuple(matrix, &corners[i],
 				NONE);
+		i++;
 	}
 	*width = distance(transformed_corners[0], transformed_corners[1]);
 	*height = distance(transformed_corners[1], transformed_corners[2]);

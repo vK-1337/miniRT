@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 16:30:27 by udumas            #+#    #+#             */
-/*   Updated: 2024/07/29 17:23:07 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/30 12:00:38 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,18 +60,5 @@ t_color	ft_color_reg(float r, float g, float b)
 	new.g = g;
 	new.b = b;
 	new.text_color = 0;
-	return (new);
-}
-
-t_color	*ft_color(float r, float g, float b)
-{
-	t_color	*new;
-
-	new = malloc(sizeof(t_color));
-	if (!new)
-		return (NULL);
-	new->r = r;
-	new->g = g;
-	new->b = b;
 	return (new);
 }

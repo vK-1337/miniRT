@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:55 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/29 17:50:55 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/30 14:11:38 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,12 +162,7 @@ int	main(int ac, char **av)
 	t_complete	*complete;
 
 	if (ac != 2 || !scene_name_check(av[1]))
-	{
-		printf("Bad arguments : Usage : ./minirt scene.rt\n");
-		return (EXIT_FAILURE);
-	}
-	if (SIZE_X > 850 || SIZE_Y > 850)
-		return (printf("Window can't be more than 850*850. Change it in \"/includes/minirt.h\" and Make re.\n"),
+		return (printf("Bad arguments : Usage : ./minirt scene.rt\n"),
 			EXIT_FAILURE);
 	fd = open(av[1], O_RDONLY);
 	if (fd == -1)

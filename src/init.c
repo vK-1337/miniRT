@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/29 17:25:37 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/30 14:58:41 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,25 +84,35 @@ int	init_data_w_line(t_world *data, t_dtype type, char **data_split, t_win *mlx)
 		if (!init_light(data, data_split))
 			return (free_data(&data, mlx), 0);
 	}
-	else if (type == PL)
+	else if (type == PL || type == SP || type == CY || type == CO)
+	{
+		if (!init_helper(data, type, data_split, mlx))
+			return (free_data(&data, mlx), 0);
+	}
+	return (1);
+}
+
+int	init_helper(t_world *data, t_dtype type, char **data_split, t_win *mlx)
+{
+	if (type == PL)
 	{
 		if (!init_plan(data, data_split, mlx))
-			return (free_data(&data, mlx), 0);
+			return (0);
 	}
 	else if (type == SP)
 	{
 		if (!init_sphere(data, data_split, mlx))
-			return (free_data(&data, mlx), 0);
+			return (0);
 	}
 	else if (type == CY)
 	{
 		if (!init_cylinder(data, data_split, mlx))
-			return (free_data(&data, mlx), 0);
+			return (0);
 	}
 	else if (type == CO)
 	{
 		if (!init_cone(data, data_split, mlx))
-			return (free_data(&data, mlx), 0);
+			return (0);
 	}
 	return (1);
 }
@@ -112,7 +122,7 @@ int	init_alight(t_world *data, char **data_split)
 	char	**color_split;
 	float	intensity;
 
-	data->alight_intensity = atof(data_split[1]);
+	data->alight_intensity = ft_atof(data_split[1]);
 	intensity = data->alight_intensity;
 	color_split = ft_split(data_split[2], ',');
 	if (!color_split)
@@ -140,13 +150,15 @@ int	init_camera(t_world *data, char **data_split)
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return (free(camera), 0);
-	from = ft_init_tuple_reg(atof(split[0]), atof(split[1]), atof(split[2]), 1);
+	from = ft_init_tuple_reg(ft_atof(split[0]), ft_atof(split[1]),
+			ft_atof(split[2]), 1);
 	free_char_tab(split);
 	split = ft_split(data_split[2], ',');
 	if (!split)
 		return (free(camera), 0);
 	to = ft_init_tuple_reg(0, 0, 0, 1);
-	up = ft_init_tuple_reg(atof(split[0]), atof(split[1]), atof(split[2]), 0);
+	up = ft_init_tuple_reg(ft_atof(split[0]), ft_atof(split[1]),
+			ft_atof(split[2]), 0);
 	camera->matrix = ft_view_transform(from, to, up);
 	free_char_tab(split);
 	data->camera = camera;
@@ -169,12 +181,12 @@ int	init_light(t_world *data, char **data_split)
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return (free(light), 0);
-	light->position.x = atof(split[0]);
-	light->position.y = atof(split[1]);
-	light->position.z = atof(split[2]);
+	light->position.x = ft_atof(split[0]);
+	light->position.y = ft_atof(split[1]);
+	light->position.z = ft_atof(split[2]);
 	light->position.w = 1;
 	free_char_tab(split);
-	intensity = atof(data_split[2]);
+	intensity = ft_atof(data_split[2]);
 	split = ft_split(data_split[3], ',');
 	if (!split)
 		return (free(light), 0);
@@ -213,9 +225,9 @@ int	init_sphere(t_world *data, char **data_split, t_win *mlx)
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return (free(sphere), 0);
-	sphere->radius = atof(data_split[2]) / 2;
-	sphere->matrix = translation(atof(split[0]), atof(split[1]),
-			atof(split[2]));
+	sphere->radius = ft_atof(data_split[2]) / 2;
+	sphere->matrix = translation(ft_atof(split[0]), ft_atof(split[1]),
+			ft_atof(split[2]));
 	if (!sphere->matrix)
 		return (free(sphere), 0);
 	sphere->center = ft_init_tuple_reg(0, 0, 0, 1);
@@ -312,23 +324,24 @@ int	init_plan(t_world *data, char **data_split, t_win *mlx)
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return (free(plan), 0);
-	plan->coord.x = atof(split[0]);
-	plan->coord.y = atof(split[1]);
-	plan->coord.z = atof(split[2]);
+	plan->coord.x = ft_atof(split[0]);
+	plan->coord.y = ft_atof(split[1]);
+	plan->coord.z = ft_atof(split[2]);
 	plan->normal = ft_init_tuple_reg(0, 1, 0, 0);
-	matrix = translation(atof(split[0]), atof(split[1]), atof(split[2]));
+	matrix = translation(ft_atof(split[0]), ft_atof(split[1]),
+			ft_atof(split[2]));
 	plan->matrix = identity_matrix(4);
 	plan->matrix = ft_mult_mat(plan->matrix, matrix, ALL);
 	free_char_tab(split);
 	split = ft_split(data_split[2], ',');
 	if (!split)
 		return (free(plan), 0);
-	plan->matrix = ft_mult_mat(plan->matrix, rotation_x(atof(split[0]) * M_PI),
-			ALL);
-	plan->matrix = ft_mult_mat(plan->matrix, rotation_y(atof(split[1]) * M_PI),
-			ALL);
-	plan->matrix = ft_mult_mat(plan->matrix, rotation_z(atof(split[2]) * M_PI),
-			ALL);
+	plan->matrix = ft_mult_mat(plan->matrix, rotation_x(ft_atof(split[0])
+				* M_PI), ALL);
+	plan->matrix = ft_mult_mat(plan->matrix, rotation_y(ft_atof(split[1])
+				* M_PI), ALL);
+	plan->matrix = ft_mult_mat(plan->matrix, rotation_z(ft_atof(split[2])
+				* M_PI), ALL);
 	free_char_tab(split);
 	split = ft_split(data_split[3], ',');
 	if (!split)
@@ -415,22 +428,22 @@ int	init_cylinder(t_world *data, char **data_split, t_win *mlx)
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return (free(cylinder), 0);
-	cylinder->matrix = translation(atof(split[0]), atof(split[1]),
-			atof(split[2]));
-	y = atof(split[1]);
+	cylinder->matrix = translation(ft_atof(split[0]), ft_atof(split[1]),
+			ft_atof(split[2]));
+	y = ft_atof(split[1]);
 	free_char_tab(split);
 	split = ft_split(data_split[2], ',');
 	if (!split)
 		return (free(cylinder), 0);
-	cylinder->matrix = ft_mult_mat(cylinder->matrix, rotation_x(atof(split[0])
-				* M_PI), ALL);
-	cylinder->matrix = ft_mult_mat(cylinder->matrix, rotation_y(atof(split[1])
-				* M_PI), ALL);
-	cylinder->matrix = ft_mult_mat(cylinder->matrix, rotation_z(atof(split[2])
-				* M_PI), ALL);
-	cylinder->radius = atof(data_split[3]) / 2;
-	cylinder->y_max = y + atof(data_split[4]) / 2;
-	cylinder->y_min = y - atof(data_split[4]) / 2;
+	cylinder->matrix = ft_mult_mat(cylinder->matrix,
+			rotation_x(ft_atof(split[0]) * M_PI), ALL);
+	cylinder->matrix = ft_mult_mat(cylinder->matrix,
+			rotation_y(ft_atof(split[1]) * M_PI), ALL);
+	cylinder->matrix = ft_mult_mat(cylinder->matrix,
+			rotation_z(ft_atof(split[2]) * M_PI), ALL);
+	cylinder->radius = ft_atof(data_split[3]) / 2;
+	cylinder->y_max = y + ft_atof(data_split[4]) / 2;
+	cylinder->y_min = y - ft_atof(data_split[4]) / 2;
 	free_char_tab(split);
 	split = ft_split(data_split[5], ',');
 	if (!split)
@@ -522,21 +535,22 @@ int	init_cone(t_world *data, char **data_split, t_win *mlx)
 	split = ft_split(data_split[1], ',');
 	if (!split)
 		return (free(cone), 0);
-	cone->matrix = translation(atof(split[0]), atof(split[1]), atof(split[2]));
-	y = atof(split[1]);
+	cone->matrix = translation(ft_atof(split[0]), ft_atof(split[1]),
+			ft_atof(split[2]));
+	y = ft_atof(split[1]);
 	free_char_tab(split);
 	split = ft_split(data_split[2], ',');
 	if (!split)
 		return (free(cone), 0);
-	cone->matrix = ft_mult_mat(cone->matrix, rotation_x(atof(split[0]) * M_PI),
-			ALL);
-	cone->matrix = ft_mult_mat(cone->matrix, rotation_y(atof(split[1]) * M_PI),
-			ALL);
-	cone->matrix = ft_mult_mat(cone->matrix, rotation_z(atof(split[2]) * M_PI),
-			ALL);
-	cone->radius = atof(data_split[3]) / 2;
-	cone->y_max = y + atof(data_split[4]) / 2;
-	cone->y_min = y - atof(data_split[4]) / 2;
+	cone->matrix = ft_mult_mat(cone->matrix, rotation_x(ft_atof(split[0])
+				* M_PI), ALL);
+	cone->matrix = ft_mult_mat(cone->matrix, rotation_y(ft_atof(split[1])
+				* M_PI), ALL);
+	cone->matrix = ft_mult_mat(cone->matrix, rotation_z(ft_atof(split[2])
+				* M_PI), ALL);
+	cone->radius = ft_atof(data_split[3]) / 2;
+	cone->y_max = y + ft_atof(data_split[4]) / 2;
+	cone->y_min = y - ft_atof(data_split[4]) / 2;
 	free_char_tab(split);
 	split = ft_split(data_split[5], ',');
 	if (!split)

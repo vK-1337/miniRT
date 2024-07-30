@@ -1,18 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mlx_destroy_display.c                              :+:      :+:    :+:   */
+/*   tuple_calculations_3.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mg <mg@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/03 18:56:35 by mg                #+#    #+#             */
-/*   Updated: 2020/10/04 01:55:35 by mg               ###   ########.fr       */
+/*   Created: 2024/07/30 12:06:02 by vda-conc          #+#    #+#             */
+/*   Updated: 2024/07/30 12:06:40 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "mlx_int.h"
+#include "../includes/minirt.h"
 
-int	mlx_destroy_display(t_xvar *xvar)
+t_tuple	cross_product(t_tuple v1, t_tuple v2)
 {
-	XCloseDisplay(xvar->display);
+	t_tuple	new;
+
+	new.w = 0;
+	new.x = v1.y * v2.z - v1.z * v2.y;
+	new.y = v1.z * v2.x - v1.x * v2.z;
+	new.z = v1.x * v2.y - v1.y * v2.x;
+	return (new);
 }

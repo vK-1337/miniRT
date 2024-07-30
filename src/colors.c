@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:28:52 by bainur            #+#    #+#             */
-/*   Updated: 2024/07/29 17:23:34 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/30 13:31:07 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ t_color	*ft_stripe_at(t_pattern *pattern, t_tuple point)
 		return (pattern->b);
 }
 
-t_color	*ft_checkerboard_at(t_pattern *pattern, float u, float v)
+t_color	*ft_chkr_at(t_pattern *pattern, float u, float v)
 {
 	if (((int)floor(u * 10) + (int)floor(v * 10)) % 2 == 0)
 		return (pattern->a);
@@ -62,7 +62,7 @@ t_material	*ft_set_pattern(t_comps *comps, int type)
 		phi = acosf(object_point->y);
 		u = (theta + M_PI) / (2 * M_PI);
 		v = phi / M_PI;
-		comps->sphere->material->color = *ft_checkerboard_at(comps->sphere->material->pattern,
+		comps->sphere->material->color = *ft_chkr_at(comps->sphere->material->pattern,
 				u, v);
 		free(pattern_point);
 		free(object_point);

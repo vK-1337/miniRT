@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 14:30:46 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/29 17:22:24 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/30 14:34:35 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,39 +14,29 @@
 
 void	*render(void *thread_)
 {
-	t_thread	*thread;
-	t_camera	*camera;
-	t_win		*win;
-	t_world		*data;
-	t_ray		ray;
-	t_color		color;
-	int			color_int;
+	t_render_norme	vars;
 
-	thread = (t_thread *)thread_;
-	camera = thread->data->camera;
-	win = thread->win;
-	data = thread->data;
-	for (int y = thread->start_y; y < thread->end_y; y++)
+	vars.thread = (t_thread *)thread_;
+	vars.camera = vars.thread->data->camera;
+	vars.win = vars.thread->win;
+	vars.data = vars.thread->data;
+	vars.y = vars.thread->start_y;
+	while (vars.y < vars.thread->end_y)
 	{
-		for (int x = thread->start_x; x < thread->end_x; x++)
+		vars.x = vars.thread->start_x - 1;
+		while (++vars.x < vars.thread->end_x)
 		{
-			ray = ray_for_pixel(camera, x, y);
-			color = ft_color_at(data, ray);
-			if (color.text_color == 1)
-			{
-				color_int = ft_texture_color_to_int(color);
-				pthread_mutex_lock(data->pixel_put);
-				put_pixel(win, x, y, color_int);
-				pthread_mutex_unlock(data->pixel_put);
-			}
+			vars.ray = ray_for_pixel(vars.camera, vars.x, vars.y);
+			vars.color = ft_color_at(vars.data, vars.ray);
+			if (vars.color.text_color == 1)
+				vars.color_int = ft_texture_color_to_int(vars.color);
 			else
-			{
-				color_int = color_to_int(color);
-				pthread_mutex_lock(data->pixel_put);
-				put_pixel(win, x, y, color_int);
-				pthread_mutex_unlock(data->pixel_put);
-			}
+				vars.color_int = color_to_int(vars.color);
+			pthread_mutex_lock(vars.data->pixel_put);
+			put_pixel(vars.win, vars.x, vars.y, vars.color_int);
+			pthread_mutex_unlock(vars.data->pixel_put);
 		}
+		vars.y++;
 	}
 	return (NULL);
 }
@@ -85,24 +75,18 @@ float	compute_pixel_size(t_camera *camera)
 
 t_ray	ray_for_pixel(t_camera *camera, int px, int py)
 {
-	double	xoffset;
-	double	yoffset;
-	double	world_x;
-	double	world_y;
-	t_tuple	pixel;
-	t_tuple	origin;
-	t_tuple	direction;
-	t_tuple	*tmp_comput;
+	t_ray_norme	ray;
 
-	xoffset = (px + 0.5) * camera->pixel_size;
-	yoffset = (py + 0.5) * camera->pixel_size;
-	world_x = camera->half_width - xoffset;
-	world_y = camera->half_height - yoffset;
-	tmp_comput = ft_init_tuple(world_x, world_y, -1, 1);
-	pixel = ft_mult_mat_tuple(tmp_comput, ft_inversion(camera->matrix, 4), ALL);
-	tmp_comput = ft_init_tuple(0, 0, 0, 1);
-	origin = ft_mult_mat_tuple(tmp_comput, ft_inversion(camera->matrix, 4),
-			ALL);
-	direction = ft_normalization(ft_dif_tuple(pixel, origin));
-	return (ft_ray(origin, direction));
+	ray.xoffset = (px + 0.5) * camera->pixel_size;
+	ray.yoffset = (py + 0.5) * camera->pixel_size;
+	ray.world_x = camera->half_width - ray.xoffset;
+	ray.world_y = camera->half_height - ray.yoffset;
+	ray.tmp_comput = ft_init_tuple(ray.world_x, ray.world_y, -1, 1);
+	ray.pixel = ft_mult_mat_tuple(ray.tmp_comput, ft_inversion(camera->matrix,
+				4), ALL);
+	ray.tmp_comput = ft_init_tuple(0, 0, 0, 1);
+	ray.origin = ft_mult_mat_tuple(ray.tmp_comput, ft_inversion(camera->matrix,
+				4), ALL);
+	ray.direction = ft_normalization(ft_dif_tuple(ray.pixel, ray.origin));
+	return (ft_ray(ray.origin, ray.direction));
 }

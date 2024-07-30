@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 18:04:20 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/29 17:51:21 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/30 14:37:58 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,7 @@ t_color	ft_lighting(t_material *m, t_light light, t_tuple position,
 			effective_color = define_effective_color(type, position, object,
 					light);
 		else
-			effective_color = define_pattern_color(type, position, object,
-					light);
+			effective_color = define_pattern_color(type, position, object);
 	}
 	else
 	{
@@ -105,13 +104,9 @@ t_color	ft_lighting(t_material *m, t_light light, t_tuple position,
 	final_color = ft_sum_color(ft_sum_color(ft_sum_color(ambiant, diffuse),
 				specular), *m->ambiant_color);
 	if (is_textured)
-	{
 		final_color.text_color = 1;
-	}
 	else
-	{
 		final_color.text_color = 0;
-	}
 	return (final_color);
 }
 
@@ -130,87 +125,4 @@ t_color	define_effective_color(t_objects type, t_tuple position, void *object,
 	else
 		effective_color = *(ft_color(1, 1, 1));
 	return (effective_color);
-}
-
-t_color	ft_spherical(t_tuple position, t_sphere sphere, t_light light)
-{
-	t_tuple	point_object;
-	t_color	texture_color;
-
-	point_object = ft_normalization(ft_mult_mat_tuple(&position,
-				ft_inversion(sphere.matrix, 4), SECOND));
-	spherical_mapping(point_object.x, point_object.y, point_object.z,
-		sphere.material->texture, &texture_color);
-	return (ft_mult_color_tog(texture_color, light.intensity));
-}
-
-t_color	ft_planar(t_tuple position, t_plan plan, t_light light)
-{
-	t_tuple	point_object;
-	t_color	texture_color;
-	float	plane_width;
-	float	plane_height;
-
-	calculate_plane_dimensions(plan.matrix, &plane_width, &plane_height);
-	point_object = ft_mult_mat_tuple(&position, ft_inversion(plan.matrix, 4),
-			SECOND);
-	planar_mapping(point_object.x, point_object.z, plan.material->texture,
-		&texture_color, plane_width, plane_height);
-	return (ft_mult_color_tog(texture_color, light.intensity));
-}
-
-t_color	ft_cylindrical(t_tuple position, t_cylinder cylinder, t_light light)
-{
-	t_tuple	point_object;
-	t_color	texture_color;
-
-	point_object = ft_normalization(ft_mult_mat_tuple(&position,
-				ft_inversion(cylinder.matrix, 4), SECOND));
-	cylindrical_mapping(point_object.x, point_object.y, point_object.z,
-		cylinder.material->texture, &texture_color);
-	return (ft_mult_color_tog(texture_color, light.intensity));
-}
-
-unsigned int	color_to_int(t_color color)
-{
-	int	r;
-	int	g;
-	int	b;
-
-	if (color.r > 1)
-		color.r = 1;
-	if (color.g > 1)
-		color.g = 1;
-	if (color.b > 1)
-		color.b = 1;
-	r = (unsigned int)(color.r * 255);
-	g = (unsigned int)(color.g * 255);
-	b = (unsigned int)(color.b * 255);
-	return ((r << 16) | (g << 8) | b);
-}
-
-int	ft_texture_color_to_int(t_color color)
-{
-	int	r;
-	int	g;
-	int	b;
-
-	r = (int)(color.r);
-	g = (int)(color.g);
-	b = (int)(color.b);
-	if (r > 255)
-		r = 255;
-	if (g > 255)
-		g = 255;
-	if (b > 255)
-		b = 255;
-	return (r << 16 | g << 8 | b);
-}
-
-void	color_black(t_color *color)
-{
-	color->r = 0.0;
-	color->g = 0.0;
-	color->b = 0.0;
-	return ;
 }

@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/29 17:16:31 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/30 14:57:32 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 # endif
 # define EPSILON 0.0001
 # define INFINITY 1e10
-# define SIZE_X 50
-# define SIZE_Y 50
+# define SIZE_X 1200
+# define SIZE_Y 1200
 # define SPHERE 0
 # define PLAN 1
 # define CYLINDER 2
@@ -100,6 +100,18 @@ typedef struct s_tuple
 	float				w;
 }						t_tuple;
 
+typedef struct s_ray_norme
+{
+	double				xoffset;
+	double				yoffset;
+	double				world_x;
+	double				world_y;
+	t_tuple				pixel;
+	t_tuple				origin;
+	t_tuple				direction;
+	t_tuple				*tmp_comput;
+}						t_ray_norme;
+
 typedef struct s_color
 {
 	double				r;
@@ -107,6 +119,17 @@ typedef struct s_color
 	double				b;
 	int					text_color;
 }						t_color;
+
+typedef struct s_define_patt_norme
+{
+	t_color				eff_color;
+	t_tuple				object_point;
+	float				theta;
+	float				phi;
+	float				u;
+	float				v;
+	t_tuple				point_object;
+}						t_define_patt_norme;
 
 typedef struct s_pattern
 {
@@ -242,6 +265,17 @@ typedef struct s_intersection
 	t_cone				*cone;
 }						t_intersection;
 
+typedef struct s_shadowed_norme
+{
+	t_tuple				v;
+	t_tuple				direction;
+	float				distance;
+	t_intersection		*intersections;
+	t_intersection		*hit;
+	t_ray				r;
+	t_light				*curr;
+}						t_shadowed_norme;
+
 typedef struct s_world
 {
 	t_color				*alight;
@@ -279,6 +313,19 @@ typedef struct s_thread
 	int					end_y;
 }						t_thread;
 
+typedef struct s_render_norme
+{
+	t_thread			*thread;
+	t_camera			*camera;
+	t_win				*win;
+	t_world				*data;
+	t_ray				ray;
+	t_color				color;
+	int					color_int;
+	int					x;
+	int					y;
+}						t_render_norme;
+
 typedef struct s_complete
 {
 	t_thread			*thread;
@@ -296,7 +343,8 @@ void					print_char_tab(char **tab);
 /******************************************************************************/
 
 int						scene_name_check(char *av);
-
+double					ft_atof(char *str);
+void					atof_util(int *i, int *sign, char *str);
 t_world					*init_all_data(int fd, t_win *mlx);
 void					null_data(t_world *data);
 int						init_corresponding_data(char *file_data, t_world *data,
@@ -362,6 +410,7 @@ t_plan					*plan_lstlast(t_plan *lst);
 int						plan_lstsize(t_plan *lst);
 void					plan_lstadd_back(t_plan **lst, t_plan *new);
 void					plan_lstfree(t_plan **lst);
+void					free_plan(t_plan **plan, void *mlx);
 
 t_cone					*cone_lstlast(t_cone *lst);
 int						cone_lstsize(t_cone *lst);
@@ -372,6 +421,7 @@ t_light					*light_lstlast(t_light *lst);
 int						light_lstsize(t_light *lst);
 void					light_lstadd_back(t_light **lst, t_light *new);
 void					light_lstfree(t_light **lst);
+void					free_light(t_light **light);
 
 void					print_sphere_list(t_sphere **sphere_list);
 void					print_plan_list(t_plan **plan_list);
@@ -403,7 +453,7 @@ t_tuple					ft_normalization(t_tuple v);
 float					ft_dotproduct(t_tuple v1, t_tuple v2);
 t_tuple					cross_product(t_tuple v1, t_tuple v2);
 
-//										COLORS							    //
+//										COLORS									//
 
 t_color					ft_sum_color(t_color c1, t_color c2);
 t_color					ft_dif_color(t_color c1, t_color c2);
@@ -412,8 +462,7 @@ t_color					ft_mult_color_tog(t_color c, t_color c2);
 t_color					*ft_color(float r, float g, float b);
 t_pattern				*ft_pattern(t_color *a, t_color *b);
 t_color					*ft_stripe_at(t_pattern *pattern, t_tuple point);
-t_color					*ft_checkerboard_at(t_pattern *pattern, float u,
-							float v);
+t_color					*ft_chkr_at(t_pattern *pattern, float u, float v);
 t_material				*ft_set_pattern(t_comps *comps, int type);
 t_color					ft_color_reg(float r, float g, float b);
 
@@ -607,6 +656,8 @@ void					calculate_plane_dimensions(float **matrix, float *width,
 							float *height);
 void					destroy_t_win(t_win *win);
 t_color					define_pattern_color(t_objects type, t_tuple position,
-							void *object, t_light light);
+							void *object);
+int						init_helper(t_world *data, t_dtype type,
+							char **data_split, t_win *mlx);
 
 #endif

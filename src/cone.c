@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 12:51:28 by bainur            #+#    #+#             */
-/*   Updated: 2024/07/29 17:51:51 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/30 10:57:00 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ void	ft_cone_intersect(t_intersection **t_tab, t_cone **cone, t_ray ray,
 
 t_cone	*ft_cone(void)
 {
-	t_cone *cone;
+	t_cone	*cone;
 
 	cone = malloc(sizeof(t_cone));
 	if (!cone)

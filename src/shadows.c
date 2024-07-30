@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 10:43:44 by vk                #+#    #+#             */
-/*   Updated: 2024/07/29 17:28:10 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/30 13:41:23 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,36 +14,28 @@
 
 int	ft_is_shadowed(t_world *world, t_tuple point)
 {
-	t_tuple			v;
-	t_tuple			direction;
-	float			distance;
-	t_intersection	*intersections;
-	t_intersection	*hit;
-	t_ray			r;
-	t_light			*curr;
+	t_shadowed_norme	vars;
 
-	curr = *world->light;
-	while (curr)
+	vars.curr = *world->light;
+	while (vars.curr)
 	{
-		v = ft_dif_tuple(curr->position, point);
-		distance = ft_magnitude(v);
-		direction = ft_normalization(v);
-		r = ft_ray(point, direction);
-		intersections = ft_intersect_world(r, &world);
-		hit = ft_hit(intersections, intersections->count);
-		if (hit && hit->t < distance)
-		{
-			free(intersections);
+		vars.v = ft_dif_tuple(vars.curr->position, point);
+		vars.distance = ft_magnitude(vars.v);
+		vars.direction = ft_normalization(vars.v);
+		vars.r = ft_ray(point, vars.direction);
+		vars.intersections = ft_intersect_world(vars.r, &world);
+		if (!vars.intersections)
+			return (0);
+		vars.hit = ft_hit(vars.intersections, vars.intersections->count);
+		free(vars.intersections);
+		if (vars.hit && vars.hit->t < vars.distance)
 			return (1);
-		}
 		else
 		{
-			free(intersections);
-			if (curr->next)
-				curr = curr->next;
+			if (vars.curr->next)
+				vars.curr = vars.curr->next;
 			else
 				break ;
-			continue ;
 		}
 	}
 	return (0);

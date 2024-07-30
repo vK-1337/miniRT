@@ -29,7 +29,7 @@ LIBFT			= $(LIBFT_DIR)$(LIBFT_NAME)
 
 NAME			= MiniRT
 CC				= cc
-FLAGS			= -Wall -Werror -Wextra -g3
+FLAGS			= -Wall -Werror -Wextra -g3 -fstack-protector-all -fsanitize=undefined
 RM				= rm -f
 AR				= ar rcs
 NORM			= ./includes\
@@ -43,10 +43,10 @@ INCLUDE			= 	-I ./includes/\
 
 OBJ_DIR_F 		= obj/
 SRC_DIR_F		= src/
-SRC_FUNCTIONS_F	= main patterns textures color_calculation tuple_calculations tuple_calculations2 rays rays_2 \
-					matrix_calcul matrix_deter_cofac matrix_utils matrix_utils2 utils init \
-					parsing get_next_line get_next_line_utils light_lst cylinder_lst sphere_lst plan_lst \
-					reflections light tuple_init scene matrix_transformation matrix_transformation2\
+SRC_FUNCTIONS_F	= main atof patterns textures color_calculation color_calculation_2 tuple_calculations tuple_calculations2 tuple_calculations_3 rays rays_2 rays_3 \
+					matrix_calcul matrix_deter_cofac matrix_utils matrix_utils2 utils utils_2 init \
+					parsing parsing_2 parsing_3 parsing_4 parsing_5 get_next_line get_next_line_utils light_lst cylinder_lst sphere_lst plan_lst \
+					reflections light light2 light3 tuple_init scene matrix_transformation matrix_transformation2\
 					camera shadows plan colors cylinder cone cone_lst\
 
 FRACT_SRC		= $(addprefix $(SRC_DIR_F), $(addsuffix .c, $(SRC_FUNCTIONS_F)))

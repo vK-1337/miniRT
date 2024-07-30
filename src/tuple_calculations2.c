@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 14:07:22 by udumas            #+#    #+#             */
-/*   Updated: 2024/07/29 17:32:03 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/30 12:06:13 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,15 +59,4 @@ t_tuple	ft_normalization(t_tuple v)
 float	ft_dotproduct(t_tuple v1, t_tuple v2)
 {
 	return (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z + v1.w * v2.w);
-}
-
-t_tuple	cross_product(t_tuple v1, t_tuple v2)
-{
-	t_tuple	new;
-
-	new.w = 0;
-	new.x = v1.y * v2.z - v1.z * v2.y;
-	new.y = v1.z * v2.x - v1.x * v2.z;
-	new.z = v1.x * v2.y - v1.y * v2.x;
-	return (new);
 }

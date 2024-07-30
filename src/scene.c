@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 11:41:54 by udumas            #+#    #+#             */
-/*   Updated: 2024/07/29 17:40:39 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/30 11:58:10 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,12 @@ t_intersection	*ft_add_t(t_intersection **t_tab, t_intersection t[2],
 	int				i;
 
 	i = 0;
-	new_t_tab = malloc(sizeof(t_intersection) * (count));
+	new_t_tab = calloc(count, sizeof(t_intersection));
 	if (!new_t_tab)
 		return (NULL);
 	while (i < count - 2)
 	{
-		new_t_tab[i] = *t_tab[i];
+		new_t_tab[i] = (*t_tab)[i];
 		new_t_tab[i].status = 1;
 		i++;
 	}
@@ -95,7 +95,7 @@ t_intersection	*ft_intersect_world(t_ray ray, t_world **data)
 		cone = *(*data)->cone;
 	else
 		cone = NULL;
-	t_tab = malloc(sizeof(t_intersection));
+	t_tab = calloc(1, sizeof(t_intersection));
 	if (!t_tab)
 		return (NULL);
 	t_tab[0].status = 0;
