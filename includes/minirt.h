@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/30 17:41:37 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/30 18:13:51 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,7 +209,7 @@ typedef struct s_cone
 	float				radius;
 	float				y_max;
 	float				y_min;
-	t_material			*material;
+	t_material			*m;
 	t_color				colors;
 	float				**matrix;
 	struct s_cone		*next;
@@ -222,7 +222,7 @@ typedef struct s_plan
 	t_tuple				vector;
 	t_color				colors;
 	float				**matrix;
-	t_material			*material;
+	t_material			*m;
 	struct s_plan		*next;
 	int					type;
 }						t_plan;
@@ -335,13 +335,13 @@ typedef struct s_complete
 
 typedef struct s_norme_set_patt
 {
-    t_tuple	*object_point;
-	t_tuple	*pattern_point;
-	float	theta;
-	float	phi;
-	float	u;
-	float	v;
-}        t_norme_set_patt;
+	t_tuple				*object_point;
+	t_tuple				*pattern_point;
+	float				theta;
+	float				phi;
+	float				u;
+	float				v;
+}						t_norme_set_patt;
 
 void					print_char_tab(char **tab);
 /******************************************************************************/
@@ -685,5 +685,9 @@ void					free_win_classic(t_win *win);
 void					start_threads(t_complete *complete);
 void					setup_hooks(t_win *win, t_complete *complete);
 int						exit_window(t_complete *complete);
+t_material				*set_sphere_patt(t_comps *comps, t_norme_set_patt *v);
+t_material				*set_plan_patt(t_comps *comps, t_norme_set_patt *v);
+t_material				*set_cone_patt(t_comps *comps, t_norme_set_patt *v);
+t_material				*set_cylinder_patt(t_comps *comps, t_norme_set_patt *v);
 
 #endif

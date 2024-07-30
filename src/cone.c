@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 12:51:28 by bainur            #+#    #+#             */
-/*   Updated: 2024/07/30 16:55:26 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/30 17:53:18 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ t_cone	*ft_cone(void)
 	cone->y_max = 1;
 	cone->y_min = 0;
 	cone->matrix = identity_matrix(4);
-	cone->material = ft_material();
+	cone->m = ft_material();
 	cone->next = NULL;
 	return (cone);
 }

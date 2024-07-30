@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 07:37:15 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/30 17:41:57 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/30 17:48:20 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_color	define_pattern_color(t_objects type, t_tuple position, void *object)
 	{
 		vars.point_object = ft_mult_mat_tuple(&position,
 				ft_inversion(((t_plan *)object)->matrix, 4), SECOND);
-		vars.eff_color = *ft_stripe_at(((t_plan *)object)->material->pattern,
+		vars.eff_color = *ft_stripe_at(((t_plan *)object)->m->pattern,
 				vars.point_object);
 	}
 	else if (type == Cylinder || type == Cone)

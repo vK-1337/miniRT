@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 12:03:27 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/30 17:42:22 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/30 17:54:18 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	free_cone(t_cone **cone, void *mlx)
 	while (*cone)
 	{
 		tmp = (*cone)->next;
-		free_material((*cone)->material, mlx);
+		free_material((*cone)->m, mlx);
 		ft_free_mat((*cone)->matrix, 4);
 		free(*cone);
 		*cone = tmp;

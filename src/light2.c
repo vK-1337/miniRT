@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 12:07:14 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/30 17:37:05 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/30 17:48:45 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_color	ft_planar(t_tuple position, t_plan plan, t_light light)
 	calculate_plane_dimensions(plan.matrix, &plane_width, &plane_height);
 	point_object = ft_mult_mat_tuple(&position, ft_inversion(plan.matrix, 4),
 			SECOND);
-	planar_mapping(point_object.x, point_object.z, plan.material->texture,
+	planar_mapping(point_object.x, point_object.z, plan.m->texture,
 		&texture_color, plane_width, plane_height);
 	return (ft_mult_color_tog(texture_color, light.intensity));
 }

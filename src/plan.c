@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 19:15:10 by udumas            #+#    #+#             */
-/*   Updated: 2024/07/29 17:40:07 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/30 17:47:56 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ t_plan	*ft_plan(void)
 		return (NULL);
 	plan->coord = *ft_init_tuple(0, 0, 0, 1);
 	plan->normal = *ft_init_tuple(0, 1, 0, 0);
-	plan->material = ft_material();
+	plan->m = ft_material();
 	plan->matrix = identity_matrix(4);
 	plan->next = NULL;
 	return (plan);

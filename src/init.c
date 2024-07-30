@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/30 17:41:42 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/30 17:53:18 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -346,10 +346,10 @@ int	init_plan(t_world *data, char **data_split, t_win *mlx)
 	split = ft_split(data_split[3], ',');
 	if (!split)
 		return (free(plan), 0);
-	plan->material = ft_material();
-	plan->material->color.r = ft_atoi(split[0]) / 255.0f;
-	plan->material->color.g = ft_atoi(split[1]) / 255.0f;
-	plan->material->color.b = ft_atoi(split[2]) / 255.0f;
+	plan->m = ft_material();
+	plan->m->color.r = ft_atoi(split[0]) / 255.0f;
+	plan->m->color.g = ft_atoi(split[1]) / 255.0f;
+	plan->m->color.b = ft_atoi(split[2]) / 255.0f;
 	plan->next = NULL;
 	free_char_tab(split);
 	if (data_split[4])
@@ -359,9 +359,9 @@ int	init_plan(t_world *data, char **data_split, t_win *mlx)
 			return (free(plan), 0);
 		if (ft_strncmp(split[0], "texture", 8) == 0)
 		{
-			free(plan->material);
-			plan->material = ft_texture(split[1], mlx);
-			if (!plan->material->texture)
+			free(plan->m);
+			plan->m = ft_texture(split[1], mlx);
+			if (!plan->m->texture)
 				return (free(plan), free_char_tab(split), 0);
 		}
 		else if (ft_strncmp(split[0], "pattern", 8) == 0)
@@ -384,9 +384,9 @@ int	init_plan(t_world *data, char **data_split, t_win *mlx)
 			if (!p_color_2)
 				return (free(plan), free(p_color_1), free_char_tab(color_split),
 					0);
-			plan->material->pattern = ft_pattern(p_color_1, p_color_2);
-			plan->material->is_pattern = 1;
-			if (!plan->material->pattern)
+			plan->m->pattern = ft_pattern(p_color_1, p_color_2);
+			plan->m->is_pattern = 1;
+			if (!plan->m->pattern)
 				return (free(plan), free_char_tab(color_split), free(p_color_1),
 					free(p_color_2), 0);
 			free_char_tab(first_color);
@@ -396,8 +396,8 @@ int	init_plan(t_world *data, char **data_split, t_win *mlx)
 	}
 	if (data->alight != NULL)
 	{
-		plan->material->ambiant_color = data->alight;
-		plan->material->ambiant = data->alight_intensity;
+		plan->m->ambiant_color = data->alight;
+		plan->m->ambiant = data->alight_intensity;
 	}
 	if (!data->plan)
 	{
@@ -555,10 +555,10 @@ int	init_cone(t_world *data, char **data_split, t_win *mlx)
 	split = ft_split(data_split[5], ',');
 	if (!split)
 		return (free(cone), 0);
-	cone->material = ft_material();
-	cone->material->color.r = ft_atoi(split[0]) / 255.0f;
-	cone->material->color.g = ft_atoi(split[1]) / 255.0f;
-	cone->material->color.b = ft_atoi(split[2]) / 255.0f;
+	cone->m = ft_material();
+	cone->m->color.r = ft_atoi(split[0]) / 255.0f;
+	cone->m->color.g = ft_atoi(split[1]) / 255.0f;
+	cone->m->color.b = ft_atoi(split[2]) / 255.0f;
 	cone->next = NULL;
 	if (data_split[6])
 	{
@@ -567,8 +567,8 @@ int	init_cone(t_world *data, char **data_split, t_win *mlx)
 			return (free(cone), 0);
 		if (ft_strncmp(split[0], "texture", 8) == 0)
 		{
-			cone->material = ft_texture(split[1], mlx);
-			if (!cone->material->texture)
+			cone->m = ft_texture(split[1], mlx);
+			if (!cone->m->texture)
 				return (free(cone), free_char_tab(split), 0);
 		}
 		else if (ft_strncmp(split[0], "pattern", 8) == 0)
@@ -591,9 +591,9 @@ int	init_cone(t_world *data, char **data_split, t_win *mlx)
 			if (!p_color_2)
 				return (free(cone), free(p_color_1), free_char_tab(color_split),
 					0);
-			cone->material->pattern = ft_pattern(p_color_1, p_color_2);
-			cone->material->is_pattern = 1;
-			if (!cone->material->pattern)
+			cone->m->pattern = ft_pattern(p_color_1, p_color_2);
+			cone->m->is_pattern = 1;
+			if (!cone->m->pattern)
 				return (free(cone), free_char_tab(color_split), free(p_color_1),
 					free(p_color_2), 0);
 			free_char_tab(first_color);
@@ -604,8 +604,8 @@ int	init_cone(t_world *data, char **data_split, t_win *mlx)
 	free_char_tab(split);
 	if (data->alight != NULL)
 	{
-		cone->material->ambiant_color = data->alight;
-		cone->material->ambiant = data->alight_intensity;
+		cone->m->ambiant_color = data->alight;
+		cone->m->ambiant = data->alight_intensity;
 	}
 	if (!data->cone)
 	{

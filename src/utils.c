@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 21:45:44 by vk                #+#    #+#             */
-/*   Updated: 2024/07/30 12:03:48 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/30 17:48:37 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	free_plan(t_plan **plan, void *mlx)
 	while (*plan)
 	{
 		tmp = (*plan)->next;
-		free_material((*plan)->material, mlx);
+		free_material((*plan)->m, mlx);
 		ft_free_mat((*plan)->matrix, 4);
 		free(*plan);
 		*plan = tmp;
