@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 12:51:28 by bainur            #+#    #+#             */
-/*   Updated: 2024/07/30 17:53:18 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/30 18:35:11 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,24 +44,25 @@ void	ft_check_cone_caps(t_intersection **t_tab, t_cone **cone, t_ray ray,
 	t.t = ((*cone)->y_max - new_ray.origin.y) / new_ray.direction.y;
 	if (within_cone_radius(&new_ray, t.t, (*cone)->y_max) == 1)
 	{
-		t.cone = *cone;
-		t.sphere = NULL;
-		t.plan = NULL;
-		t.cylinder = NULL;
-		*count += 1;
+	    attribute_cone(&t, count, *cone);
 		*t_tab = ft_add_one_t(t_tab, t, *count);
 	}
 	t.t = ((*cone)->y_min - new_ray.origin.y) / new_ray.direction.y;
 	if (within_cone_radius(&new_ray, t.t, (*cone)->y_min) == 1)
 	{
-		t.cone = *cone;
-		t.sphere = NULL;
-		t.plan = NULL;
-		t.cylinder = NULL;
-		*count += 1;
+		attribute_cone(&t, count, *cone);
 		*t_tab = ft_add_one_t(t_tab, t, *count);
 	}
 	*cone = (*cone)->next;
+}
+
+void attribute_cone(t_intersection *t, int *count, t_cone *cone)
+{
+    t->cone = cone;
+    t->sphere = NULL;
+    t->plan = NULL;
+    t->cylinder = NULL;
+    *count += 1;
 }
 
 float	get_cone_discriminant(t_ray ray, float abc[3])

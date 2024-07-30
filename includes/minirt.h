@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/30 18:13:51 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/30 18:20:01 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -689,5 +689,7 @@ t_material				*set_sphere_patt(t_comps *comps, t_norme_set_patt *v);
 t_material				*set_plan_patt(t_comps *comps, t_norme_set_patt *v);
 t_material				*set_cone_patt(t_comps *comps, t_norme_set_patt *v);
 t_material				*set_cylinder_patt(t_comps *comps, t_norme_set_patt *v);
+void					attribute_cone(t_intersection *t, int *count,
+							t_cone *cone);
 
 #endif
