@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 12:07:14 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/31 10:04:10 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/31 10:09:19 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,14 @@
 
 t_color	ft_planar(t_tuple position, t_plan plan, t_light light)
 {
-	t_tuple	point_object;
-	t_color	texture_color;
-	t_norme_planar_mapping v;
+	t_tuple					point_object;
+	t_color					texture_color;
+	t_norme_planar_mapping	v;
 
 	calculate_plane_dimensions(plan.matrix, &v.plane_width, &v.plane_height);
 	point_object = ft_mult_mat_tuple(&position, ft_inversion(plan.matrix, 4),
 			SECOND);
-	planar_mapping(point_object, plan.m->texture,
-		&texture_color, v);
+	planar_mapping(point_object, plan.m->texture, &texture_color, v);
 	return (ft_mult_color_tog(texture_color, light.intensity));
 }
 
@@ -33,8 +32,7 @@ t_color	ft_cylindrical(t_tuple position, t_cylinder cylinder, t_light light)
 
 	point_object = ft_normalization(ft_mult_mat_tuple(&position,
 				ft_inversion(cylinder.matrix, 4), SECOND));
-	cylindrical_mapping(point_object,
-		cylinder.m->texture, &texture_color);
+	cylindrical_mapping(point_object, cylinder.m->texture, &texture_color);
 	return (ft_mult_color_tog(texture_color, light.intensity));
 }
 

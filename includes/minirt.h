@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/31 10:03:12 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/31 11:09:33 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -386,8 +386,8 @@ typedef struct s_norme_submat2
 
 typedef struct s_norme_planar_mapping
 {
-    float				plane_width;
-    float				plane_height;
+	float				plane_width;
+	float				plane_height;
 }						t_norme_planar_mapping;
 
 void					print_char_tab(char **tab);
@@ -698,8 +698,8 @@ t_material				*ft_texture(char *path, void *mlx);
 int						ft_texture_color_to_int(t_color color);
 void					cylindrical_mapping(t_tuple point_object,
 							t_image *image, t_color *color);
-void	planar_mapping(t_tuple point_object, t_image *image, t_color *color,
-		t_norme_planar_mapping v);
+void					planar_mapping(t_tuple point_object, t_image *image,
+							t_color *color, t_norme_planar_mapping v);
 void					spherical_mapping(t_tuple point, t_image *image,
 							t_color *color);
 void					get_interpolated_color(float u, float v, t_image *image,
@@ -748,5 +748,8 @@ t_material				*set_cone_patt(t_comps *comps, t_norme_set_patt *v);
 t_material				*set_cylinder_patt(t_comps *comps, t_norme_set_patt *v);
 void					attribute_cone(t_intersection *t, int *count,
 							t_cone *cone);
+float					distance(t_tuple a, t_tuple b);
+void					ft_sphere_comps(t_comps *comps, t_sphere *sphere);
+t_comps					ft_null_comps(void);
 
 #endif

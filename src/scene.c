@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 11:41:54 by udumas            #+#    #+#             */
-/*   Updated: 2024/07/30 11:58:10 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/31 11:09:18 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,28 +117,12 @@ t_comps	ft_prepare_computations(t_intersection *i, t_ray ray)
 	t_comps	comps;
 
 	if (i == NULL)
-	{
-		comps.t = 0;
-		comps.sphere = NULL;
-		comps.plan = NULL;
-		comps.point = (t_tuple){0, 0, 0, 0};
-		comps.eyev = (t_tuple){0, 0, 0, 0};
-		comps.normalv = (t_tuple){0, 0, 0, 0};
-		comps.over_point = (t_tuple){0, 0, 0, 0};
-		comps.inside = 0;
-		return (comps);
-	}
+		return (ft_null_comps());
 	comps.t = i[0].t;
 	comps.eyev = ft_neg_tuple(ray.direction);
 	comps.point = ft_position(ray, comps.t);
 	if (i[0].sphere != NULL)
-	{
-		comps.sphere = i[0].sphere;
-		comps.plan = NULL;
-		comps.cylinder = NULL;
-		comps.cone = NULL;
-		comps.type = SPHERE;
-	}
+		ft_sphere_comps(&comps, i[0].sphere);
 	else if (i[0].plan != NULL)
 	{
 		comps.plan = i[0].plan;
@@ -170,12 +154,34 @@ t_comps	ft_prepare_computations(t_intersection *i, t_ray ray)
 		comps.normalv = ft_neg_tuple(comps.normalv);
 	}
 	else
-	{
 		comps.inside = 0;
-	}
 	comps.over_point = ft_sum_tuple(comps.point, ft_mult_vector(comps.normalv,
 				EPSILON));
 	return (comps);
+}
+
+t_comps ft_null_comps(void)
+{
+    t_comps comps;
+
+    comps.t = 0;
+    comps.sphere = NULL;
+    comps.plan = NULL;
+    comps.point = (t_tuple){0, 0, 0, 0};
+    comps.eyev = (t_tuple){0, 0, 0, 0};
+    comps.normalv = (t_tuple){0, 0, 0, 0};
+    comps.over_point = (t_tuple){0, 0, 0, 0};
+    comps.inside = 0;
+    return (comps);
+}
+
+void ft_sphere_comps(t_comps *comps, t_sphere *sphere)
+{
+    comps->sphere = sphere;
+    comps->plan = NULL;
+    comps->cylinder = NULL;
+    comps->cone = NULL;
+    comps->type = SPHERE;
 }
 
 t_color	ft_shade_hit(t_world *data, t_comps *comps)
