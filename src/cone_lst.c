@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cone_lst.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 14:16:39 by udumas            #+#    #+#             */
-/*   Updated: 2024/07/04 14:17:34 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/29 17:25:16 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,18 +55,17 @@ void	cone_lstadd_back(t_cone **lst, t_cone *new)
 		*lst = new;
 }
 
-void cone_lstfree(t_cone **lst)
+void	cone_lstfree(t_cone **lst)
 {
-  t_cone	*tmp;
+	t_cone	*tmp;
 
-  if (!lst)
-    return ;
-  while (*lst)
-  {
-    tmp = (*lst)->next;
-    free(*lst);
-    *lst = tmp;
-  }
-  free(lst);
+	if (!lst)
+		return ;
+	while (*lst)
+	{
+		tmp = (*lst)->next;
+		free(*lst);
+		*lst = tmp;
+	}
+	free(lst);
 }
-

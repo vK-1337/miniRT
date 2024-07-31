@@ -3,29 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   sphere_lst.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 12:12:03 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/05/30 15:48:20 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/29 17:28:12 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
-#include "../includes/minirt.h"
 
-void sphere_lstfree(t_sphere **lst)
+void	sphere_lstfree(t_sphere **lst)
 {
-  t_sphere	*tmp;
+	t_sphere	*tmp;
 
-  if (!lst)
-    return ;
-  while (*lst)
-  {
-    tmp = (*lst)->next;
-    free(*lst);
-    *lst = tmp;
-  }
-  free(lst);
+	if (!lst)
+		return ;
+	while (*lst)
+	{
+		tmp = (*lst)->next;
+		free(*lst);
+		*lst = tmp;
+	}
+	free(lst);
 }
 
 t_sphere	*sphere_lstlast(t_sphere *lst)

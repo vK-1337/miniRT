@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   matrix_deter_cofac.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 15:13:02 by udumas            #+#    #+#             */
-/*   Updated: 2024/07/12 11:07:49 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/29 17:41:33 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,14 @@ float	ft_deter2_2(float **mat)
 float	ft_determinant3_3(float **mat)
 {
 	float	det;
-	
+
 	det = mat[0][0] * ((mat[1][1] * mat[2][2]) - (mat[2][1] * mat[1][2]))
 		- mat[0][1] * ((mat[1][0] * mat[2][2]) - (mat[2][0] * mat[1][2]))
 		+ mat[0][2] * ((mat[1][0] * mat[2][1]) - (mat[2][0] * mat[1][1]));
 	return (det);
 }
 
-float ft_cofactorinversion(float **mat, int row, int col)
+float	ft_cofactorinversion(float **mat, int row, int col)
 {
 	float	determinant;
 	float	cofactor;
@@ -45,15 +45,14 @@ float ft_cofactorinversion(float **mat, int row, int col)
 
 float	ft_determinant4_4(float **matrice)
 {
-	float det;
-	float sign;
-	int i;
-	float **mat;
-	
+	float	det;
+	float	sign;
+	int		i;
+	float	**mat;
+
 	det = 0;
 	sign = 1;
 	i = 0;
-	
 	while (i < 4)
 	{
 		mat = ft_submat(matrice, 4, 0, i);

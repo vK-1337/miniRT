@@ -1,0 +1,13 @@
+A 0.1 255,255,255
+
+C 0,0,-60 0,1,0.5 45
+
+L 0,0,-25 1.0 255,255,255
+
+sp 10.0,0.0,0 10.0 10,0,255 texture:textures/desert_rocky_n.xpm
+
+sp 0.0,10.0,0 10.0 10,0,255 texture:textures/fire_0000.xpm
+
+sp 0.0,-10.0,0 10.0 10,0,255 texture:textures/wood.xpm
+
+sp -10.0,0.0,0 10.0 10,0,255 texture:textures/461223103.xpm

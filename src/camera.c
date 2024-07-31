@@ -3,40 +3,47 @@
 /*                                                        :::      ::::::::   */
 /*   camera.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: udumas <udumas@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 14:30:46 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/16 16:49:59 by udumas           ###   ########.fr       */
+/*   Updated: 2024/07/30 14:34:35 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
 
-void *render(void *thread_)
+void	*render(void *thread_)
 {
-	t_thread *thread = thread_;
-	t_camera *camera = thread->data->camera;
-	t_win *win = thread->win;
-	t_world *data = thread->data;
+	t_render_norme	vars;
 
-	for (int y = thread->start_y; y < thread->end_y; y++)
+	vars.thread = (t_thread *)thread_;
+	vars.camera = vars.thread->data->camera;
+	vars.win = vars.thread->win;
+	vars.data = vars.thread->data;
+	vars.y = vars.thread->start_y;
+	while (vars.y < vars.thread->end_y)
 	{
-		for (int x = thread->start_x; x < thread->end_x; x++)
+		vars.x = vars.thread->start_x - 1;
+		while (++vars.x < vars.thread->end_x)
 		{
-			t_ray ray = ray_for_pixel(camera, x, y);
-			t_color color = ft_color_at(data, ray);
-			unsigned int color_int = color_to_int(color); // Convert color to int
-			pthread_mutex_lock(data->pixel_put);
-			put_pixel(win, x, y, color_int);
-			pthread_mutex_unlock(data->pixel_put);
+			vars.ray = ray_for_pixel(vars.camera, vars.x, vars.y);
+			vars.color = ft_color_at(vars.data, vars.ray);
+			if (vars.color.text_color == 1)
+				vars.color_int = ft_texture_color_to_int(vars.color);
+			else
+				vars.color_int = color_to_int(vars.color);
+			pthread_mutex_lock(vars.data->pixel_put);
+			put_pixel(vars.win, vars.x, vars.y, vars.color_int);
+			pthread_mutex_unlock(vars.data->pixel_put);
 		}
+		vars.y++;
 	}
 	return (NULL);
 }
 
-t_camera *ft_new_camera(float hsize, float vsize, double fov)
+t_camera	*ft_new_camera(float hsize, float vsize, double fov)
 {
-	t_camera *camera;
+	t_camera	*camera;
 
 	camera = malloc(sizeof(t_camera));
 	camera->hsize = hsize;
@@ -46,10 +53,10 @@ t_camera *ft_new_camera(float hsize, float vsize, double fov)
 	return (camera);
 }
 
-float compute_pixel_size(t_camera *camera)
+float	compute_pixel_size(t_camera *camera)
 {
-	double half_view;
-	double aspect;
+	double	half_view;
+	double	aspect;
 
 	half_view = tan(camera->fov / 2);
 	aspect = camera->hsize / camera->vsize;
@@ -66,25 +73,20 @@ float compute_pixel_size(t_camera *camera)
 	return ((camera->half_width * 2) / camera->hsize);
 }
 
-t_ray ray_for_pixel(t_camera *camera, int px, int py)
+t_ray	ray_for_pixel(t_camera *camera, int px, int py)
 {
-	double xoffset;
-	double yoffset;
-	double world_x;
-	double world_y;
-	t_tuple pixel;
-	t_tuple origin;
-	t_tuple direction;
-	t_tuple *tmp_comput;
+	t_ray_norme	ray;
 
-	xoffset = (px + 0.5) * camera->pixel_size;
-	yoffset = (py + 0.5) * camera->pixel_size;
-	world_x = camera->half_width - xoffset;
-	world_y = camera->half_height - yoffset;
-	tmp_comput = ft_init_tuple(world_x, world_y, -1, 1);
-	pixel = ft_mult_mat_tuple(tmp_comput, ft_inversion(camera->matrix, 4), ALL);
-	tmp_comput = ft_init_tuple(0, 0, 0, 1);
-	origin = ft_mult_mat_tuple(tmp_comput, ft_inversion(camera->matrix, 4), ALL);
-	direction = ft_normalization(ft_dif_tuple(pixel, origin));
-	return (ft_ray(origin, direction));
+	ray.xoffset = (px + 0.5) * camera->pixel_size;
+	ray.yoffset = (py + 0.5) * camera->pixel_size;
+	ray.world_x = camera->half_width - ray.xoffset;
+	ray.world_y = camera->half_height - ray.yoffset;
+	ray.tmp_comput = ft_init_tuple(ray.world_x, ray.world_y, -1, 1);
+	ray.pixel = ft_mult_mat_tuple(ray.tmp_comput, ft_inversion(camera->matrix,
+				4), ALL);
+	ray.tmp_comput = ft_init_tuple(0, 0, 0, 1);
+	ray.origin = ft_mult_mat_tuple(ray.tmp_comput, ft_inversion(camera->matrix,
+				4), ALL);
+	ray.direction = ft_normalization(ft_dif_tuple(ray.pixel, ray.origin));
+	return (ft_ray(ray.origin, ray.direction));
 }

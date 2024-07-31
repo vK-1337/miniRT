@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cylindre_lst.c                                     :+:      :+:    :+:   */
+/*   cylinder_lst.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bainur <bainur@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 12:11:43 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/06/05 19:31:33 by bainur           ###   ########.fr       */
+/*   Updated: 2024/07/29 17:45:02 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,18 +55,17 @@ void	cylinder_lstadd_back(t_cylinder **lst, t_cylinder *new)
 		*lst = new;
 }
 
-void cylinder_lstfree(t_cylinder **lst)
+void	cylinder_lstfree(t_cylinder **lst)
 {
-  t_cylinder	*tmp;
+	t_cylinder	*tmp;
 
-  if (!lst)
-    return ;
-  while (*lst)
-  {
-    tmp = (*lst)->next;
-    free(*lst);
-    *lst = tmp;
-  }
-  free(lst);
+	if (!lst)
+		return ;
+	while (*lst)
+	{
+		tmp = (*lst)->next;
+		free(*lst);
+		*lst = tmp;
+	}
+	free(lst);
 }
-
