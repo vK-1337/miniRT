@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/31 13:21:18 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/31 16:07:07 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,6 +178,7 @@ typedef struct s_material
 	int					is_texture;
 	t_image				*texture;
 	int					is_pattern;
+	t_objects			type;
 }						t_material;
 
 typedef struct s_sphere
@@ -252,6 +253,7 @@ typedef struct s_comps
 	t_tuple				normalv;
 	t_tuple				over_point;
 	int					inside;
+	int					in_shadow;
 }						t_comps;
 
 typedef struct s_intersection
@@ -399,6 +401,30 @@ typedef struct s_norme_intersect_world
 	t_cylinder			*cylinder;
 	t_cone				*cone;
 }						t_norme_intersect_world;
+
+typedef struct s_norme_sphere_intersect
+{
+	t_intersection		t[2];
+	t_discriminant		dis;
+	t_ray				new_ray;
+}						t_norme_sphere_intersect;
+
+typedef struct s_norme_lighting
+{
+	t_color				eff;
+	t_tuple				lightv;
+	t_color				diffuse;
+	t_color				specular;
+	t_tuple				reflectv;
+	t_color				ambiant;
+	float				factor;
+	float				reflect_dot_eye;
+	float				light_dot_normal;
+	int					is_textured;
+	t_color				final_color;
+	t_tuple				normalv;
+	t_tuple				eyev;
+}						t_norme_lighting;
 
 void					print_char_tab(char **tab);
 /******************************************************************************/
@@ -623,8 +649,7 @@ void					ft_point_light2(t_light *light, t_tuple position,
 							t_color intensity);
 
 t_color					ft_lighting(t_material *m, t_light light,
-							t_tuple position, t_tuple eyev, t_tuple normalv,
-							int in_shadow, void *object, t_objects type);
+							t_comps *comps, void *object);
 void					color_black(t_color *color);
 t_tuple					ft_normal_at(t_comps comps, t_tuple world_point);
 unsigned int			color_to_int(t_color color);
@@ -716,7 +741,7 @@ void					get_interpolated_color(float u, float v, t_image *image,
 							t_color *color);
 uint8_t					*get_pixel(t_image *image, int x, int y);
 t_image					*load_xpm_image(void *mlx_ptr, const char *file_path);
-t_color					define_effective_color(t_objects type, t_tuple position,
+t_color					define_eff_color(t_objects type, t_tuple position,
 							void *object, t_light light);
 t_color					ft_spherical(t_tuple position, t_sphere sphere,
 							t_light light);
@@ -744,9 +769,6 @@ t_tuple					calculate_cone_normal(t_comps object,
 							t_tuple world_point, float ***attr_mat);
 void					thread_attribution(t_thread *thread,
 							t_complete *complete);
-void					cone_inter_util(t_intersection *t,
-							t_intersection **t_tab, t_cone **cone, int *count,
-							float abc[3]);
 void					destroy_t_win(t_win *win);
 void					free_win_classic(t_win *win);
 void					start_threads(t_complete *complete);
@@ -767,5 +789,15 @@ void					ft_plan_comps(t_comps *comps, t_plan *plan);
 int						prepare_all_data(t_norme_intersect_world *v);
 void					define_tmp_color(t_color *tmp_color, t_comps *comps,
 							t_light *light, int in_shadow);
+void					ft_lighting_helper(t_norme_lighting *v, t_light light,
+							int in_shadow, t_material *m);
+void					ft_lighting_helper2(t_norme_lighting *v, t_tuple eyev,
+							t_tuple normalv);
+void					ft_init_light_pos(t_light *light, char **split);
+void					ft_init_light_intensity(t_light *light, char **split,
+							float intensity);
+t_light					*ft_init_light(void);
+int						ft_init_all_light_values(char **data_split,
+							t_light *light);
 
 #endif

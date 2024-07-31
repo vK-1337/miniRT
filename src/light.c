@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 18:04:20 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/30 14:37:58 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/31 14:58:55 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,81 +48,38 @@ t_material	*ft_material(void)
 	return (material);
 }
 
-t_color	ft_lighting(t_material *m, t_light light, t_tuple position,
-		t_tuple eyev, t_tuple normalv, int in_shadow, void *object,
-		t_objects type)
+t_color	ft_lighting(t_material *m, t_light light, t_comps *comps, void *object)
 {
-	t_color	effective_color;
-	t_tuple	lightv;
-	t_color	diffuse;
-	t_color	specular;
-	t_tuple	reflectv;
-	t_color	ambiant;
-	float	factor;
-	float	reflect_dot_eye;
-	float	light_dot_normal;
-	int		is_textured;
-	t_color	final_color;
+	t_norme_lighting	v;
 
-	if (type && type != 0 && (m->is_texture || m->is_pattern))
+	ft_lighting_helper2(&v, comps->eyev, comps->normalv);
+	if (m->type && m->type != 0 && (m->is_texture || m->is_pattern))
 	{
-		is_textured = 1;
+		v.is_textured = 1;
 		if (m->is_texture)
-			effective_color = define_effective_color(type, position, object,
-					light);
+			v.eff = define_eff_color(m->type, comps->over_point, object, light);
 		else
-			effective_color = define_pattern_color(type, position, object);
+			v.eff = define_pattern_color(m->type, comps->over_point, object);
 	}
 	else
-	{
-		is_textured = 0;
-		effective_color = ft_mult_color_tog(m->color, light.intensity);
-	}
-	lightv = ft_normalization(ft_dif_tuple(light.position, position));
-	ambiant = ft_mult_color(effective_color, m->ambiant);
-	light_dot_normal = ft_dotproduct(lightv, normalv);
-	if (light_dot_normal < 0 || in_shadow)
-	{
-		color_black(&diffuse);
-		color_black(&specular);
-	}
+		v.eff = ft_mult_color_tog(m->color, light.intensity);
+	v.lightv = ft_normalization(ft_dif_tuple(light.position,
+				comps->over_point));
+	v.ambiant = ft_mult_color(v.eff, m->ambiant);
+	v.light_dot_normal = ft_dotproduct(v.lightv, comps->normalv);
+	ft_lighting_helper(&v, light, comps->in_shadow, m);
+	v.final_color = ft_sum_color(ft_sum_color(ft_sum_color(v.ambiant,
+					v.diffuse), v.specular), *m->ambiant_color);
+	if (v.is_textured)
+		v.final_color.text_color = 1;
 	else
-	{
-		diffuse = ft_mult_color(effective_color, m->diffuse);
-		diffuse = ft_mult_color(diffuse, light_dot_normal);
-		reflectv = ft_reflect(ft_neg_tuple(lightv), normalv);
-		reflect_dot_eye = ft_dotproduct(reflectv, eyev);
-		if (reflect_dot_eye <= 0)
-			color_black(&specular);
-		else
-		{
-			factor = pow(reflect_dot_eye, m->shininess);
-			specular = ft_mult_color(light.intensity, m->specular);
-			specular = ft_mult_color(specular, factor);
-		}
-	}
-	final_color = ft_sum_color(ft_sum_color(ft_sum_color(ambiant, diffuse),
-				specular), *m->ambiant_color);
-	if (is_textured)
-		final_color.text_color = 1;
-	else
-		final_color.text_color = 0;
-	return (final_color);
+		v.final_color.text_color = 0;
+	return (v.final_color);
 }
 
-t_color	define_effective_color(t_objects type, t_tuple position, void *object,
-		t_light light)
+void	ft_lighting_helper2(t_norme_lighting *v, t_tuple eyev, t_tuple normalv)
 {
-	t_color	effective_color;
-
-	if (type == Sphere)
-		effective_color = ft_spherical(position, *(t_sphere *)object, light);
-	else if (type == Plan)
-		effective_color = ft_planar(position, *(t_plan *)object, light);
-	else if (type == Cylinder || type == Cone)
-		effective_color = ft_cylindrical(position, *(t_cylinder *)object,
-				light);
-	else
-		effective_color = *(ft_color(1, 1, 1));
-	return (effective_color);
+	v->eyev = eyev;
+	v->normalv = normalv;
+	v->is_textured = 0;
 }

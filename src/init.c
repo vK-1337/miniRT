@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/30 17:53:18 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/31 16:07:19 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,7 @@ t_world	*init_all_data(int fd, t_win *mlx)
 		if (file_data && file_data[0] == '\n')
 			continue ;
 		if (init_corresponding_data(file_data, data, mlx) == 2)
-		{
 			return (get_next_line(fd, 1), free(file_data), NULL);
-		}
 	}
 	return (data);
 }
@@ -165,11 +163,26 @@ int	init_camera(t_world *data, char **data_split)
 	return (1);
 }
 
-int	init_light(t_world *data, char **data_split)
+int	ft_init_all_light_values(char **data_split, t_light *light)
 {
 	char	**split;
-	t_light	*light;
 	float	intensity;
+
+	split = ft_split(data_split[1], ',');
+	if (!split)
+		return (free(light), 0);
+	ft_init_light_pos(light, split);
+	intensity = ft_atof(data_split[2]);
+	split = ft_split(data_split[3], ',');
+	if (!split)
+		return (free(light), 0);
+	ft_init_light_intensity(light, split, intensity);
+	return (1);
+}
+
+t_light	*ft_init_light(void)
+{
+	t_light	*light;
 
 	light = malloc(sizeof(t_light));
 	if (!light)
@@ -178,24 +191,37 @@ int	init_light(t_world *data, char **data_split)
 	light->position = (t_tuple){0, 0, 0, 1};
 	light->intensity = (t_color){0, 0, 0, 0};
 	light->colors = (t_color){0, 0, 0, 0};
-	split = ft_split(data_split[1], ',');
-	if (!split)
-		return (free(light), 0);
+	return (light);
+}
+
+void	ft_init_light_pos(t_light *light, char **split)
+{
 	light->position.x = ft_atof(split[0]);
 	light->position.y = ft_atof(split[1]);
 	light->position.z = ft_atof(split[2]);
 	light->position.w = 1;
 	free_char_tab(split);
-	intensity = ft_atof(data_split[2]);
-	split = ft_split(data_split[3], ',');
-	if (!split)
-		return (free(light), 0);
+}
+
+void	ft_init_light_intensity(t_light *light, char **split, float intensity)
+{
 	light->intensity.r = ft_atoi(split[0]) / 255.0f * intensity;
 	light->intensity.g = ft_atoi(split[1]) / 255.0f * intensity;
 	light->intensity.b = ft_atoi(split[2]) / 255.0f * intensity;
 	light->colors = ft_color_reg(light->intensity.r, light->intensity.g,
 			light->intensity.b);
 	free_char_tab(split);
+}
+
+int	init_light(t_world *data, char **data_split)
+{
+	t_light	*light;
+
+	light = ft_init_light();
+	if (!light)
+		return (0);
+	if (!ft_init_all_light_values(data_split, light))
+		return (0);
 	light->next = NULL;
 	if (!data->light)
 	{
@@ -207,6 +233,14 @@ int	init_light(t_world *data, char **data_split)
 	else
 		light_lstadd_back(data->light, light);
 	return (1);
+}
+
+void	init_m_color(t_material *m, char **split)
+{
+	m->color.r = ft_atoi(split[0]) / 255.0f;
+	m->color.g = ft_atoi(split[1]) / 255.0f;
+	m->color.b = ft_atoi(split[2]) / 255.0f;
+	free_char_tab(split);
 }
 
 int	init_sphere(t_world *data, char **data_split, t_win *mlx)
@@ -239,10 +273,7 @@ int	init_sphere(t_world *data, char **data_split, t_win *mlx)
 	if (!sphere->m)
 		return (free_char_tab(split), ft_free_mat(sphere->matrix, 4),
 			free(sphere), 0);
-	sphere->m->color.r = ft_atoi(split[0]) / 255.0f;
-	sphere->m->color.g = ft_atoi(split[1]) / 255.0f;
-	sphere->m->color.b = ft_atoi(split[2]) / 255.0f;
-	free_char_tab(split);
+	init_m_color(sphere->m, split);
 	if (data_split[4])
 	{
 		split = ft_split(data_split[4], ':');
@@ -289,6 +320,7 @@ int	init_sphere(t_world *data, char **data_split, t_win *mlx)
 		}
 		free_char_tab(split);
 	}
+	sphere->m->type = Sphere;
 	if (data->alight != NULL)
 	{
 		sphere->m->ambiant_color = data->alight;
@@ -347,11 +379,10 @@ int	init_plan(t_world *data, char **data_split, t_win *mlx)
 	if (!split)
 		return (free(plan), 0);
 	plan->m = ft_material();
-	plan->m->color.r = ft_atoi(split[0]) / 255.0f;
-	plan->m->color.g = ft_atoi(split[1]) / 255.0f;
-	plan->m->color.b = ft_atoi(split[2]) / 255.0f;
+	if (!plan->m)
+		return (free(plan), free_char_tab(split), 0);
+	init_m_color(plan->m, split);
 	plan->next = NULL;
-	free_char_tab(split);
 	if (data_split[4])
 	{
 		split = ft_split(data_split[4], ':');
@@ -394,6 +425,7 @@ int	init_plan(t_world *data, char **data_split, t_win *mlx)
 		}
 		free_char_tab(split);
 	}
+	plan->m->type = Plan;
 	if (data->alight != NULL)
 	{
 		plan->m->ambiant_color = data->alight;
@@ -449,11 +481,10 @@ int	init_cylinder(t_world *data, char **data_split, t_win *mlx)
 	if (!split)
 		return (free(cylinder), 0);
 	cylinder->m = ft_material();
-	cylinder->m->color.r = ft_atoi(split[0]) / 255.0f;
-	cylinder->m->color.g = ft_atoi(split[1]) / 255.0f;
-	cylinder->m->color.b = ft_atoi(split[2]) / 255.0f;
+	if (!cylinder->m)
+		return (free(cylinder), free_char_tab(split), 0);
+	init_m_color(cylinder->m, split);
 	cylinder->next = NULL;
-	free_char_tab(split);
 	if (data->alight != NULL)
 	{
 		cylinder->m->ambiant_color = data->alight;
@@ -501,6 +532,7 @@ int	init_cylinder(t_world *data, char **data_split, t_win *mlx)
 		}
 		free_char_tab(split);
 	}
+	cylinder->m->type = Cylinder;
 	if (data->alight != NULL)
 	{
 		cylinder->m->ambiant_color = data->alight;
@@ -556,9 +588,9 @@ int	init_cone(t_world *data, char **data_split, t_win *mlx)
 	if (!split)
 		return (free(cone), 0);
 	cone->m = ft_material();
-	cone->m->color.r = ft_atoi(split[0]) / 255.0f;
-	cone->m->color.g = ft_atoi(split[1]) / 255.0f;
-	cone->m->color.b = ft_atoi(split[2]) / 255.0f;
+	if (!cone->m)
+		return (free(cone), free_char_tab(split), 0);
+	init_m_color(cone->m, split);
 	cone->next = NULL;
 	if (data_split[6])
 	{
@@ -602,6 +634,7 @@ int	init_cone(t_world *data, char **data_split, t_win *mlx)
 		free_char_tab(split);
 	}
 	free_char_tab(split);
+	cone->m->type = Cone;
 	if (data->alight != NULL)
 	{
 		cone->m->ambiant_color = data->alight;

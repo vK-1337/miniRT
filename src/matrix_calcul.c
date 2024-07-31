@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 12:08:49 by udumas            #+#    #+#             */
-/*   Updated: 2024/07/29 17:25:48 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/31 13:35:21 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,10 @@ float	**ft_mult_mat(float **mat1, float **mat2, int free_data)
 	}
 	if (free_data == FIRST)
 		ft_free_mat(mat1, 4);
-	if (free_data == SECOND)
+	else if (free_data == SECOND)
 		ft_free_mat(mat2, 4);
-	if (free_data == ALL)
-	{
-		ft_free_mat(mat1, 4);
-		ft_free_mat(mat2, 4);
-	}
+	else if (free_data == ALL)
+		return (ft_free_mat(mat1, 4), ft_free_mat(mat2, 4), res);
 	return (res);
 }
 
