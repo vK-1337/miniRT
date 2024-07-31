@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 21:45:44 by vk                #+#    #+#             */
-/*   Updated: 2024/07/30 17:48:37 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/31 19:36:03 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ void	free_plan(t_plan **plan, void *mlx)
 
 void	free_material(t_material *material, void *mlx)
 {
+	if (!material)
+		return ;
 	if (material->pattern)
 	{
 		free(material->pattern->a);

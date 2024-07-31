@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/31 16:07:07 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/31 20:00:23 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -426,6 +426,15 @@ typedef struct s_norme_lighting
 	t_tuple				eyev;
 }						t_norme_lighting;
 
+typedef struct s_norme_init_pattern
+{
+	char				**col_split;
+	char				**first_color;
+	char				**second_color;
+	t_color				*p_color_1;
+	t_color				*p_color_2;
+}						t_norme_init_pattern;
+
 void					print_char_tab(char **tab);
 /******************************************************************************/
 /*                                                                            */
@@ -799,5 +808,13 @@ void					ft_init_light_intensity(t_light *light, char **split,
 t_light					*ft_init_light(void);
 int						ft_init_all_light_values(char **data_split,
 							t_light *light);
-
+int						ft_init_sphere_pattern(char **split, t_sphere *sphere);
+int						ft_init_text_or_patt_sphere(char **data_split,
+							t_sphere *sphere, t_win *mlx);
+void					free_sphere(t_sphere **sphere, void *mlx);
+int						ft_init_sphere_helper(char **data_split,
+							t_sphere *sphere, t_win *mlx);
+int						add_sphere_to_lst(t_world *data, t_sphere *sphere);
+int						ft_init_cylinder_helper(char **data_split,
+							t_cylinder *cylinder, int y);
 #endif
