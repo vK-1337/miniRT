@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:01:11 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/30 16:13:38 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/31 10:05:50 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,7 @@ void	get_interpolated_color(float u, float v, t_image *image, t_color *color)
 	color->b = pixel[0];
 }
 
-void	spherical_mapping(t_tuple point, t_image *image,
-		t_color *color)
+void	spherical_mapping(t_tuple point, t_image *image, t_color *color)
 {
 	float	theta;
 	float	phi;
@@ -77,10 +76,10 @@ float	distance(t_tuple a, t_tuple b)
 void	calculate_plane_dimensions(float **matrix, float *width, float *height)
 {
 	t_tuple	transformed_corners[4];
-	t_tuple	corners[4] = {{-1, 0, -1, 1}, {1, 0, -1, 1}, {1, 0, 1, 1}, {-1, 0,
-			1, 1}};
+	t_tuple	corners[4];
 	int		i;
 
+	initialize_corners(corners);
 	i = 0;
 	while (i < 4)
 	{
@@ -92,16 +91,24 @@ void	calculate_plane_dimensions(float **matrix, float *width, float *height)
 	*height = distance(transformed_corners[1], transformed_corners[2]);
 }
 
-void	planar_mapping(float x, float y, t_image *image, t_color *color,
-		float plane_width, float plane_height)
+void	initialize_corners(t_tuple corners[4])
+{
+	corners[0] = (t_tuple){-1, 0, -1, 1};
+	corners[1] = (t_tuple){1, 0, -1, 1};
+	corners[2] = (t_tuple){1, 0, 1, 1};
+	corners[3] = (t_tuple){-1, 0, 1, 1};
+}
+
+void	planar_mapping(t_tuple point_object, t_image *image, t_color *color,
+		t_norme_planar_mapping v_i)
 {
 	float	scale_u;
 	float	u;
 	float	v;
 
 	scale_u = 140.0f;
-	u = x / (plane_width * scale_u);
-	v = y / (plane_height * scale_u);
+	u = point_object.x / (v_i.plane_width * scale_u);
+	v = point_object.z / (v_i.plane_height * scale_u);
 	u = fmodf(u, 1.0f);
 	v = fmodf(v, 1.0f);
 	if (u < 0)
@@ -111,14 +118,14 @@ void	planar_mapping(float x, float y, t_image *image, t_color *color,
 	get_interpolated_color(u, v, image, color);
 }
 
-void	cylindrical_mapping(float x, float y, float z, t_image *image,
+void	cylindrical_mapping(t_tuple point_object, t_image *image,
 		t_color *color)
 {
 	float	u;
 	float	v;
 
-	u = (atan2f(z, x) / (2 * M_PI)) + 0.5f;
-	v = y + 0.5f;
+	u = (atan2f(point_object.z, point_object.x) / (2 * M_PI)) + 0.5f;
+	v = point_object.y + 0.5f;
 	get_interpolated_color(u, v, image, color);
 }
 

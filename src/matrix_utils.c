@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 15:10:22 by udumas            #+#    #+#             */
-/*   Updated: 2024/07/29 17:46:46 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/31 09:50:40 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,39 +81,51 @@ float	**ft_create_mat_null(int row_col)
 
 float	**ft_submat(float **matrice, int row_col, int row, int col)
 {
-	float	**new_mat;
-	int		i;
-	int		j;
-	int		k;
-	int		l;
+	float			**new_mat;
+	t_norme_submat	v;
 
-	i = -1;
-	k = 0;
-	l = 0;
+	v.i = -1;
+	v.k = 0;
+	v.l = 0;
+	v.row = row;
+	v.col = col;
 	if (matrice == NULL)
 		return (NULL);
 	new_mat = malloc(sizeof(float *) * (row_col - 1));
 	if (!new_mat)
 		return (printf("Erreur malloc\n"), NULL);
-	while (++i < row_col - 1)
+	while (++v.i < row_col - 1)
 	{
-		new_mat[i] = malloc(sizeof(float) * (row_col - 1));
-		if (!new_mat[i])
+		new_mat[v.i] = malloc(sizeof(float) * (row_col - 1));
+		if (!new_mat[v.i])
 			return (printf("Erreur malloc\n"), NULL);
 	}
+	submat_helper(new_mat, matrice, row_col, v);
+	return (new_mat);
+}
+
+void	submat_helper(float **new_mat, float **matrice, int row_col,
+		t_norme_submat v)
+{
+	int	i;
+	int	j;
+	int	k;
+	int	l;
+
 	i = -1;
+	k = 0;
+	l = 0;
 	while (++i < row_col)
 	{
-		if (i == row)
+		if (i == v.row)
 			continue ;
 		j = -1;
 		l = 0;
 		while (++j < row_col)
 		{
-			if (j != col)
+			if (j != v.col)
 				new_mat[k][l++] = matrice[i][j];
 		}
 		k++;
 	}
-	return (new_mat);
 }

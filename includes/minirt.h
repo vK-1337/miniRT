@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/30 18:20:01 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/31 10:03:12 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -343,6 +343,53 @@ typedef struct s_norme_set_patt
 	float				v;
 }						t_norme_set_patt;
 
+typedef struct s_norme_cone
+{
+	float				abc[3];
+	float				discriminant;
+	t_ray				new_ray;
+	float				y0;
+	t_intersection		t;
+}						t_norme_cone;
+
+typedef struct s_norme_cylinder
+{
+	float				tab[4];
+	t_intersection		t;
+	t_ray				new_ray;
+	float				y0;
+}						t_norme_cylinder;
+
+typedef struct s_norme_caps_cylinder
+{
+	t_intersection		t;
+	t_ray				new_ray;
+	float				t0;
+	float				t1;
+}						t_norme_caps_cylinder;
+
+typedef struct s_norme_submat
+{
+	int					row;
+	int					col;
+	int					i;
+	int					k;
+	int					l;
+}						t_norme_submat;
+
+typedef struct s_norme_submat2
+{
+	float				**mat;
+	int					i;
+	int					j;
+}						t_norme_submat2;
+
+typedef struct s_norme_planar_mapping
+{
+    float				plane_width;
+    float				plane_height;
+}						t_norme_planar_mapping;
+
 void					print_char_tab(char **tab);
 /******************************************************************************/
 /*                                                                            */
@@ -463,7 +510,7 @@ t_tuple					ft_normalization(t_tuple v);
 float					ft_dotproduct(t_tuple v1, t_tuple v2);
 t_tuple					cross_product(t_tuple v1, t_tuple v2);
 
-//										COLORS									//
+//										COLORS								//
 
 t_color					ft_sum_color(t_color c1, t_color c2);
 t_color					ft_dif_color(t_color c1, t_color c2);
@@ -502,6 +549,8 @@ float					**ft_create_mat_null(int row_col);
 void					print_matrix(float **mat, int row_col);
 float					**ft_submat(float **matrice, int row_col, int row,
 							int col);
+void					submat_helper(float **new_mat, float **matrice,
+							int row_col, t_norme_submat v);
 
 //										UTILS2								//
 float					**identity_matrix(int size);
@@ -619,15 +668,23 @@ t_plan					*ft_plan(void);
 void					ft_cylinder_intersect(t_intersection **t_tab,
 							t_cylinder **cylinder, t_ray ray, int *count);
 t_cylinder				*ft_cylinder(void);
+void					cylinder_intersect_helper(t_norme_cylinder *v,
+							t_cylinder **cylinder, int *count,
+							t_intersection **t_tab);
 t_intersection			*ft_add_t(t_intersection **t_tab, t_intersection t[2],
 							int count);
 t_intersection			*ft_add_one_t(t_intersection **t_tab, t_intersection t,
 							int count);
 void					ft_cylinder_caps_intersect(t_intersection **t_tab,
 							t_cylinder **cylinder, t_ray ray, int *count);
+void					cylinder_caps_helper(t_intersection *t, int *count,
+							t_cylinder *cylinder, float t_n);
 void					ft_cone_intersect(t_intersection **t_tab, t_cone **cone,
 							t_ray ray, int *count);
 t_cone					*ft_cone(void);
+void					cone_intersect_helper(t_norme_cone *v, t_cone **cone);
+void					cone_intersect_helper2(t_norme_cone *v, int *count,
+							t_cone **cone, t_intersection **t_tab);
 
 /******************************************************************************/
 /*                                                                            */
@@ -639,11 +696,10 @@ t_cone					*ft_cone(void);
 
 t_material				*ft_texture(char *path, void *mlx);
 int						ft_texture_color_to_int(t_color color);
-void					cylindrical_mapping(float x, float y, float z,
+void					cylindrical_mapping(t_tuple point_object,
 							t_image *image, t_color *color);
-void					planar_mapping(float x, float y, t_image *image,
-							t_color *color, float plane_width,
-							float plane_height);
+void	planar_mapping(t_tuple point_object, t_image *image, t_color *color,
+		t_norme_planar_mapping v);
 void					spherical_mapping(t_tuple point, t_image *image,
 							t_color *color);
 void					get_interpolated_color(float u, float v, t_image *image,
@@ -664,6 +720,7 @@ void					ft_check_cone_caps(t_intersection **t_tab,
 int						ft_equal_tuple(t_tuple *t1, t_tuple *t2);
 void					calculate_plane_dimensions(float **matrix, float *width,
 							float *height);
+void					initialize_corners(t_tuple corners[4]);
 void					destroy_t_win(t_win *win);
 t_color					define_pattern_color(t_objects type, t_tuple position,
 							void *object);
