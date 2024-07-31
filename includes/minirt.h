@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/31 11:09:33 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/31 13:21:18 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -390,6 +390,16 @@ typedef struct s_norme_planar_mapping
 	float				plane_height;
 }						t_norme_planar_mapping;
 
+typedef struct s_norme_intersect_world
+{
+	t_intersection		*t_tab;
+	int					count;
+	t_sphere			*sphere;
+	t_plan				*plan;
+	t_cylinder			*cylinder;
+	t_cone				*cone;
+}						t_norme_intersect_world;
+
 void					print_char_tab(char **tab);
 /******************************************************************************/
 /*                                                                            */
@@ -751,5 +761,11 @@ void					attribute_cone(t_intersection *t, int *count,
 float					distance(t_tuple a, t_tuple b);
 void					ft_sphere_comps(t_comps *comps, t_sphere *sphere);
 t_comps					ft_null_comps(void);
+void					ft_cone_comps(t_comps *comps, t_cone *cone);
+void					ft_cylinder_comps(t_comps *comps, t_cylinder *cylinder);
+void					ft_plan_comps(t_comps *comps, t_plan *plan);
+int						prepare_all_data(t_norme_intersect_world *v);
+void					define_tmp_color(t_color *tmp_color, t_comps *comps,
+							t_light *light, int in_shadow);
 
 #endif

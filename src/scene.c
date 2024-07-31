@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 11:41:54 by udumas            #+#    #+#             */
-/*   Updated: 2024/07/31 11:09:18 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/31 13:24:28 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,47 +69,46 @@ void	ft_sphere_intersections(t_intersection **t_tab, t_sphere **sphere,
 
 t_intersection	*ft_intersect_world(t_ray ray, t_world **data)
 {
-	t_intersection	*t_tab;
-	int				count;
-	t_sphere		*sphere;
-	t_plan			*plan;
-	t_cylinder		*cylinder;
-	t_cone			*cone;
+	t_norme_intersect_world	v;
 
-	count = 0;
+	if (!prepare_all_data(&v))
+		return (NULL);
 	if (*data == NULL)
 		return (NULL);
 	if ((*data)->sphere)
-		sphere = *(*data)->sphere;
-	else
-		sphere = NULL;
+		v.sphere = *(*data)->sphere;
 	if ((*data)->plan)
-		plan = *(*data)->plan;
-	else
-		plan = NULL;
+		v.plan = *(*data)->plan;
 	if ((*data)->cylinder)
-		cylinder = *(*data)->cylinder;
-	else
-		cylinder = NULL;
+		v.cylinder = *(*data)->cylinder;
 	if ((*data)->cone)
-		cone = *(*data)->cone;
-	else
-		cone = NULL;
-	t_tab = calloc(1, sizeof(t_intersection));
-	if (!t_tab)
-		return (NULL);
-	t_tab[0].status = 0;
-	while (sphere != NULL || plan != NULL || cylinder != NULL || cone != NULL)
+		v.cone = *(*data)->cone;
+	while (v.sphere != NULL || v.plan != NULL || v.cylinder != NULL
+		|| v.cone != NULL)
 	{
-		ft_plan_intersect(&t_tab, &plan, ray, &count);
-		ft_sphere_intersections(&t_tab, &sphere, ray, &count);
-		ft_cylinder_intersect(&t_tab, &cylinder, ray, &count);
-		ft_cylinder_caps_intersect(&t_tab, &cylinder, ray, &count);
-		ft_cone_intersect(&t_tab, &cone, ray, &count);
-		ft_check_cone_caps(&t_tab, &cone, ray, &count);
+		ft_plan_intersect(&v.t_tab, &v.plan, ray, &v.count);
+		ft_sphere_intersections(&v.t_tab, &v.sphere, ray, &v.count);
+		ft_cylinder_intersect(&v.t_tab, &v.cylinder, ray, &v.count);
+		ft_cylinder_caps_intersect(&v.t_tab, &v.cylinder, ray, &v.count);
+		ft_cone_intersect(&v.t_tab, &v.cone, ray, &v.count);
+		ft_check_cone_caps(&v.t_tab, &v.cone, ray, &v.count);
 	}
-	ft_sort_intersections(t_tab, count);
-	return (t_tab);
+	return (ft_sort_intersections(v.t_tab, v.count), v.t_tab);
+}
+
+int	prepare_all_data(t_norme_intersect_world *v)
+{
+	v->sphere = NULL;
+	v->plan = NULL;
+	v->cylinder = NULL;
+	v->cone = NULL;
+	v->t_tab = NULL;
+	v->count = 0;
+	v->t_tab = calloc(1, sizeof(t_intersection));
+	if (!v->t_tab)
+		return (0);
+	v->t_tab[0].status = 0;
+	return (1);
 }
 
 t_comps	ft_prepare_computations(t_intersection *i, t_ray ray)
@@ -124,64 +123,72 @@ t_comps	ft_prepare_computations(t_intersection *i, t_ray ray)
 	if (i[0].sphere != NULL)
 		ft_sphere_comps(&comps, i[0].sphere);
 	else if (i[0].plan != NULL)
-	{
-		comps.plan = i[0].plan;
-		comps.sphere = NULL;
-		comps.cylinder = NULL;
-		comps.cone = NULL;
-		comps.type = PLAN;
-	}
+		ft_plan_comps(&comps, i[0].plan);
 	else if (i[0].cylinder != NULL)
-	{
-		comps.cylinder = i[0].cylinder;
-		comps.sphere = NULL;
-		comps.plan = NULL;
-		comps.cone = NULL;
-		comps.type = CYLINDER;
-	}
+		ft_cylinder_comps(&comps, i[0].cylinder);
 	else if (i[0].cone != NULL)
-	{
-		comps.cone = i[0].cone;
-		comps.sphere = NULL;
-		comps.plan = NULL;
-		comps.cylinder = NULL;
-		comps.type = CONE;
-	}
+		ft_cone_comps(&comps, i[0].cone);
 	comps.normalv = ft_normal_at(comps, comps.point);
+	comps.inside = 0;
 	if (ft_dotproduct(comps.normalv, comps.eyev) < 0)
 	{
 		comps.inside = 1;
 		comps.normalv = ft_neg_tuple(comps.normalv);
 	}
-	else
-		comps.inside = 0;
 	comps.over_point = ft_sum_tuple(comps.point, ft_mult_vector(comps.normalv,
 				EPSILON));
 	return (comps);
 }
 
-t_comps ft_null_comps(void)
+t_comps	ft_null_comps(void)
 {
-    t_comps comps;
+	t_comps	comps;
 
-    comps.t = 0;
-    comps.sphere = NULL;
-    comps.plan = NULL;
-    comps.point = (t_tuple){0, 0, 0, 0};
-    comps.eyev = (t_tuple){0, 0, 0, 0};
-    comps.normalv = (t_tuple){0, 0, 0, 0};
-    comps.over_point = (t_tuple){0, 0, 0, 0};
-    comps.inside = 0;
-    return (comps);
+	comps.t = 0;
+	comps.sphere = NULL;
+	comps.plan = NULL;
+	comps.point = (t_tuple){0, 0, 0, 0};
+	comps.eyev = (t_tuple){0, 0, 0, 0};
+	comps.normalv = (t_tuple){0, 0, 0, 0};
+	comps.over_point = (t_tuple){0, 0, 0, 0};
+	comps.inside = 0;
+	return (comps);
 }
 
-void ft_sphere_comps(t_comps *comps, t_sphere *sphere)
+void	ft_sphere_comps(t_comps *comps, t_sphere *sphere)
 {
-    comps->sphere = sphere;
-    comps->plan = NULL;
-    comps->cylinder = NULL;
-    comps->cone = NULL;
-    comps->type = SPHERE;
+	comps->sphere = sphere;
+	comps->plan = NULL;
+	comps->cylinder = NULL;
+	comps->cone = NULL;
+	comps->type = SPHERE;
+}
+
+void	ft_plan_comps(t_comps *comps, t_plan *plan)
+{
+	comps->plan = plan;
+	comps->sphere = NULL;
+	comps->cylinder = NULL;
+	comps->cone = NULL;
+	comps->type = PLAN;
+}
+
+void	ft_cylinder_comps(t_comps *comps, t_cylinder *cylinder)
+{
+	comps->cylinder = cylinder;
+	comps->sphere = NULL;
+	comps->plan = NULL;
+	comps->cone = NULL;
+	comps->type = CYLINDER;
+}
+
+void	ft_cone_comps(t_comps *comps, t_cone *cone)
+{
+	comps->cone = cone;
+	comps->sphere = NULL;
+	comps->plan = NULL;
+	comps->cylinder = NULL;
+	comps->type = CONE;
 }
 
 t_color	ft_shade_hit(t_world *data, t_comps *comps)
@@ -199,24 +206,7 @@ t_color	ft_shade_hit(t_world *data, t_comps *comps)
 		if (!tmp_color)
 			return (color);
 		in_shadow = ft_is_shadowed(data, comps->over_point);
-		if (comps->plan != NULL)
-			*tmp_color = ft_lighting(ft_set_pattern(comps, PLAN), *light,
-					comps->over_point, comps->eyev, comps->normalv, in_shadow,
-					comps->plan, Plan);
-		else if (comps->sphere != NULL)
-			*tmp_color = ft_lighting(ft_set_pattern(comps, SPHERE), *light,
-					comps->point, comps->eyev, comps->normalv, in_shadow,
-					comps->sphere, Sphere);
-		else if (comps->cylinder != NULL)
-			*tmp_color = ft_lighting(ft_set_pattern(comps, CYLINDER), *light,
-					comps->over_point, comps->eyev, comps->normalv, in_shadow,
-					comps->cylinder, Cylinder);
-		else if (comps->cone != NULL)
-			*tmp_color = ft_lighting(ft_set_pattern(comps, CONE), *light,
-					comps->over_point, comps->eyev, comps->normalv, in_shadow,
-					comps->cone, Cone);
-		else
-			tmp_color = ft_color(0, 0, 0);
+		define_tmp_color(tmp_color, comps, light, in_shadow);
 		color = ft_sum_color(color, *tmp_color);
 		if (tmp_color->text_color == 1)
 			color.text_color = 1;
@@ -226,6 +216,29 @@ t_color	ft_shade_hit(t_world *data, t_comps *comps)
 		light = light->next;
 	}
 	return (color);
+}
+
+void	define_tmp_color(t_color *tmp_color, t_comps *comps, t_light *light,
+		int in_shadow)
+{
+	if (comps->plan != NULL)
+		*tmp_color = ft_lighting(ft_set_pattern(comps, PLAN), *light,
+				comps->over_point, comps->eyev, comps->normalv, in_shadow,
+				comps->plan, Plan);
+	else if (comps->sphere != NULL)
+		*tmp_color = ft_lighting(ft_set_pattern(comps, SPHERE), *light,
+				comps->point, comps->eyev, comps->normalv, in_shadow,
+				comps->sphere, Sphere);
+	else if (comps->cylinder != NULL)
+		*tmp_color = ft_lighting(ft_set_pattern(comps, CYLINDER), *light,
+				comps->over_point, comps->eyev, comps->normalv, in_shadow,
+				comps->cylinder, Cylinder);
+	else if (comps->cone != NULL)
+		*tmp_color = ft_lighting(ft_set_pattern(comps, CONE), *light,
+				comps->over_point, comps->eyev, comps->normalv, in_shadow,
+				comps->cone, Cone);
+	else
+		tmp_color = ft_color(0, 0, 0);
 }
 
 t_color	ft_color_at(t_world *data, t_ray ray)
