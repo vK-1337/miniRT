@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:55 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/30 17:15:01 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/31 21:54:50 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,107 +61,31 @@ t_win	*init_mlx(void)
 	return (win);
 }
 
-void	start_threads(t_complete *complete)
-{
-	int	i;
-	int	start_x;
-	int	start_y;
-	int	end_x;
-	int	end_y;
-
-	start_x = 0;
-	start_y = 0;
-	end_x = SIZE_X / 10;
-	end_y = SIZE_Y / 10;
-	complete->thread = malloc(sizeof(t_thread) * (10 * 10));
-	if (!complete->thread)
-		return ;
-	complete->data->pixel_put = malloc(sizeof(pthread_mutex_t));
-	if (!complete->data->pixel_put)
-		return ;
-	pthread_mutex_init(complete->data->pixel_put, NULL);
-	i = 0;
-	while (i < 10 * 10)
-	{
-		complete->thread[i].start_x = start_x;
-		complete->thread[i].start_y = start_y;
-		complete->thread[i].end_x = end_x;
-		complete->thread[i].end_y = end_y;
-		complete->thread[i].index = i;
-		complete->thread[i].win = complete->win;
-		complete->thread[i].data = complete->data;
-		pthread_create(&complete->thread[i].pthread_id, NULL, render,
-			&complete->thread[i]);
-		start_x = end_x;
-		end_x += SIZE_X / 10;
-		if (start_x == SIZE_X)
-		{
-			start_x = 0;
-			end_x = SIZE_X / 10;
-			start_y = end_y;
-			end_y += SIZE_Y / 10;
-		}
-		if (start_y == SIZE_Y)
-		{
-			start_y = i * SIZE_Y / 10;
-			end_y = start_y + SIZE_Y / 10;
-		}
-		if (end_x > SIZE_X)
-			end_x = SIZE_X;
-		if (end_y > SIZE_Y)
-			end_y = SIZE_Y;
-		i++;
-	}
-	i--;
-	while (i >= 0)
-	{
-		pthread_join(complete->thread[i].pthread_id, NULL);
-		i--;
-	}
-	free(complete->thread);
-	pthread_mutex_destroy(complete->data->pixel_put);
-	free(complete->data->pixel_put);
-}
-
-void	thread_attribution(t_thread *thread, t_complete *complete)
-{
-	thread->start_x = 0;
-	thread->start_y = 0;
-	thread->end_x = SIZE_X;
-	thread->end_y = SIZE_Y;
-	thread->index = 0;
-	thread->win = complete->win;
-	thread->data = complete->data;
-}
-
 int	main(int ac, char **av)
 {
-	int			fd;
-	t_world		*data;
-	t_win		*win;
-	t_complete	*complete;
+	t_norme_main	v;
 
 	if (ac != 2 || !scene_name_check(av[1]))
 		return (printf("Bad arguments : Usage : ./minirt scene.rt\n"),
 			EXIT_FAILURE);
-	fd = open(av[1], O_RDONLY);
-	if (fd == -1)
+	v.fd = open(av[1], O_RDONLY);
+	if (v.fd == -1)
 		return (write(2, "File not found\n", 16), EXIT_FAILURE);
-	win = init_mlx();
-	if (!win)
+	v.win = init_mlx();
+	if (!v.win)
 		return (EXIT_FAILURE);
-	data = init_all_data(fd, win->mlx);
-	if (!data)
-		return (free_win_classic(win), EXIT_FAILURE);
-	complete = malloc(sizeof(t_complete));
-	if (!complete)
-		return (free_data(&data, win->mlx), free_win_classic(win),
+	v.data = init_all_data(v.fd, v.win->mlx);
+	if (!v.data)
+		return (free_win_classic(v.win), EXIT_FAILURE);
+	v.complete = malloc(sizeof(t_complete));
+	if (!v.complete)
+		return (free_data(&v.data, v.win->mlx), free_win_classic(v.win),
 			EXIT_FAILURE);
-	complete->data = data;
-	complete->win = win;
-	start_threads(complete);
-	mlx_put_image_to_window(win->mlx, win->win, win->img, 0, 0);
-	setup_hooks(win, complete);
-	mlx_loop(win->mlx);
+	v.complete->data = v.data;
+	v.complete->win = v.win;
+	start_threads(v.complete);
+	mlx_put_image_to_window(v.win->mlx, v.win->win, v.win->img, 0, 0);
+	setup_hooks(v.win, v.complete);
+	mlx_loop(v.win->mlx);
 	return (EXIT_SUCCESS);
 }

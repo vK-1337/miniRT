@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/31 20:00:23 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/31 21:57:41 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 # endif
 # define EPSILON 0.0001
 # define INFINITY 1e10
-# define SIZE_X 1200
-# define SIZE_Y 1200
+# define SIZE_X 50
+# define SIZE_Y 50
 # define SPHERE 0
 # define PLAN 1
 # define CYLINDER 2
@@ -435,6 +435,23 @@ typedef struct s_norme_init_pattern
 	t_color				*p_color_2;
 }						t_norme_init_pattern;
 
+typedef struct s_norme_main
+{
+	int					fd;
+	t_world				*data;
+	t_win				*win;
+	t_complete			*complete;
+}						t_norme_main;
+
+typedef struct s_norme_threads
+{
+	int					i;
+	int					start_x;
+	int					start_y;
+	int					end_x;
+	int					end_y;
+}						t_norme_threads;
+
 void					print_char_tab(char **tab);
 /******************************************************************************/
 /*                                                                            */
@@ -777,7 +794,7 @@ t_tuple					calculate_cylinder_normal(t_comps object,
 t_tuple					calculate_cone_normal(t_comps object,
 							t_tuple world_point, float ***attr_mat);
 void					thread_attribution(t_thread *thread,
-							t_complete *complete);
+							t_complete *complete, t_norme_threads *v);
 void					destroy_t_win(t_win *win);
 void					free_win_classic(t_win *win);
 void					start_threads(t_complete *complete);
@@ -817,4 +834,31 @@ int						ft_init_sphere_helper(char **data_split,
 int						add_sphere_to_lst(t_world *data, t_sphere *sphere);
 int						ft_init_cylinder_helper(char **data_split,
 							t_cylinder *cylinder, int y);
+int						ft_init_text_or_patt_cyl(char **data_split,
+							t_cylinder *cylinder, t_win *mlx);
+int						ft_init_cylinder_pattern(char **split,
+							t_cylinder *cylinder);
+int						ft_init_cylinder_helper2(t_cylinder *cylinder,
+							t_world *data, char **data_split, t_win *mlx);
+int						ft_init_plan_pattern(char **split, t_plan *plan);
+int						ft_init_text_or_patt_plan(char **data_split,
+							t_plan *plan, t_win *mlx);
+int						ft_init_plan_helper(char **data_split, t_plan *plan);
+int						ft_init_plan_helper2(t_world *data, char **data_split,
+							t_plan *plan, void *mlx);
+int						ft_init_text_or_patt_cone(char **data_split,
+							t_cone *cone, t_win *mlx);
+int						ft_init_cone_helper(char **data_split, t_cone *cone,
+							int y);
+int						ft_init_cone_pattern(char **split, t_cone *cone);
+int						ft_init_cone_helper2(t_cone *cone, t_world *data,
+							char **data_split, t_win *mlx);
+void					init_m_color(t_material *m, char **split);
+int						add_cylinder_to_lst(t_world *data,
+							t_cylinder *cylinder);
+int						add_cone_to_lst(t_world *data, t_cone *cone);
+int						add_plan_to_lst(t_world *data, t_plan *plan);
+void					ft_start_thread_helper(t_norme_threads *v);
+void					ft_start_thread_helper2(t_norme_threads *v,
+							t_complete *complete);
 #endif

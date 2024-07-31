@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 10:43:44 by vk                #+#    #+#             */
-/*   Updated: 2024/07/30 13:41:23 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/07/31 22:00:45 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@ int	ft_is_shadowed(t_world *world, t_tuple point)
 		if (!vars.intersections)
 			return (0);
 		vars.hit = ft_hit(vars.intersections, vars.intersections->count);
-		free(vars.intersections);
-		if (vars.hit && vars.hit->t < vars.distance)
-			return (1);
+		if (vars.hit && vars.hit->t && vars.hit->t < vars.distance)
+			return (free(vars.intersections), 1);
 		else
 		{
+            free(vars.intersections);
 			if (vars.curr->next)
 				vars.curr = vars.curr->next;
 			else
