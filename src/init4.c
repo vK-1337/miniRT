@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 21:29:56 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/31 22:01:53 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/08/01 04:48:06 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	init_plan(t_world *data, char **data_split, t_win *mlx)
 		return (free(plan), 0);
 	if (!ft_init_plan_helper(data_split, plan))
 		return (0);
-    free_char_tab(split);
+	free_char_tab(split);
 	split = ft_split(data_split[3], ',');
 	if (!split)
 		return (free(plan), 0);
