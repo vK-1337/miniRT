@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 21:28:06 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/31 21:28:28 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/08/22 12:55:20 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,9 +93,9 @@ int	ft_init_cone_pattern(char **split, t_cone *cone)
 
 t_dtype	determine_type(char *data)
 {
-	if (strlen(data) > 2 || strlen(data) <= 0)
+	if (!data || ft_strlen(data) > 2 || ft_strlen(data) <= 0)
 		return (NOTYPE);
-	if (strlen(data) == 1)
+	if (ft_strlen(data) == 1)
 	{
 		if (data[0] == 'A')
 			return (A);

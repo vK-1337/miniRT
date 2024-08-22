@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/31 21:31:50 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/08/22 12:54:51 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,10 @@ t_world	*init_all_data(int fd, t_win *mlx)
 	null_data(data);
 	file_data = get_next_line(fd, 0);
 	if (file_data == NULL)
-		return (write(3, "The file is empty\n", 19), free(data), NULL);
-	if (init_corresponding_data(file_data, data, mlx) == 2)
-		return (get_next_line(fd, 1), free_data(&data, mlx), free(file_data),
+		return (write(STDERR_FILENO, "The file is empty\n", 19), free(data),
 			NULL);
+	if (init_corresponding_data(file_data, data, mlx) == 2)
+		return (get_next_line(fd, 1), free(file_data), NULL);
 	while (file_data)
 	{
 		free(file_data);

@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 21:30:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/31 21:31:03 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/08/22 12:18:03 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int	init_sphere(t_world *data, char **data_split, t_win *mlx)
 	sphere = malloc(sizeof(t_sphere));
 	if (!sphere)
 		return (0);
+	sphere->next = NULL;
 	if (!ft_init_sphere_helper(data_split, sphere, mlx))
 		return (0);
 	if (data_split[4])
@@ -32,7 +33,6 @@ int	init_sphere(t_world *data, char **data_split, t_win *mlx)
 		sphere->m->ambiant_color = data->alight;
 		sphere->m->ambiant = data->alight_intensity;
 	}
-	sphere->next = NULL;
 	if (!add_sphere_to_lst(data, sphere))
 		return (0);
 	return (1);
