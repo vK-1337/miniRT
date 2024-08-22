@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:09:57 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/08/22 12:07:03 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/08/22 15:06:11 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -452,6 +452,12 @@ typedef struct s_norme_threads
 	int					end_y;
 }						t_norme_threads;
 
+typedef struct s_types_check
+{
+	int					a;
+	int					c;
+}						t_types_check;
+
 void					print_char_tab(char **tab);
 /******************************************************************************/
 /*                                                                            */
@@ -461,13 +467,16 @@ void					print_char_tab(char **tab);
 /*                                                                            */
 /******************************************************************************/
 
+void					ft_add_type(t_types_check *types, t_dtype type);
+void					ft_check_types(t_types_check types, t_world **data,
+							t_win *mlx);
 int						scene_name_check(char *av);
 double					ft_atof(char *str);
 void					atof_util(int *i, int *sign, char *str);
 t_world					*init_all_data(int fd, t_win *mlx);
 void					null_data(t_world *data);
 int						init_corresponding_data(char *file_data, t_world *data,
-							t_win *mlx);
+							t_win *mlx, t_types_check *types);
 int						init_data_w_line(t_world *data, t_dtype type,
 							char **data_split, t_win *mlx);
 t_dtype					determine_type(char *data);
