@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 21:31:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/07/31 21:32:04 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/08/22 15:06:34 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,30 @@ int	ft_init_all_light_values(char **data_split, t_light *light)
 		return (free(light), 0);
 	ft_init_light_intensity(light, split, intensity);
 	return (1);
+}
+
+void	ft_add_type(t_types_check *types, t_dtype type)
+{
+	static int	i;
+
+	if (i == 0)
+	{
+		types->a = 0;
+		types->c = 0;
+		i++;
+	}
+	if (type == A)
+		types->a++;
+	else if (type == C)
+		types->c++;
+}
+
+void	ft_check_types(t_types_check types, t_world **data, t_win *mlx)
+{
+	if (types.a != 1 || types.c != 1)
+	{
+		write(STDERR_FILENO, ".rt file content is not valid.\n", 32);
+		free_data(data, mlx);
+		*data = NULL;
+	}
 }

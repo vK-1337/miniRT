@@ -6,7 +6,7 @@
 /*   By: vda-conc <vda-conc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 18:28:58 by vda-conc          #+#    #+#             */
-/*   Updated: 2024/08/22 12:54:51 by vda-conc         ###   ########.fr       */
+/*   Updated: 2024/08/22 15:07:04 by vda-conc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 
 t_world	*init_all_data(int fd, t_win *mlx)
 {
-	t_world	*data;
-	char	*file_data;
+	t_world			*data;
+	char			*file_data;
+	t_types_check	types;
 
 	data = malloc(sizeof(t_world));
 	if (!data)
@@ -25,7 +26,7 @@ t_world	*init_all_data(int fd, t_win *mlx)
 	if (file_data == NULL)
 		return (write(STDERR_FILENO, "The file is empty\n", 19), free(data),
 			NULL);
-	if (init_corresponding_data(file_data, data, mlx) == 2)
+	if (init_corresponding_data(file_data, data, mlx, &types) == 2)
 		return (get_next_line(fd, 1), free(file_data), NULL);
 	while (file_data)
 	{
@@ -33,13 +34,15 @@ t_world	*init_all_data(int fd, t_win *mlx)
 		file_data = get_next_line(fd, 0);
 		if (file_data && file_data[0] == '\n')
 			continue ;
-		if (init_corresponding_data(file_data, data, mlx) == 2)
+		if (init_corresponding_data(file_data, data, mlx, &types) == 2)
 			return (get_next_line(fd, 1), free(file_data), NULL);
 	}
+	ft_check_types(types, &data, mlx);
 	return (data);
 }
 
-int	init_corresponding_data(char *file_data, t_world *data, t_win *mlx)
+int	init_corresponding_data(char *file_data, t_world *data, t_win *mlx,
+		t_types_check *types)
 {
 	char	**data_split;
 	t_dtype	type;
@@ -52,14 +55,17 @@ int	init_corresponding_data(char *file_data, t_world *data, t_win *mlx)
 	type = determine_type(data_split[0]);
 	if (!type || verified_content(data_split, type) == 0)
 	{
-		free_char_tab(data_split);
 		write(STDERR_FILENO, ".rt file content is not valid.\n", 32);
-		return (free_data(&data, mlx), 2);
+		return (free_char_tab(data_split), free_data(&data, mlx), 2);
 	}
-	if (!init_data_w_line(data, type, data_split, mlx))
+	ft_add_type(types, type);
+	if (types->a <= 1 && types->c <= 1)
 	{
-		write(STDERR_FILENO, "Error initiating data.\n", 24);
-		return (free_char_tab(data_split), 2);
+		if (!init_data_w_line(data, type, data_split, mlx))
+		{
+			write(STDERR_FILENO, "Error initiating data.\n", 24);
+			return (free_char_tab(data_split), 2);
+		}
 	}
 	free_char_tab(data_split);
 	return (EXIT_SUCCESS);
